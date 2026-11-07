@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Metro Quest: Free-Roam Top-down RPG - Đại Học Mở TP.HCM</title>
+  <!-- Google Fonts: VT323 (Retro Pixel) & Be Vietnam Pro -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700;800&family=VT323&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    :root {
+      --neon-pink: #ff2a85;
+      --neon-cyan: #00f0ff;
+      --neon-yellow: #ffe600;
+      --dark-blue: #0b0f19;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      background-color: #05070c;
+      color: #e2e8f0;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pixel-font {
+      font-family: 'VT323', monospace;
+      letter-spacing: 1px;
+    }
+
+    /* Pixel Frame CRT Filter */
+    .crt-overlay::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.2) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+      pointer-events: none;
+      z-index: 25;
+    }
+
+    /* Custom Box Styles */
+    .dialogue-glass {
+      background: rgba(11, 15, 25, 0.95);
+      border: 3px solid var(--neon-pink);
+      box-shadow: 0 0 15px rgba(255, 42, 133, 0.4), inset 0 0 15px rgba(0, 240, 255, 0.15);
+    }
+
+    .btn-pixel-game {
+      background: #1e1b4b;
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 3px 3px 0 var(--neon-pink);
+      transition: all 0.1s ease;
+    }
+    .btn-pixel-game:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--neon-pink);
+    }
+
+    /* Virtual Joystick Styles */
+    #joystick-zone {
+      width: 120px;
+      height: 120px;
+      background: rgba(15, 23, 42, 0.65);
+      border: 2px solid rgba(0, 240, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      border-radius: 9999px;
+      position: relative;
+      touch-action: none;
+    }
+    #joystick-stick {
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #00f0ff 20%, #3b82f6 80%);
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
+      border-radius: 9999px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: transform 0.05s ease-out;
+    }
+
+    /* Typewriter Cursor */
+    .typing-cursor::after {
+      content: '▋';
+      margin-left: 4px;
+      color: var(--neon-cyan);
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="w-screen h-screen">
+
+  <!-- Master Game Viewport Container -->
+  <main id="game-app" class="relative w-full max-w-[1050px] h-full max-h-[660px] crt-overlay bg-black md:rounded-2xl border-4 border-slate-800 shadow-[0_0_35px_rgba(0,240,255,0.25)] overflow-hidden flex flex-col justify-between">
+
+    <!-- TOP HUD: Stats, Nhiệm vụ hiện tại & Nút Tiện Ích -->
+    <header class="absolute top-0 left-0 right-0 z-20 flex flex-wrap items-center justify-between p-2 sm:p-3 bg-gradient-to-b from-black/90 to-transparent pointer-events-auto">
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- Năng Lượng Thể Lực -->
+        <div class="flex items-center gap-1.5 bg-slate-900/90 border border-pink-500 px-2.5 py-1 rounded shadow">
+          <span class="text-pink-400 text-xs font-bold">⚡ NĂNG LƯỢNG:</span>
+          <div class="w-20 sm:w-28 bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700">
+            <div id="hud-energy" class="bg-gradient-to-r from-pink-500 to-rose-400 h-full w-full transition-all duration-300"></div>
+          </div>
+          <span id="hud-energy-txt" class="text-[11px] text-pink-300 font-mono">100%</span>
+        </div>
+
+        <!-- Nhiệm vụ hiện tại -->
+        <div class="hidden sm:flex items-center gap-1.5 bg-slate-900/90 border border-cyan-400 px-2.5 py-1 rounded shadow">
+          <span class="text-cyan-400 text-xs font-bold">🎯 NHIỆM VỤ:</span>
+          <span id="hud-quest-txt" class="text-xs text-yellow-300 font-semibold truncate max-w-[280px]">Vượt ngã 3 Vũng Tàu tới Ga Suối Tiên</span>
+        </div>
+      </div>
+
+      <!-- Action Toggles -->
+      <div class="flex items-center gap-2">
+        <button id="btn-audio-toggle" class="btn-pixel-game px-2.5 py-1 text-xs text-cyan-300 font-bold rounded">
+          🔊 BẬT ÂM
+        </button>
+        <button id="btn-guide-toggle" class="btn-pixel-game px-2.5 py-1 text-xs text-yellow-300 font-bold rounded">
+          ❓ TRỢ GIÚP
+        </button>
+      </div>
+    </header>
+
+    <!-- 2D Canvas: Thế giới Pixel Top-Down Free-Roam -->
+    <canvas id="rpg-canvas" class="w-full h-full block cursor-crosshair bg-slate-900"></canvas>
+
+    <!-- Prompt nổi khi đứng gần vật thể tương tác -->
+    <div id="interact-prompt" class="hidden absolute top-[52%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none text-center">
+      <div class="bg-black/85 border-2 border-yellow-400 text-yellow-300 font-bold text-xs sm:text-sm px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,230,0,0.6)] animate-bounce flex items-center gap-2">
+        <span class="bg-yellow-400 text-black px-1.5 py-0.5 rounded font-mono font-black text-xs">E</span>
+        <span id="interact-prompt-txt">Nhấn [E] hoặc Chạm [TƯƠNG TÁC]</span>
+      </div>
+    </div>
+
+    <!-- JOYSTICK & TOUCH CONTROLS CHO THIẾT BỊ DI ĐỘNG -->
+    <div id="mobile-controls" class="absolute bottom-4 left-4 right-4 z-20 pointer-events-none flex items-end justify-between">
+      <!-- Cần gạt Ảo Virtual Joystick -->
+      <div class="pointer-events-auto select-none" id="joystick-zone">
+        <div id="joystick-stick"></div>
+      </div>
+
+      <!-- Nút tương tác chính (Action Button) -->
+      <button id="touch-action-btn" class="pointer-events-auto w-18 h-18 sm:w-20 sm:h-20 p-4 rounded-full bg-gradient-to-tr from-pink-600 to-rose-400 border-2 border-yellow-300 text-white font-bold text-xs shadow-[0_0_20px_rgba(255,42,133,0.7)] flex flex-col items-center justify-center active:scale-90 transition-transform">
+        <span class="pixel-font text-lg leading-none">ACTION</span>
+        <span class="text-[10px] text-yellow-200">TƯƠNG TÁC</span>
+      </button>
+    </div>
+
+    <!-- OTOME / VISUAL NOVEL DIALOGUE OVERLAY -->
+    <div id="dialogue-box" class="hidden absolute bottom-3 left-3 right-3 sm:bottom-4 sm:left-6 sm:right-6 z-30 pointer-events-auto">
+      <div class="dialogue-glass rounded-xl p-3 sm:p-5 relative flex flex-col sm:flex-row gap-3 sm:gap-4 items-start shadow-2xl">
+        
+        <!-- Portrait Pixel Art Nhân vật đang trò chuyện -->
+        <div class="flex-shrink-0 flex sm:flex-col items-center gap-2">
+          <div id="portrait-frame" class="w-16 h-16 sm:w-24 sm:h-24 rounded-lg bg-slate-900 border-2 border-pink-500 overflow-hidden shadow-lg p-1">
+            <svg id="portrait-svg" class="w-full h-full" viewBox="0 0 100 100">
+              <!-- Render động portrait pixel bằng hàm switch bên dưới -->
+            </svg>
+          </div>
+          <div class="text-left sm:text-center">
+            <div id="dialogue-speaker" class="pixel-font text-base sm:text-lg text-pink-400 font-bold tracking-wide">SINH VIÊN A</div>
+            <div id="dialogue-role" class="text-[10px] text-cyan-300 font-medium">Tân sinh viên Đồng Nai</div>
+          </div>
+        </div>
+
+        <!-- Nội dung hội thoại & Phân nhánh lựa chọn -->
+        <div class="flex-1 min-w-0 flex flex-col justify-between h-full w-full">
+          <!-- Text Body -->
+          <div class="min-h-[55px] sm:min-h-[70px]">
+            <p id="dialogue-text" class="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal">
+              Đang tải nội dung...
+            </p>
+          </div>
+
+          <!-- Nhánh Lựa Chọn (Nếu có) -->
+          <div id="dialogue-choices" class="hidden my-2 flex flex-col gap-1.5">
+            <!-- Render động các nút lựa chọn -->
+          </div>
+
+          <!-- Bottom Action Prompt -->
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800 text-[11px] text-slate-400 mt-1">
+            <span id="dialogue-hint" class="text-cyan-400 font-medium">Nhấn phím [E / Space] hoặc chạm để tiếp tục</span>
+            <button id="btn-next-dialogue" class="text-pink-400 font-bold hover:text-white flex items-center gap-1">
+              <span>TIẾP</span>
+              <span class="pixel-font text-base animate-pulse">▼</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MODAL MINIGAME: SIMULATE SMARTPHONE APP HCMC METRO & DYNAMIC QR -->
+    <div id="phone-modal" class="hidden absolute inset-0 z-40 bg-black/80 backdrop-blur-sm flex items-center justify-center p-3">
+      <div class="bg-slate-900 border-4 border-cyan-400 rounded-3xl p-4 w-full max-w-sm shadow-[0_0_30px_rgba(0,240,255,0.4)] flex flex-col items-center relative">
+        <button id="close-phone-btn" class="absolute top-3 right-4 text-slate-400 hover:text-white text-lg font-bold">✕</button>
+        
+        <!-- Màn hình Smartphone -->
+        <div class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3 flex flex-col items-center">
+          <div class="text-[11px] text-cyan-400 font-bold tracking-widest mb-1">HCMC METRO HURC1 • OU APP</div>
+          <div class="text-[10px] text-slate-400 mb-2">Đăng ký Thẻ Sinh Viên Trợ Giá 50%</div>
+
+          <!-- Thẻ Sinh Viên OU Preview -->
+          <div class="w-full bg-gradient-to-r from-blue-900 to-indigo-950 border border-yellow-400/60 rounded-lg p-2.5 mb-3 flex items-center gap-2">
+            <div class="w-10 h-10 bg-yellow-400/20 rounded border border-yellow-400 flex items-center justify-center text-yellow-300 font-bold pixel-font text-lg">OU</div>
+            <div class="text-left">
+              <div class="text-[11px] font-bold text-white">ĐẠI HỌC MỞ TP.HCM</div>
+              <div class="text-[9px] text-emerald-400 font-mono">ĐÃ XÁC THỰC THẺ SINH VIÊN (-50%)</div>
+              <div class="text-[9px] text-slate-300">Tuyến: Bến xe MĐ mới ⇄ Ga Ba Son</div>
+            </div>
+          </div>
+
+          <!-- Dynamic QR Code Canvas -->
+          <div id="modal-qr-container" class="w-36 h-36 bg-white p-2 rounded-xl flex items-center justify-center relative border-2 border-cyan-400">
+            <svg id="dynamic-qr-svg" class="w-full h-full" viewBox="0 0 100 100">
+              <rect width="100" height="100" fill="#fff"/>
+              <rect x="10" y="10" width="25" height="25" fill="#000"/>
+              <rect x="14" y="14" width="17" height="17" fill="#fff"/>
+              <rect x="18" y="18" width="9" height="9" fill="#000"/>
+              
+              <rect x="65" y="10" width="25" height="25" fill="#000"/>
+              <rect x="69" y="14" width="17" height="17" fill="#fff"/>
+              <rect x="73" y="18" width="9" height="9" fill="#000"/>
+
+              <rect x="10" y="65" width="25" height="25" fill="#000"/>
+              <rect x="14" y="69" width="17" height="17" fill="#fff"/>
+              <rect x="18" y="73" width="9" height="9" fill="#000"/>
+
+              <rect x="42" y="12" width="6" height="18" fill="#000"/>
+              <rect x="40" y="40" width="20" height="20" fill="#000"/>
+              <rect x="65" y="45" width="22" height="6" fill="#000"/>
+              <rect x="42" y="70" width="18" height="18" fill="#000"/>
+              <rect x="70" y="70" width="16" height="16" fill="#000"/>
+            </svg>
+            <div id="qr-scan-line" class="absolute left-0 right-0 top-0 h-1 bg-cyan-400 shadow-[0_0_10px_#00f0ff] animate-pulse"></div>
+          </div>
+
+          <!-- Timer bảo mật 30 giây -->
+          <div class="text-[10px] text-pink-400 font-mono mt-2 flex items-center gap-1">
+            <span>Mã Dynamic QR đổi sau:</span>
+            <span id="qr-countdown" class="font-bold text-yellow-300">29s</span>
+          </div>
+
+          <button id="btn-confirm-ticket" class="mt-3 w-full py-2 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-lg text-white font-bold text-xs tracking-wider shadow hover:opacity-90 active:scale-95 transition-all">
+            ĐÃ MUA VÉ TRỢ GIÁ • SẴN SÀNG QUÉT GA
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL HƯỚNG DẪN TRỢ GIÚP -->
+    <div id="guide-modal" class="hidden absolute inset-0 z-40 bg-black/85 flex items-center justify-center p-4">
+      <div class="bg-slate-900 border-2 border-yellow-400 p-5 rounded-2xl max-w-md w-full">
+        <h3 class="pixel-font text-xl text-yellow-300 font-bold mb-2">HƯỚNG DẪN PHÍM ĐIỀU KHIỂN RPG</h3>
+        <ul class="text-xs space-y-2 text-slate-300">
+          <li>• <b class="text-cyan-400">WASD / Phím Mũi Tên:</b> Di chuyển nhân vật 4 hướng tự do.</li>
+          <li>• <b class="text-yellow-400">Phím E hoặc SPACE:</b> Tương tác với NPC và các điểm sự kiện.</li>
+          <li>• <b class="text-pink-400">Thiết bị cảm ứng (Mobile):</b> Dùng cụm D-pad góc trái và nút ACTION góc phải.</li>
+          <li>• Hãy theo dõi chỉ dẫn <b class="text-white">🎯 NHIỆM VỤ</b> trên cùng để hoàn thành toàn bộ kịch bản từ Biên Hòa tới Giảng đường OU!</li>
+        </ul>
+        <button id="close-guide-btn" class="mt-4 w-full py-2 bg-yellow-400 text-black font-bold text-xs rounded hover:bg-yellow-300">ĐÃ HIỂU - TIẾP TỤC CHƠI</button>
+      </div>
+    </div>
+
+    <!-- MODAL CHIẾN THẮNG / KẾT THÚC GAME THAY THẾ ALERT -->
+    <div id="victory-modal" class="hidden absolute inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="dialogue-glass max-w-lg w-full p-6 rounded-2xl text-center border-yellow-400 shadow-[0_0_35px_rgba(255,230,0,0.5)]">
+        <div class="text-4xl mb-2">🎉 🏆 🎓</div>
+        <h2 class="pixel-font text-3xl text-yellow-300 font-bold mb-2">XUẤT SẮC HOÀN THÀNH BÀI BÁO CÁO!</h2>
+        <div class="bg-slate-900/80 border border-slate-700 rounded-lg p-3 text-left text-xs space-y-1.5 mb-4 text-slate-200 font-mono">
+          <p class="text-cyan-400 font-bold">• Hành trình: Biên Hòa (Đồng Nai) ➔ Ga Suối Tiên ➔ Metro Số 1 ➔ ĐH Mở TP.HCM</p>
+          <p class="text-emerald-400">• Đánh giá hội đồng chuyên môn: <span class="font-bold text-yellow-300">RANK S (10/10)</span></p>
+          <p class="text-pink-400">• Sức khỏe & Thể lực còn lại: <span id="victory-energy" class="font-bold">100%</span></p>
+          <p class="text-slate-300 italic">"Giao thông số và liên kết vùng giúp thu hẹp khoảng cách địa lý cho mọi sinh viên!"</p>
+        </div>
+        <button id="btn-replay" class="btn-pixel-game px-6 py-2.5 text-yellow-300 font-bold text-sm rounded-lg hover:text-white">
+          🔄 CHƠI LẠI TỪ ĐẦU
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    /* ========================================================================
+       1. SYNTHESIZED RETRO AUDIO ENGINE (Web Audio API)
+       ======================================================================== */
+    const SoundEngine = {
+      ctx: null,
+      enabled: false,
+
+      init() {
+        if (!this.ctx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (AC) this.ctx = new AC();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+
+      playBlip(freq = 600) {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq + (Math.random() * 40 - 20), this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.04);
+        } catch(e) {}
+      },
+
+      playGateSuccess() {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(880, now); // A5
+          osc.frequency.setValueAtTime(1320, now + 0.12); // E6
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        } catch(e) {}
+      },
+
+      playStep() {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.03);
+        } catch(e) {}
+      },
+
+      playHorn() {
+        if (!this.enabled || !this.ctx) return;
+        try {
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.setValueAtTime(160, now + 0.15);
+          gain.gain.setValueAtTime(0.04, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } catch(e) {}
+      }
+    };
+
+    /* ========================================================================
+       2. TOP-DOWN 2D PIXEL RPG WORLD & ENGINE
+       Thế giới dài liền mạch chia theo trục X (0 -> 4000px):
+       - Vùng 1 (0 - 800): Ngã ba Vũng Tàu (Đồng Nai) - Xe container, khói bụi, kẹt xe.
+       - Vùng 2 (800 - 1650): Ga Bến xe Miền Đông Mới / Ga Suối Tiên (Bãi xe máy, NPC Sinh viên B).
+       - Vùng 3 (1650 - 2400): Sảnh & Cổng soát vé Turnstile Gate.
+       - Vùng 4 (2400 - 3250): Khoang tàu Metro số 1 mát rượi, ngắm cảnh.
+       - Vùng 5 (3250 - 4000): Giảng đường Đại học Mở TP.HCM (OU) - Thuyết trình & Phản biện.
+       ======================================================================== */
+    const canvas = document.getElementById('rpg-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const WORLD_WIDTH = 4000;
+    const WORLD_HEIGHT = 600;
+
+    function resizeCanvas() {
+      const parent = canvas.parentElement;
+      canvas.width = parent.clientWidth;
+      canvas.height = parent.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Game State Core
+    const RPG = {
+      player: {
+        x: 120,
+        y: 350,
+        w: 32,
+        h: 44,
+        speed: 4.8,
+        dir: 'right', // 'up' | 'down' | 'left' | 'right'
+        moving: false,
+        ridingBike: true, // Cảnh đầu Sinh viên A đang chạy xe máy từ Biên Hòa
+        frame: 0,
+        frameTimer: 0,
+        energy: 100,
+        bikeParked: false,
+        ticketPurchased: false,
+        gatePassed: false,
+        onTrain: false,
+        reachedOU: false
+      },
+      camera: { x: 0, y: 0 },
+      keys: {
+        up: false,
+        down: false,
+        left: false,
+        right: false,
+        action: false
+      },
+      joystick: {
+        active: false,
+        dx: 0,
+        dy: 0
+      },
+      quest: "Lái xe máy từ Biên Hòa qua ngã 3 Vũng Tàu tới Ga Suối Tiên gửi xe",
+      activeDialogue: null,
+      dialogueStep: 0,
+      isTyping: false,
+      typingTimer: null,
+      nearbyTarget: null
+    };
+
+    // Danh sách NPC và Điểm tương tác trên bản đồ
+    const ENTITIES = [
+      {
+        id: 'traffic_jam',
+        name: 'XE CONTAINER 50L',
+        x: 380,
+        y: 340,
+        w: 120,
+        h: 60,
+        type: 'event',
+        icon: '🚛',
+        dialogueId: 'traffic_warning'
+      },
+      {
+        id: 'parking_lot',
+        name: 'BÃI GIỮ XE MÁY GA SUỐI TIÊN',
+        x: 1050,
+        y: 280,
+        w: 90,
+        h: 50,
+        type: 'event',
+        icon: '🅿️',
+        dialogueId: 'park_bike'
+      },
+      {
+        id: 'npc_student_b',
+        name: 'SINH VIÊN B (OU-ER)',
+        role: 'OU-er sành công nghệ',
+        x: 1320,
+        y: 340,
+        w: 32,
+        h: 44,
+        type: 'npc',
+        sprite: 'b',
+        dialogueId: 'meet_b'
+      },
+      {
+        id: 'turnstile_gate',
+        name: 'CỔNG SOÁT VÉ TỰ ĐỘNG (TURNSTILE)',
+        x: 2000,
+        y: 320,
+        w: 60,
+        h: 90,
+        type: 'event',
+        icon: '🎟️',
+        dialogueId: 'scan_gate'
+      },
+      {
+        id: 'npc_metro_friend',
+        name: 'BẠN HỌC TRÊN TÀU',
+        role: 'Sinh viên năm 2 OU',
+        x: 2780,
+        y: 340,
+        w: 32,
+        h: 44,
+        type: 'npc',
+        sprite: 'c',
+        dialogueId: 'train_chat'
+      },
+      {
+        id: 'npc_lecturer',
+        name: 'GIẢNG VIÊN OU & CHUYÊN VIÊN HURC1',
+        role: 'Hội đồng phản biện chính sách số',
+        x: 3680,
+        y: 330,
+        w: 48,
+        h: 48,
+        type: 'npc',
+        sprite: 'lecturer',
+        dialogueId: 'final_presentation'
+      }
+    ];
+
+    /* ========================================================================
+       3. VISUAL NOVEL & OTOME DIALOGUE DATABASE
+       ======================================================================== */
+    const DIALOGUES = {
+      traffic_warning: {
+        speaker: 'SINH VIÊN A',
+        role: 'Tân sinh viên OU từ Đồng Nai',
+        portrait: 'a_sweat',
+        pages: [
+          {
+            text: 'Trời ơi! 5h30 sáng chạy xe máy từ Biên Hòa qua cầu Đồng Nai, tới ngã ba Vũng Tàu là kẹt cứng ngắc giữa một rừng xe container!',
+            effect: () => SoundEngine.playHorn()
+          },
+          {
+            text: 'Bụi mù mịt, hít khói cay xè mắt, người mệt lả run cả tay! Nếu cứ cố chạy xe máy thế này chắc chắn sẽ trễ giờ điểm danh của Thầy!',
+            choices: [
+              {
+                text: '🚇 Tấp vào lề, chạy thẳng tới Ga Bến xe Miền Đông mới / Ga Suối Tiên!',
+                nextAction: () => {
+                  RPG.quest = "Tới Bãi giữ xe máy Ga Suối Tiên (x: 1050)";
+                  updateHUD();
+                  closeDialogue();
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      park_bike: {
+        speaker: 'BẢO VỆ GA METRO',
+        role: 'Bãi gửi xe thông minh',
+        portrait: 'guard',
+        pages: [
+          {
+            text: 'Chào bạn sinh viên! Bạn muốn gửi xe máy để chuyển tiếp đi Metro số 1 vào trung tâm thành phố đúng không?',
+            choices: [
+              {
+                text: '🅿️ Gửi xe máy tại bãi ga (Chuyển sang đi bộ vào sảnh)',
+                nextAction: () => {
+                  RPG.player.bikeParked = true;
+                  RPG.player.ridingBike = false; // Xuống xe máy đi bộ
+                  RPG.player.speed = 3.5;
+                  RPG.quest = "Gặp Sinh viên B đang đợi ở trước sảnh ga (x: 1320)";
+                  updateHUD();
+                  showSingleTextDialogue("HỆ THỐNG", "Bạn đã gửi xe máy an toàn! Bây giờ hãy đi bộ vào sảnh ga tìm bạn B.");
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      meet_b: {
+        speaker: 'SINH VIÊN B',
+        role: 'OU-er sành công nghệ',
+        portrait: 'b_confident',
+        pages: [
+          {
+            text: 'Ủa bạn tôi ơi! Lại ám ảnh kẹt xe ngã ba Vũng Tàu nữa hả? Nhà ở Đồng Nai giờ đi Metro số 1 là chuẩn bài nhất rồi!'
+          },
+          {
+            text: 'Không cần xếp hàng mua vé giấy đâu! Mở điện thoại quét mã QR tải app HCMC Metro HURC liền đi, tui hướng dẫn đăng ký Thẻ Sinh Viên trợ giá 50% nè!'
+          },
+          {
+            text: 'Nhấn nút bên dưới để mở giao diện App HURC mô phỏng nhé!',
+            choices: [
+              {
+                text: '📲 Mở App HCMC Metro HURC & Đăng ký gói Sinh Viên OU (-50%)',
+                nextAction: () => {
+                  closeDialogue();
+                  openPhoneApp();
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      scan_gate: {
+        speaker: 'CỔNG TURNSTILE METRO',
+        role: 'Kiểm soát vé tự động',
+        portrait: 'gate',
+        pages: [
+          {
+            text: () => {
+              if (!RPG.player.ticketPurchased) {
+                return 'CẢNH BÁO: Quý khách chưa có vé điện tử! Hãy gặp Sinh viên B ở sảnh để mở app mua vé sinh viên trước.';
+              }
+              return 'Hệ thống đã nhận diện Dynamic QR Code trên Smartphone của bạn. Chạm màn hình để xác nhận qua cổng!';
+            },
+            choices: () => {
+              if (!RPG.player.ticketPurchased) {
+                return [{ text: 'Quay lại gặp Sinh viên B', nextAction: () => closeDialogue() }];
+              }
+              return [
+                {
+                  text: '⚡ QUÉT MÃ QR QUA CỔNG SOÁT VÉ',
+                  nextAction: () => {
+                    SoundEngine.playGateSuccess();
+                    RPG.player.gatePassed = true;
+                    RPG.player.energy = Math.min(100, RPG.player.energy + 20);
+                    RPG.quest = "Bước vào Toa tàu Metro số 1 mát lạnh (x: 2700)";
+                    updateHUD();
+                    showSingleTextDialogue("CỔNG METRO", "🔊 TÍT! - CHÚC QUÝ KHÁCH CHUYẾN ĐI VUI VẺ! Cổng turnstile đã mở.");
+                  }
+                }
+              ];
+            }
+          }
+        ]
+      },
+
+      train_chat: {
+        speaker: 'BẠN HỌC TRÊN TÀU',
+        role: 'Sinh viên năm 2 OU',
+        portrait: 'c_smile',
+        pages: [
+          {
+            text: 'Đi Metro thích ghê ha bạn! Máy lạnh mát rượi, tàu chạy êm ru không một hạt bụi. Từ Đồng Nai vào Bến Thành chỉ mất đúng 25 phút thay vì 90 phút hít khói xe container!'
+          },
+          {
+            text: 'Trên tàu còn tranh thủ mở app LMS của Đại học Mở ra đọc tài liệu trước giờ học. Chuẩn bị xuống ga Ba Son để vào Giảng đường thuyết trình thôi!',
+            choices: [
+              {
+                text: '🎓 Tiến vào Giảng đường Đại học Mở TP.HCM báo cáo bài tập lớn',
+                nextAction: () => {
+                  RPG.player.onTrain = true;
+                  RPG.quest = "Đến Giảng đường OU gặp Thầy Cô và Chuyên viên HURC1 (x: 3680)";
+                  updateHUD();
+                  closeDialogue();
+                }
+              }
+            ]
+          }
+        ]
+      },
+
+      final_presentation: {
+        speaker: 'CHUYÊN VIÊN HURC1 & GIẢNG VIÊN',
+        role: 'Hội đồng chuyên môn Chính phủ số',
+        portrait: 'expert',
+        pages: [
+          {
+            text: 'Chào mừng nhóm sinh viên OU! Thầy và Chuyên viên HURC1 rất mong đợi phần thuyết trình về đề án Chuyển đổi số giao thông công cộng liên kết vùng TP.HCM - Đồng Nai.'
+          },
+          {
+            text: 'CHUYÊN VIÊN HURC1: "Hệ thống vé số hóa giúp phân tích Big Data hành khách từ cửa ngõ Đồng Nai vào giờ cao điểm, tối ưu tần suất phục vụ và tiến tới giao thông xanh bền vững."'
+          },
+          {
+            text: 'NHÓM BÁO CÁO PHẢN BIỆN: Chúng em đề xuất 3 giải pháp đột phá: Vé Offline Encrypted phòng khi mất sóng 4G, bãi gửi xe thông minh tại ga Suối Tiên, và mô hình MaaS liên thông buýt Đồng Nai 60-1 / 60-2!'
+          },
+          {
+            text: 'GIẢNG VIÊN: "Xuất sắc! Bài thuyết trình sinh động, am hiểu thực tế sinh viên ngoại tỉnh và đề xuất chính sách số rất xác đáng! Điểm tổng kết: RANK S - 10/10!"',
+            choices: [
+              {
+                text: '🎉 HOÀN THÀNH XUẤT SẮC HÀNH TRÌNH METRO QUEST!',
+                nextAction: () => {
+                  RPG.player.reachedOU = true;
+                  RPG.quest = "🏆 ĐÃ HOÀN THÀNH XUẤT SẮC - RANK S";
+                  updateHUD();
+                  closeDialogue();
+                  showVictoryModal();
+                }
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    /* ========================================================================
+       4. DRAWING & RENDERING ENGINE (Top-down Pixel Art)
+       ======================================================================== */
+    function drawWorld() {
+      // 1. Nền bản đồ theo từng phân vùng
+      // Khu 1: Ngã 3 Vũng Tàu / Đường nhựa cao tốc
+      ctx.fillStyle = '#262626';
+      ctx.fillRect(0, 0, 800, WORLD_HEIGHT);
+      // Vạch kẻ đường cao tốc Xa lộ Hà Nội
+      ctx.fillStyle = '#eab308';
+      for (let i = 20; i < 800; i += 60) {
+        ctx.fillRect(i, 320, 30, 6);
+      }
+      // Dải phân cách & Khói bụi
+      ctx.fillStyle = '#52525b';
+      ctx.fillRect(0, 180, 800, 16);
+      ctx.fillRect(0, 480, 800, 16);
+
+      // Biển báo Ngã ba Vũng Tàu - Biên Hòa
+      drawPixelSign(80, 120, "NGÃ 3 VŨNG TÀU - BIÊN HÒA", "#ef4444");
+
+      // Khu 2: Ga Suối Tiên / Bến xe Miền Đông mới
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(800, 0, 850, WORLD_HEIGHT);
+      // Gạch lát sảnh trạm ga hiện đại
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      for (let x = 800; x < 1650; x += 40) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, WORLD_HEIGHT); ctx.stroke();
+      }
+      // Bãi giữ xe máy
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(1000, 240, 180, 120);
+      ctx.strokeStyle = '#38bdf8';
+      ctx.strokeRect(1000, 240, 180, 120);
+      drawPixelSign(1010, 210, "BÃI GIỮ XE MÁY GA METRO", "#0284c7");
+      
+      // Xe máy xếp trong bãi
+      for (let m = 0; m < 4; m++) {
+        drawPixelBike(1020 + (m * 40), 280);
+      }
+      drawPixelSign(1300, 140, "GA SUỐI TIÊN - TUYẾN SỐ 1", "#0284c7");
+
+      // Khu 3: Sảnh Soát Vé & Cổng Turnstile
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(1650, 0, 750, WORLD_HEIGHT);
+      // Vạch ngăn an toàn màu vàng trước cổng
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillRect(1980, 180, 8, 300);
+      drawPixelSign(1900, 130, "CỔNG SOÁT VÉ THÔNG MINH TURNSTILE", "#ff2a85");
+
+      // Khu 4: Khoang Tàu Metro Số 1 Hiện Đại
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fillRect(2400, 160, 850, 320);
+      // Khung kính ngắm cảnh
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(2420, 180, 810, 50);
+      // Ghế ngồi xanh dương Metro
+      ctx.fillStyle = '#0284c7';
+      ctx.fillRect(2440, 240, 770, 25);
+      ctx.fillRect(2440, 420, 770, 25);
+      // Tay vịn inox
+      ctx.fillStyle = '#cbd5e1';
+      for (let p = 2460; p < 3230; p += 70) {
+        ctx.fillRect(p, 230, 4, 190);
+      }
+      drawPixelSign(2600, 100, "KHOANG TÀU METRO SỐ 1 (BẾN THÀNH - SUỐI TIÊN)", "#0284c7");
+
+      // Khu 5: Giảng Đường Đại Học Mở TP.HCM (OU)
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(3250, 0, 750, WORLD_HEIGHT);
+      // Bảng xanh lớn giảng đường
+      ctx.fillStyle = '#15803d';
+      ctx.fillRect(3550, 120, 320, 70);
+      ctx.strokeStyle = '#854d0e';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(3550, 120, 320, 70);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '14px VT323';
+      ctx.fillText("BÁO CÁO: CHÍNH PHỦ ĐIỆN TỬ & CHUYỂN ĐỔI SỐ", 3570, 150);
+      ctx.fillText("ĐỀ TÀI: KẾT NỐI VÙNG TP.HCM - ĐỒNG NAI (OU 2026)", 3570, 175);
+      // Bàn ghế giảng đường
+      ctx.fillStyle = '#b45309';
+      ctx.fillRect(3400, 280, 120, 30);
+      ctx.fillRect(3400, 380, 120, 30);
+      drawPixelSign(3550, 80, "GIẢNG ĐƯỜNG ĐẠI HỌC MỞ TP.HCM", "#16a34a");
+
+      // 2. Vẽ các thực thể tương tác (NPC / Xe container / Cổng)
+      ENTITIES.forEach(ent => {
+        if (ent.id === 'traffic_jam') {
+          drawPixelTruck(ent.x, ent.y);
+        } else if (ent.id === 'turnstile_gate') {
+          drawTurnstileGate(ent.x, ent.y, RPG.player.gatePassed);
+        } else if (ent.type === 'npc') {
+          drawPixelNPC(ent.x, ent.y, ent.sprite);
+        }
+
+        // Vẽ tên và icon nổi trên đầu entity
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(ent.x - 10, ent.y - 22, 100, 18);
+        ctx.strokeStyle = '#00f0ff';
+        ctx.strokeRect(ent.x - 10, ent.y - 22, 100, 18);
+        ctx.fillStyle = '#fef08a';
+        ctx.font = '11px Be Vietnam Pro';
+        ctx.fillText(ent.name.substring(0, 14), ent.x - 6, ent.y - 9);
+      });
+
+      // 3. Vẽ nhân vật chính (Sinh viên A)
+      drawPlayerCharacter();
+    }
+
+    // Vẽ biển báo Pixel
+    function drawPixelSign(x, y, text, color) {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(x, y, text.length * 9 + 20, 26);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x, y, text.length * 9 + 20, 26);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '12px VT323';
+      ctx.fillText(text, x + 10, y + 17);
+    }
+
+    // Vẽ Xe Container khói bụi
+    function drawPixelTruck(x, y) {
+      ctx.fillStyle = '#b91c1c';
+      ctx.fillRect(x, y, 120, 50);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(x + 120, y + 10, 40, 40);
+      // Cửa kính cabin
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(x + 135, y + 14, 20, 16);
+      // Bánh xe
+      ctx.fillStyle = '#000';
+      ctx.beginPath(); ctx.arc(x + 25, y + 50, 10, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x + 85, y + 50, 10, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x + 140, y + 50, 10, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Vẽ Xe máy trong bãi
+    function drawPixelBike(x, y) {
+      ctx.fillStyle = '#ef4444';
+      ctx.fillRect(x, y, 22, 14);
+      ctx.fillStyle = '#000';
+      ctx.beginPath(); ctx.arc(x + 4, y + 14, 5, 0, Math.PI*2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x + 18, y + 14, 5, 0, Math.PI*2); ctx.fill();
+    }
+
+    // Vẽ Cổng Turnstile Gate
+    function drawTurnstileGate(x, y, isOpen) {
+      ctx.fillStyle = '#334155';
+      ctx.fillRect(x, y, 20, 70);
+      ctx.fillRect(x + 50, y, 20, 70);
+      // Cánh cổng xoay hoặc mở ra
+      if (isOpen) {
+        ctx.fillStyle = '#22c55e';
+        ctx.fillRect(x + 18, y + 25, 6, 30);
+        ctx.fillRect(x + 46, y + 25, 6, 30);
+      } else {
+        ctx.fillStyle = '#ef4444';
+        ctx.fillRect(x + 20, y + 30, 30, 8); // Cánh chắn ngang màu đỏ
+      }
+      // Đèn tín hiệu
+      ctx.fillStyle = isOpen ? '#22c55e' : '#ef4444';
+      ctx.beginPath(); ctx.arc(x + 10, y + 15, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(x + 60, y + 15, 4, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // Vẽ NPC Sprite Pixel
+    function drawPixelNPC(x, y, type) {
+      const color = type === 'b' ? '#8b5cf6' : (type === 'c' ? '#06b6d4' : '#f59e0b');
+      // Thân áo
+      ctx.fillStyle = color;
+      ctx.fillRect(x + 6, y + 14, 20, 22);
+      // Quần
+      ctx.fillStyle = '#1e293b';
+      ctx.fillRect(x + 8, y + 36, 6, 12);
+      ctx.fillRect(x + 18, y + 36, 6, 12);
+      // Đầu
+      ctx.fillStyle = '#fed7aa';
+      ctx.fillRect(x + 7, y, 18, 14);
+      // Tóc
+      ctx.fillStyle = '#451a03';
+      ctx.fillRect(x + 6, y, 20, 6);
+      // Kính công nghệ (nếu là Sinh viên B hoặc Chuyên viên)
+      if (type === 'b' || type === 'lecturer') {
+        ctx.fillStyle = '#00f0ff';
+        ctx.fillRect(x + 10, y + 6, 6, 3);
+        ctx.fillRect(x + 18, y + 6, 6, 3);
+      }
+    }
+
+    // Vẽ Nhân vật chính (Sinh viên A: Chạy xe máy hoặc đi bộ)
+    function drawPlayerCharacter() {
+      const p = RPG.player;
+      const x = p.x;
+      const y = p.y;
+
+      if (p.ridingBike) {
+        // TRẠNG THÁI LÁI XE MÁY ĐẦU GAME (BIÊN HÒA)
+        // 1. Thân xe máy & bánh xe
+        ctx.fillStyle = '#ef4444'; // Thân xe màu đỏ
+        ctx.fillRect(x - 2, y + 26, 36, 12);
+        ctx.fillStyle = '#38bdf8'; // Đèn pha trước
+        if (p.dir === 'left') {
+          ctx.fillRect(x - 4, y + 26, 4, 6);
+        } else {
+          ctx.fillRect(x + 34, y + 26, 4, 6);
+        }
+        // Bánh xe máy
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath(); ctx.arc(x + 4, y + 38, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 28, y + 38, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#94a3b8';
+        ctx.beginPath(); ctx.arc(x + 4, y + 38, 3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x + 28, y + 38, 3, 0, Math.PI * 2); ctx.fill();
+
+        // 2. Khói ống xả khi xe di chuyển
+        if (p.moving) {
+          ctx.fillStyle = 'rgba(203, 213, 225, 0.6)';
+          const exhaustX = (p.dir === 'left') ? x + 34 : x - 8;
+          ctx.beginPath(); ctx.arc(exhaustX - (Math.random() * 4), y + 36, 4, 0, Math.PI * 2); ctx.fill();
+        }
+
+        // 3. Người lái cúi người lái xe
+        ctx.fillStyle = '#f59e0b'; // Áo vàng
+        ctx.fillRect(x + 10, y + 16, 16, 14);
+        ctx.fillStyle = '#1d4ed8'; // Quần xanh
+        ctx.fillRect(x + 8, y + 26, 14, 10);
+        // Balo to sau lưng
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(x + 4, y + 14, 8, 14);
+        // Đầu đội nón bảo hiểm đỏ
+        ctx.fillStyle = '#fed7aa';
+        ctx.fillRect(x + 12, y + 4, 12, 12);
+        ctx.fillStyle = '#dc2626'; // Nón bảo hiểm trùm kín
+        ctx.beginPath(); ctx.arc(x + 18, y + 8, 8, Math.PI, 0); ctx.fill();
+        ctx.fillRect(x + 10, y + 6, 16, 5);
+
+      } else {
+        // TRẠNG THÁI ĐI BỘ (SAU KHI ĐÃ GỬI XE TẠI GA)
+        const legOffset = p.moving ? (Math.sin(p.frame * 0.3) * 4) : 0;
+
+        // Balo sau lưng
+        if (p.dir === 'up' || p.dir === 'right') {
+          ctx.fillStyle = '#334155';
+          ctx.fillRect(x + 2, y + 12, 12, 20);
+        }
+
+        // Thân áo thun vàng sinh viên
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillRect(x + 6, y + 14, 20, 20);
+
+        // Nón bảo hiểm treo bên hông
+        ctx.fillStyle = '#ef4444';
+        ctx.beginPath();
+        ctx.arc(x + (p.dir === 'left' ? 24 : 4), y + 22, 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Quần jean & Chân bước
+        ctx.fillStyle = '#1d4ed8';
+        ctx.fillRect(x + 7, y + 34, 7, 10 + legOffset);
+        ctx.fillRect(x + 18, y + 34, 7, 10 - legOffset);
+
+        // Giày
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(x + 6, y + 44 + legOffset, 8, 4);
+        ctx.fillRect(x + 18, y + 44 - legOffset, 8, 4);
+
+        // Khuôn mặt chibi
+        ctx.fillStyle = '#fed7aa';
+        ctx.fillRect(x + 7, y, 18, 14);
+        ctx.fillStyle = '#78350f';
+        ctx.fillRect(x + 6, y, 20, 5);
+
+        // Mắt nhìn theo hướng
+        ctx.fillStyle = '#0f172a';
+        if (p.dir === 'down') {
+          ctx.fillRect(x + 10, y + 7, 3, 3);
+          ctx.fillRect(x + 19, y + 7, 3, 3);
+        } else if (p.dir === 'left') {
+          ctx.fillRect(x + 8, y + 7, 3, 3);
+        } else if (p.dir === 'right') {
+          ctx.fillRect(x + 21, y + 7, 3, 3);
+        }
+      }
+    }
+
+    /* ========================================================================
+       5. GAME LOOP & MOVEMENT LOGIC
+       ======================================================================== */
+    let lastTime = performance.now();
+
+    function gameLoop(now) {
+      const dt = (now - lastTime) / 1000;
+      lastTime = now;
+
+      update(dt);
+      render();
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function update(dt) {
+      // Đóng băng di chuyển khi đang mở khung thoại hoặc popup
+      if (RPG.activeDialogue || !phoneModal.classList.contains('hidden') || !victoryModal.classList.contains('hidden')) {
+        RPG.player.moving = false;
+        return;
+      }
+
+      const p = RPG.player;
+      let dx = 0;
+      let dy = 0;
+
+      // Ưu tiên Joystick nếu đang tương tác
+      if (RPG.joystick.active) {
+        dx = RPG.joystick.dx;
+        dy = RPG.joystick.dy;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          p.dir = dx > 0 ? 'right' : 'left';
+        } else {
+          p.dir = dy > 0 ? 'down' : 'up';
+        }
+      } else {
+        // Phím bàn phím
+        if (RPG.keys.up) { dy -= 1; p.dir = 'up'; }
+        if (RPG.keys.down) { dy += 1; p.dir = 'down'; }
+        if (RPG.keys.left) { dx -= 1; p.dir = 'left'; }
+        if (RPG.keys.right) { dx += 1; p.dir = 'right'; }
+      }
+
+      if (dx !== 0 || dy !== 0) {
+        // Chuẩn hóa vector di chuyển
+        const length = Math.hypot(dx, dy);
+        dx = (dx / length) * p.speed;
+        dy = (dy / length) * p.speed;
+
+        p.x = Math.max(10, Math.min(WORLD_WIDTH - p.w - 10, p.x + dx));
+        p.y = Math.max(160, Math.min(480 - p.h, p.y + dy));
+
+        p.moving = true;
+        p.frame++;
+        if (p.frame % 15 === 0) {
+          if (p.ridingBike) {
+            SoundEngine.playStep();
+          } else {
+            SoundEngine.playStep();
+          }
+        }
+      } else {
+        p.moving = false;
+      }
+
+      // Smooth Camera Follow Player
+      const targetCamX = p.x - (canvas.width / 2);
+      const targetCamY = p.y - (canvas.height / 2);
+      RPG.camera.x += (targetCamX - RPG.camera.x) * 0.1;
+      RPG.camera.y += (targetCamY - RPG.camera.y) * 0.1;
+
+      // Giới hạn camera trong thế giới
+      RPG.camera.x = Math.max(0, Math.min(WORLD_WIDTH - canvas.width, RPG.camera.x));
+      RPG.camera.y = Math.max(0, Math.min(WORLD_HEIGHT - canvas.height, RPG.camera.y));
+
+      // Kiểm tra thực thể tương tác gần nhất
+      checkNearbyInteractions();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      // Áp dụng dịch chuyển camera
+      ctx.translate(-Math.floor(RPG.camera.x), -Math.floor(RPG.camera.y));
+      drawWorld();
+      ctx.restore();
+    }
+
+    function checkNearbyInteractions() {
+      const p = RPG.player;
+      const interactDist = 65;
+      let closest = null;
+      let minDist = Infinity;
+
+      ENTITIES.forEach(ent => {
+        const dist = Math.hypot((p.x + p.w / 2) - (ent.x + ent.w / 2), (p.y + p.h / 2) - (ent.y + ent.h / 2));
+        if (dist < interactDist && dist < minDist) {
+          closest = ent;
+          minDist = dist;
+        }
+      });
+
+      const promptEl = document.getElementById('interact-prompt');
+      const promptTxt = document.getElementById('interact-prompt-txt');
+
+      if (closest && !RPG.activeDialogue) {
+        RPG.nearbyTarget = closest;
+        promptTxt.textContent = `Nhấn [E] để tương tác: ${closest.name}`;
+        promptEl.classList.remove('hidden');
+      } else {
+        RPG.nearbyTarget = null;
+        promptEl.classList.add('hidden');
+      }
+    }
+
+    /* ========================================================================
+       6. OTOME / VISUAL NOVEL DIALOGUE SYSTEM
+       ======================================================================== */
+    const dialogueBox = document.getElementById('dialogue-box');
+    const dialogueSpeaker = document.getElementById('dialogue-speaker');
+    const dialogueRole = document.getElementById('dialogue-role');
+    const dialogueText = document.getElementById('dialogue-text');
+    const dialogueChoices = document.getElementById('dialogue-choices');
+    const portraitSvg = document.getElementById('portrait-svg');
+    const btnNextDialogue = document.getElementById('btn-next-dialogue');
+
+    function triggerInteraction() {
+      if (!RPG.nearbyTarget) return;
+      const target = RPG.nearbyTarget;
+      const dData = DIALOGUES[target.dialogueId];
+      if (!dData) return;
+
+      openDialogue(dData);
+    }
+
+    function openDialogue(dialogueObj) {
+      RPG.activeDialogue = dialogueObj;
+      RPG.dialogueStep = 0;
+      dialogueBox.classList.remove('hidden');
+      renderDialoguePage();
+    }
+
+    function closeDialogue() {
+      clearInterval(RPG.typingTimer);
+      RPG.isTyping = false;
+      RPG.activeDialogue = null;
+      RPG.dialogueStep = 0;
+      dialogueBox.classList.add('hidden');
+      dialogueChoices.classList.add('hidden');
+      
+      // Reset triệt để trạng thái phím để không bao giờ bị đơ nhân vật
+      RPG.keys.up = false;
+      RPG.keys.down = false;
+      RPG.keys.left = false;
+      RPG.keys.right = false;
+      RPG.joystick.active = false;
+      resetJoystickVisual();
+    }
+
+    function renderDialoguePage() {
+      const d = RPG.activeDialogue;
+      if (!d) return;
+      const page = d.pages[RPG.dialogueStep];
+      if (!page) {
+        closeDialogue();
+        return;
+      }
+
+      dialogueSpeaker.textContent = d.speaker;
+      dialogueRole.textContent = d.role;
+      renderPortraitSVG(d.portrait);
+
+      // Nếu có hiệu ứng âm thanh trang
+      if (page.effect) page.effect();
+
+      // Render nội dung gõ chữ
+      const rawText = typeof page.text === 'function' ? page.text() : page.text;
+      typewriterDialogue(rawText, () => {
+        // Render các nút lựa chọn sau khi gõ xong
+        dialogueChoices.innerHTML = '';
+        const choices = typeof page.choices === 'function' ? page.choices() : page.choices;
+        if (choices && choices.length > 0) {
+          dialogueChoices.classList.remove('hidden');
+          choices.forEach(ch => {
+            const btn = document.createElement('button');
+            btn.className = "btn-pixel-game p-2 rounded text-left text-xs font-semibold text-cyan-200 hover:text-white flex items-center gap-2";
+            btn.innerHTML = `<span class="text-pink-400 font-bold">▶</span> <span>${ch.text}</span>`;
+            btn.onclick = (e) => {
+              e.stopPropagation();
+              SoundEngine.playBlip(750);
+              if (ch.nextAction) ch.nextAction();
+            };
+            dialogueChoices.appendChild(btn);
+          });
+        } else {
+          dialogueChoices.classList.add('hidden');
+        }
+      });
+    }
+
+    function typewriterDialogue(text, onComplete) {
+      clearInterval(RPG.typingTimer);
+      RPG.isTyping = true;
+      dialogueText.textContent = "";
+      dialogueText.classList.add('typing-cursor');
+
+      let idx = 0;
+      RPG.typingTimer = setInterval(() => {
+        if (idx < text.length) {
+          dialogueText.textContent += text.charAt(idx);
+          if (idx % 2 === 0) SoundEngine.playBlip(680);
+          idx++;
+        } else {
+          clearInterval(RPG.typingTimer);
+          RPG.isTyping = false;
+          dialogueText.classList.remove('typing-cursor');
+          if (onComplete) onComplete();
+        }
+      }, 20);
+    }
+
+    function advanceDialogue() {
+      if (!RPG.activeDialogue) return;
+
+      if (RPG.isTyping) {
+        // Tua nhanh hết chữ
+        clearInterval(RPG.typingTimer);
+        const d = RPG.activeDialogue;
+        const page = d.pages[RPG.dialogueStep];
+        dialogueText.textContent = typeof page.text === 'function' ? page.text() : page.text;
+        dialogueText.classList.remove('typing-cursor');
+        RPG.isTyping = false;
+        return;
+      }
+
+      const d = RPG.activeDialogue;
+      const page = d.pages[RPG.dialogueStep];
+      // Nếu có danh sách lựa chọn bắt buộc bấm thì không tự bấm tiếp
+      const choices = typeof page.choices === 'function' ? page.choices() : page.choices;
+      if (choices && choices.length > 0) return;
+
+      if (RPG.dialogueStep < d.pages.length - 1) {
+        RPG.dialogueStep++;
+        renderDialoguePage();
+      } else {
+        closeDialogue();
+      }
+    }
+
+    function showSingleTextDialogue(speaker, msg) {
+      openDialogue({
+        speaker: speaker,
+        role: "Thông báo hệ thống",
+        portrait: "system",
+        pages: [{
+          text: msg,
+          choices: [
+            {
+              text: 'Đã hiểu, tiếp tục!',
+              nextAction: () => closeDialogue()
+            }
+          ]
+        }]
+      });
+    }
+
+    function renderPortraitSVG(portraitKey) {
+      let content = '';
+      if (portraitKey === 'a_sweat') {
+        content = `
+          <rect width="100" height="100" fill="#1e1b4b"/>
+          <circle cx="50" cy="50" r="32" fill="#fed7aa"/>
+          <rect x="25" y="20" width="50" height="24" rx="6" fill="#78350f"/>
+          <circle cx="42" cy="48" r="4" fill="#000"/>
+          <circle cx="58" cy="48" r="4" fill="#000"/>
+          <ellipse cx="50" cy="65" rx="8" ry="5" fill="#dc2626"/>
+          <path d="M72 40 Q75 48 72 52 Q68 48 72 40" fill="#38bdf8"/>
+        `;
+      } else if (portraitKey === 'b_confident') {
+        content = `
+          <rect width="100" height="100" fill="#2e1065"/>
+          <circle cx="50" cy="50" r="32" fill="#ffedd5"/>
+          <path d="M22 35 C25 15, 75 15, 78 35 Z" fill="#1e1b4b"/>
+          <circle cx="40" cy="48" r="7" stroke="#ff2a85" stroke-width="2" fill="none"/>
+          <circle cx="60" cy="48" r="7" stroke="#ff2a85" stroke-width="2" fill="none"/>
+          <path d="M44 64 Q50 70 56 64" stroke="#e11d48" stroke-width="2" fill="none"/>
+        `;
+      } else if (portraitKey === 'expert' || portraitKey === 'c_smile') {
+        content = `
+          <rect width="100" height="100" fill="#082f49"/>
+          <circle cx="50" cy="50" r="32" fill="#fed7aa"/>
+          <path d="M26 30 C30 14, 70 14, 74 30 Z" fill="#334155"/>
+          <rect x="34" y="44" width="14" height="8" rx="2" fill="#00f0ff" opacity="0.9"/>
+          <rect x="52" y="44" width="14" height="8" rx="2" fill="#00f0ff" opacity="0.9"/>
+          <path d="M45 64 Q50 68 55 64" stroke="#000" stroke-width="2" fill="none"/>
+        `;
+      } else {
+        content = `
+          <rect width="100" height="100" fill="#0f172a"/>
+          <circle cx="50" cy="50" r="28" fill="#38bdf8"/>
+          <rect x="35" y="35" width="30" height="30" fill="#0f172a"/>
+        `;
+      }
+      portraitSvg.innerHTML = content;
+    }
+
+    /* ========================================================================
+       7. SMARTPHONE METRO HURC APP MINIGAME (Dynamic QR & Pass OU)
+       ======================================================================== */
+    const phoneModal = document.getElementById('phone-modal');
+    const closePhoneBtn = document.getElementById('close-phone-btn');
+    const btnConfirmTicket = document.getElementById('btn-confirm-ticket');
+    const qrCountdown = document.getElementById('qr-countdown');
+    let qrTimer = null;
+    let secondsLeft = 29;
+
+    function openPhoneApp() {
+      phoneModal.classList.remove('hidden');
+      secondsLeft = 29;
+      qrCountdown.textContent = `${secondsLeft}s`;
+      clearInterval(qrTimer);
+      qrTimer = setInterval(() => {
+        secondsLeft--;
+        if (secondsLeft <= 0) secondsLeft = 30;
+        qrCountdown.textContent = `${secondsLeft}s`;
+      }, 1000);
+    }
+
+    closePhoneBtn.onclick = () => {
+      clearInterval(qrTimer);
+      phoneModal.classList.add('hidden');
+    };
+
+    btnConfirmTicket.onclick = () => {
+      SoundEngine.playGateSuccess();
+      RPG.player.ticketPurchased = true;
+      clearInterval(qrTimer);
+      phoneModal.classList.add('hidden');
+      RPG.quest = "Tiến tới Cổng Turnstile Gate (x: 2000) để quét vé QR qua ga";
+      updateHUD();
+      showSingleTextDialogue("HCMC METRO", "Kích hoạt vé sinh viên trợ giá thành công! Dynamic QR Code đã sẵn sàng quét tại cổng.");
+    };
+
+    function updateHUD() {
+      document.getElementById('hud-energy').style.width = `${RPG.player.energy}%`;
+      document.getElementById('hud-energy-txt').textContent = `${RPG.player.energy}%`;
+      document.getElementById('hud-quest-txt').textContent = RPG.quest;
+    }
+
+    /* ========================================================================
+       8. CONTROLS: VIRTUAL JOYSTICK & KEYBOARD
+       ======================================================================== */
+    // Keyboard Event Listeners
+    window.addEventListener('keydown', (e) => {
+      SoundEngine.init();
+
+      if (e.code === 'KeyW' || e.code === 'ArrowUp') RPG.keys.up = true;
+      if (e.code === 'KeyS' || e.code === 'ArrowDown') RPG.keys.down = true;
+      if (e.code === 'KeyA' || e.code === 'ArrowLeft') RPG.keys.left = true;
+      if (e.code === 'KeyD' || e.code === 'ArrowRight') RPG.keys.right = true;
+
+      if (e.code === 'KeyE' || e.code === 'Space') {
+        if (RPG.activeDialogue) {
+          advanceDialogue();
+        } else {
+          triggerInteraction();
+        }
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'KeyW' || e.code === 'ArrowUp') RPG.keys.up = false;
+      if (e.code === 'KeyS' || e.code === 'ArrowDown') RPG.keys.down = false;
+      if (e.code === 'KeyA' || e.code === 'ArrowLeft') RPG.keys.left = false;
+      if (e.code === 'KeyD' || e.code === 'ArrowRight') RPG.keys.right = false;
+    });
+
+    // Virtual Joystick Logic
+    const joystickZone = document.getElementById('joystick-zone');
+    const joystickStick = document.getElementById('joystick-stick');
+    const MAX_JOYSTICK_RADIUS = 38;
+
+    function handleJoystickMove(clientX, clientY) {
+      const rect = joystickZone.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      let dx = clientX - centerX;
+      let dy = clientY - centerY;
+      const distance = Math.hypot(dx, dy);
+
+      if (distance > MAX_JOYSTICK_RADIUS) {
+        dx = (dx / distance) * MAX_JOYSTICK_RADIUS;
+        dy = (dy / distance) * MAX_JOYSTICK_RADIUS;
+      }
+
+      joystickStick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+
+      RPG.joystick.active = true;
+      RPG.joystick.dx = dx / MAX_JOYSTICK_RADIUS;
+      RPG.joystick.dy = dy / MAX_JOYSTICK_RADIUS;
+    }
+
+    function resetJoystickVisual() {
+      joystickStick.style.transform = 'translate(-50%, -50%)';
+      RPG.joystick.active = false;
+      RPG.joystick.dx = 0;
+      RPG.joystick.dy = 0;
+    }
+
+    // Touch Joystick Events
+    joystickZone.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      SoundEngine.init();
+      const touch = e.touches[0];
+      handleJoystickMove(touch.clientX, touch.clientY);
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (RPG.joystick.active) {
+        const touch = e.touches[0];
+        handleJoystickMove(touch.clientX, touch.clientY);
+      }
+    }, { passive: false });
+
+    window.addEventListener('touchend', () => {
+      resetJoystickVisual();
+    });
+
+    // Mouse Drag Joystick (Cho phép test joystick bằng chuột máy tính)
+    let isMouseDownJoystick = false;
+    joystickZone.addEventListener('mousedown', (e) => {
+      isMouseDownJoystick = true;
+      SoundEngine.init();
+      handleJoystickMove(e.clientX, e.clientY);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (isMouseDownJoystick) {
+        handleJoystickMove(e.clientX, e.clientY);
+      }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isMouseDownJoystick) {
+        isMouseDownJoystick = false;
+        resetJoystickVisual();
+      }
+    });
+
+    // Nút Action Touch trên màn hình
+    const touchActionBtn = document.getElementById('touch-action-btn');
+    touchActionBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      SoundEngine.init();
+      if (RPG.activeDialogue) {
+        advanceDialogue();
+      } else {
+        triggerInteraction();
+      }
+    });
+
+    // Bấm vào khung thoại để tiếp tục
+    btnNextDialogue.onclick = (e) => {
+      e.stopPropagation();
+      advanceDialogue();
+    };
+    dialogueBox.addEventListener('click', (e) => {
+      if (!e.target.closest('button')) {
+        advanceDialogue();
+      }
+    });
+
+    // Audio & Guide Buttons
+    const btnAudioToggle = document.getElementById('btn-audio-toggle');
+    btnAudioToggle.onclick = () => {
+      SoundEngine.init();
+      SoundEngine.enabled = !SoundEngine.enabled;
+      btnAudioToggle.textContent = SoundEngine.enabled ? "🔊 TẮT ÂM" : "🔇 BẬT ÂM";
+      btnAudioToggle.classList.toggle('text-pink-400', SoundEngine.enabled);
+    };
+
+    const guideModal = document.getElementById('guide-modal');
+    document.getElementById('btn-guide-toggle').onclick = () => guideModal.classList.remove('hidden');
+    document.getElementById('close-guide-btn').onclick = () => guideModal.classList.add('hidden');
+
+    // Victory Modal & Replay
+    const victoryModal = document.getElementById('victory-modal');
+    const btnReplay = document.getElementById('btn-replay');
+
+    function showVictoryModal() {
+      document.getElementById('victory-energy').textContent = `${RPG.player.energy}%`;
+      victoryModal.classList.remove('hidden');
+      SoundEngine.playGateSuccess();
+    }
+
+    btnReplay.onclick = () => {
+      victoryModal.classList.add('hidden');
+      // Reset trạng thái game
+      RPG.player.x = 120;
+      RPG.player.y = 350;
+      RPG.player.ridingBike = true;
+      RPG.player.speed = 4.8;
+      RPG.player.energy = 100;
+      RPG.player.bikeParked = false;
+      RPG.player.ticketPurchased = false;
+      RPG.player.gatePassed = false;
+      RPG.player.onTrain = false;
+      RPG.player.reachedOU = false;
+      RPG.quest = "Lái xe máy từ Biên Hòa qua ngã 3 Vũng Tàu tới Ga Suối Tiên gửi xe";
+      updateHUD();
+    };
+
+    // Khởi chạy game loop an toàn với resize và kích thước màn hình chuẩn xác
+    window.onload = function() {
+      resizeCanvas();
+      updateHUD();
+      lastTime = performance.now();
+      requestAnimationFrame(gameLoop);
+    };
+
+    // Đảm bảo cập nhật lại canvas khi cửa sổ thay đổi kích thước
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+    });
+  </script>
+</body>
+</html>
