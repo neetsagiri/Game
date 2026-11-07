@@ -21,7 +21,7 @@
     body {
       background-color: #030712;
       color: #f1f5f9;
-      font-family: 'VT323', monospace;
+      font-family: 'Press Start 2P', monospace;
       user-select: none;
       -webkit-user-select: none;
       overflow-x: hidden;
@@ -65,65 +65,71 @@
       border-radius: 3px;
     }
 
-    /* 9:16 Vertical Aspect Ratio Container */
-    .game-container-9-16 {
-      /* 360 Virtual Drag Joystick Knob */
-      #joystick-base {
-        width: 96px;
-        height: 96px;
-        background: rgba(15, 23, 42, 0.85);
-        border: 3px solid rgba(56, 189, 248, 0.85);
-        border-radius: 50%;
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        touch-action: none;
-        z-index: 25;
-        box-shadow: 0 0 18px rgba(2, 132, 199, 0.6);
-      }
+    /* 9:12 Portrait Aspect Ratio Game Container */
+    .game-container-9-12 {
+      aspect-ratio: 9 / 12;
+      width: 100%;
+      max-width: 390px;
+      max-height: 95vh;
+    }
 
-      #joystick-stick {
-        width: 44px;
-        height: 44px;
-        background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
-        border: 2.5px solid #ffffff;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.8);
-      }
+    /* 360 Virtual Drag Joystick Knob */
+    #joystick-base {
+      width: 84px;
+      height: 84px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 3px solid rgba(56, 189, 248, 0.85);
+      border-radius: 50%;
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      touch-action: none;
+      z-index: 25;
+      box-shadow: 0 0 16px rgba(2, 132, 199, 0.6);
+    }
 
-      /* Smartphone Frame Bezel */
-      .phone-bezel {
-        border: 8px solid #1e293b;
-        border-radius: 32px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), inset 0 0 10px rgba(0,0,0,0.7);
-      }
-    </style>
+    #joystick-stick {
+      width: 38px;
+      height: 38px;
+      background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+    }
+
+    /* Smartphone Frame Bezel */
+    .phone-bezel {
+      border: 8px solid #1e293b;
+      border-radius: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), inset 0 0 10px rgba(0,0,0,0.7);
+    }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-1 sm:p-2 bg-slate-950">
+<body class="min-h-screen flex flex-col items-center justify-center p-1 sm:p-2 bg-slate-950 font-pixel">
 
-  <!-- MAIN 9:16 VERTICAL PORTRAIT GAME CONTAINER -->
-  <div id="game-app" class="game-container-9-16 flex flex-col relative rounded-2xl overflow-hidden border-2 sm:border-4 border-slate-800 bg-slate-900 shadow-2xl">
+  <!-- MAIN 9:12 PORTRAIT GAME CONTAINER -->
+  <div id="game-app" class="game-container-9-12 flex flex-col relative rounded-2xl overflow-hidden border-2 sm:border-4 border-slate-800 bg-slate-900 shadow-2xl">
     
     <!-- TOP HEADER HUD BAR -->
-    <header class="bg-slate-900 border-b-2 border-slate-700 px-3 py-1.5 flex items-center justify-between text-amber-400 z-10 shrink-0">
+    <header class="bg-slate-900 border-b-2 border-slate-700 px-2.5 py-1.5 flex items-center justify-between text-amber-400 z-10 shrink-0">
       <div class="flex items-center gap-1.5">
-        <span class="text-xl">🚇</span>
+        <span class="text-lg">🚇</span>
         <div>
-          <h1 class="font-pixel text-[9px] text-cyan-400 tracking-wider leading-none">HCMC METRO HURC</h1>
-          <p class="text-[10px] text-slate-300">Tuyến Số 1: Bến Thành ↔ Suối Tiên</p>
+          <h1 class="font-pixel text-[8px] text-cyan-400 tracking-wider leading-none">HCMC METRO HURC</h1>
+          <p class="font-retro text-xs text-slate-300">Tuyến Số 1: Bến Thành ↔ Suối Tiên</p>
         </div>
       </div>
 
       <div class="flex items-center gap-1.5 text-xs">
         <div class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 flex items-center gap-1">
-          <span class="text-slate-400 text-[10px]">Tên:</span>
-          <span id="hud-player-name" class="font-bold text-emerald-400 text-xs">---</span>
-          <span id="hud-student-badge" class="bg-indigo-600 text-white text-[9px] px-1 rounded font-sans hidden">50%</span>
+          <span class="text-slate-400 text-[9px] font-retro">Tên:</span>
+          <span id="hud-player-name" class="font-pixel text-[9px] text-emerald-400">---</span>
+          <span id="hud-student-badge" class="bg-indigo-600 text-white text-[8px] px-1 rounded font-sans hidden">50%</span>
         </div>
 
         <button id="btn-audio-toggle" type="button" class="bg-slate-800 hover:bg-slate-700 p-1 rounded border border-slate-700 text-xs cursor-pointer" title="Âm thanh">
@@ -133,40 +139,39 @@
     </header>
 
     <!-- QUEST TRACKER BANNER -->
-    <div class="bg-slate-950 border-b-2 border-cyan-900 px-3 py-1 flex items-center justify-between text-xs shrink-0">
-      <div class="flex items-center gap-1.5 overflow-hidden mr-1">
-        <span class="text-amber-400 font-bold text-[11px] shrink-0">NHIỆM VỤ:</span>
-        <span id="quest-tracker-text" class="truncate text-white font-retro text-base leading-none">Nói chuyện với Bác Bảo Vệ tại Ga Thủ Đức</span>
+    <div class="bg-slate-950 border-b-2 border-cyan-900 px-2.5 py-1 flex items-center justify-between text-xs shrink-0">
+      <div class="flex items-center gap-1 overflow-hidden mr-1">
+        <span class="text-amber-400 font-pixel text-[8px] shrink-0">NHIỆM VỤ:</span>
+        <span id="quest-tracker-text" class="truncate text-white font-retro text-sm leading-none">Nói chuyện với Sinh viên A tại Ga Thủ Đức</span>
       </div>
-      <div class="bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-800 text-[10px] shrink-0 font-bold">
+      <div class="bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-800 text-[8px] shrink-0 font-pixel">
         <span id="current-location-text" class="text-amber-300">Bên ngoài Ga Thủ Đức</span>
       </div>
     </div>
 
-    <!-- CANVAS & INTERACTIVE DISPLAY AREA (360x640) -->
+    <!-- CANVAS & INTERACTIVE DISPLAY AREA (360x480) -->
     <div id="canvas-container" class="w-full flex-1 relative bg-slate-950 overflow-hidden crt-overlay flex items-center justify-center">
       
-      <!-- 9:16 CANVAS -->
-      <canvas id="gameCanvas" width="360" height="640" class="w-full h-full object-cover block cursor-default"></canvas>
+      <!-- 9:12 GAMEPLAY CANVAS (360x480) -->
+      <canvas id="gameCanvas" width="360" height="480" class="w-full h-full object-cover block cursor-default"></canvas>
 
-      <!-- IDLE HINT BANNER (Adjusted to top-20 to avoid overlapping App button) -->
-      <div id="idle-hint-banner" class="absolute top-20 left-4 right-4 bg-amber-500/95 text-slate-950 border-2 border-amber-300 rounded-xl p-2 z-20 shadow-2xl text-center backdrop-blur hidden animate-bounce">
-        <p class="font-bold text-xs leading-tight">
+      <!-- IDLE HINT BANNER -->
+      <div id="idle-hint-banner" class="absolute top-[75px] left-3 right-3 bg-amber-500/95 text-slate-950 border-2 border-amber-300 rounded-xl p-2 z-10 shadow-2xl text-center backdrop-blur hidden animate-bounce">
+        <p class="font-pixel text-[8px] leading-relaxed">
           💡 <b>GHI CHÚ HƯỚNG DẪN:</b><br>
-          Kéo cần Joystick góc trái để di chuyển | Bấm nút <b class="text-red-950 uppercase">📱 MỞ APP HURC</b> góc phải để mua vé & quét mã QR!
+          Kéo Joystick góc trái để di chuyển | Bấm nút <b class="text-red-950 uppercase">📱 MỞ APP HURC</b> góc phải để mua vé & quét mã QR!
         </p>
       </div>
 
-      <!-- RETRO TOAST NOTIFICATION OVERLAY (Replacing alert()) -->
-      <div id="game-toast" class="absolute top-2 left-4 right-4 bg-slate-900/95 border-2 border-cyan-400 text-white rounded-xl p-2.5 z-30 shadow-2xl text-center backdrop-blur hidden transition-all">
-        <p id="game-toast-text" class="font-retro text-base text-cyan-200 leading-tight">Thông báo game...</p>
+      <!-- RETRO TOAST NOTIFICATION OVERLAY -->
+      <div id="game-toast" class="absolute top-2 left-3 right-3 bg-slate-900/95 border-2 border-cyan-400 text-white rounded-xl p-2 z-30 shadow-2xl text-center backdrop-blur hidden transition-all">
+        <p id="game-toast-text" class="font-retro text-sm text-cyan-200 leading-tight">Thông báo game...</p>
       </div>
 
-      <!-- TOP RIGHT: SMARTPHONE HURC APP BUTTON WITH LOGO (IMAGE 1000081731) -->
+      <!-- TOP RIGHT: SMARTPHONE HURC APP BUTTON WITH LOGO -->
       <div class="absolute top-2 right-2 z-20">
-        <button id="btn-open-phone" type="button" class="bg-gradient-to-r from-red-600 via-red-500 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white border-2 border-red-300 font-pixel text-[10px] px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow-2xl animate-bounce cursor-pointer">
-          <!-- HURC Official SVG Logo Icon -->
-          <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center p-0.5 shadow shrink-0">
+        <button id="btn-open-phone" type="button" class="bg-gradient-to-r from-red-600 via-red-500 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white border-2 border-red-300 font-pixel text-[8px] px-2 py-1 rounded-xl flex items-center gap-1 shadow-2xl animate-bounce cursor-pointer">
+          <div class="w-6 h-6 bg-white rounded-lg flex items-center justify-center p-0.5 shadow shrink-0">
             <svg viewBox="0 0 100 100" class="w-full h-full">
               <path d="M 20 40 A 30 30 0 0 1 80 40" stroke="#dc2626" stroke-width="12" fill="none" stroke-linecap="round"/>
               <path d="M 20 80 L 45 35 L 50 45 L 55 35 L 80 80" stroke="#1d4ed8" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -174,16 +179,16 @@
             </svg>
           </div>
           <div class="flex flex-col text-left leading-none">
-            <span class="text-[8px] text-amber-200 uppercase">App Official</span>
-            <span class="text-[10px] font-bold text-white tracking-wide">MỞ APP HURC</span>
+            <span class="text-[7px] text-amber-200 uppercase font-pixel">Official</span>
+            <span class="text-[8px] font-pixel text-white tracking-wide">MỞ APP HURC</span>
           </div>
         </button>
       </div>
 
       <!-- BOTTOM RIGHT: INTERACT ACTION BUTTON -->
-      <div class="absolute bottom-4 right-4 z-20">
-        <button id="btn-interact" type="button" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold font-pixel text-xs px-3.5 py-3 rounded-2xl shadow-2xl border-2 border-amber-300 flex items-center gap-1.5 active:scale-95 transition cursor-pointer">
-          <span class="text-lg">💬</span>
+      <div class="absolute bottom-3 right-3 z-20">
+        <button id="btn-interact" type="button" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-pixel text-[9px] px-2.5 py-2.5 rounded-xl shadow-2xl border-2 border-amber-300 flex items-center gap-1 active:scale-95 transition cursor-pointer">
+          <span class="text-base">💬</span>
           <span>TƯƠNG TÁC</span>
         </button>
       </div>
@@ -193,92 +198,90 @@
         <div id="joystick-stick"></div>
       </div>
 
-      <!-- DIALOGUE BOX MODAL OVERLAY -->
-      <div id="dialogue-box" class="absolute bottom-20 left-3 right-3 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-3 z-30 shadow-2xl backdrop-blur hidden">
-        <div class="flex items-center gap-2 mb-1 border-b border-cyan-900 pb-1">
-          <span id="npc-avatar" class="text-2xl">👮</span>
-          <div>
-            <h3 id="npc-name" class="font-bold text-cyan-300 text-sm">Bác Bảo Vệ</h3>
-            <p class="text-[10px] text-slate-400">Ga Thủ Đức - Metro Line 1</p>
+      <!-- DIALOGUE BOX MODAL OVERLAY (DISMISS ON CLICK) -->
+      <div id="dialogue-box" onclick="dismissDialogue()" class="absolute bottom-16 left-2 right-2 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-2.5 z-30 shadow-2xl backdrop-blur cursor-pointer hidden">
+        <div class="flex items-center justify-between mb-1 border-b border-cyan-900 pb-1">
+          <div class="flex items-center gap-2">
+            <span id="npc-avatar" class="text-xl">🧑‍🎓</span>
+            <div>
+              <h3 id="npc-name" class="font-pixel text-cyan-300 text-[10px]">Sinh viên A</h3>
+              <p class="font-retro text-xs text-slate-400">Ga Thủ Đức - Metro Line 1</p>
+            </div>
           </div>
+          <span class="text-xs text-slate-400 font-bold bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">✕ Đóng</span>
         </div>
-        <p id="dialogue-text" class="text-white font-retro text-lg leading-snug min-h-[48px] py-1">
-          Xin chào cháu! Hãy mở App HURC trên điện thoại để mua vé tàu sinh viên nhé.
+        <p id="dialogue-text" class="text-white font-retro text-base leading-snug min-h-[44px] py-0.5">
+          Xin chào! Hãy mở App HURC màu đỏ ở góc phải để mua vé tàu sinh viên nhé.
         </p>
-        <div class="flex justify-between items-center pt-1 border-t border-slate-800 text-[10px] text-cyan-400">
-          <span>Chạm vào đây hoặc bấm nút TƯƠNG TÁC để tiếp tục...</span>
-          <span class="animate-pulse">▼</span>
+        <div class="flex justify-between items-center pt-1 border-t border-slate-800 text-[8px] text-cyan-400 font-pixel">
+          <span>Chạm vào đây để đóng ngay...</span>
+          <span class="animate-pulse">✖</span>
         </div>
       </div>
 
     </div>
 
     <!-- FOOTER HELPER TEXT -->
-    <footer class="bg-slate-900 border-t border-slate-800 px-3 py-1 text-center text-[10px] text-slate-400 shrink-0">
-      Điều khiển bằng Joystick 360° | Mở App HURC màu đỏ ở góc phải để mua vé & quét mã QR
+    <footer class="bg-slate-900 border-t border-slate-800 px-2 py-1 text-center font-retro text-xs text-slate-400 shrink-0">
+      Điều khiển Joystick 360° | Mở App HURC góc phải để mua vé & quét QR
     </footer>
 
   </div>
 
   <!-- CHARACTER CUSTOMIZATION MODAL (SCREEN 1) -->
   <div id="screen-customize" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-3">
-    <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-4 w-full max-w-sm text-center space-y-4 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
+    <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-4 w-full max-w-sm text-center space-y-3 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
       
       <div class="space-y-1">
-        <span class="text-3xl">🚇</span>
+        <span class="text-2xl">🚇</span>
         <h2 class="font-pixel text-xs text-cyan-400 tracking-wider">HCMC METRO HURC QUEST</h2>
-        <p class="text-xs text-slate-300">Hành Trình Sinh Viên Đến Trung Tâm TP.HCM</p>
+        <p class="font-retro text-sm text-slate-300">Hành Trình Sinh Viên Đến Trung Tâm TP.HCM</p>
       </div>
 
-      <!-- Character 8-Bit Pixel Preview Canvas -->
       <div class="bg-slate-950 border border-slate-700 rounded-xl p-2 flex flex-col items-center justify-center">
         <canvas id="previewCanvas" width="90" height="90" class="w-20 h-20 bg-slate-900 rounded-lg border border-slate-800"></canvas>
-        <span class="text-[10px] text-cyan-400 mt-1 font-mono">Xem Trước Nhân Vật 8-Bit</span>
       </div>
 
-      <!-- Player Name Input (Must be typed by user) -->
       <div class="space-y-1 text-left">
-        <label class="text-xs text-slate-300 font-bold block">Tên nhân vật của bạn:</label>
+        <label class="font-pixel text-[9px] text-slate-300 block">Tên nhân vật của bạn:</label>
         <input type="text" id="input-player-name" placeholder="Nhập tên nhân vật..." maxlength="14" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-retro text-lg focus:outline-none focus:border-cyan-400 text-center" />
       </div>
 
-      <!-- Gender Selection Toggle (Nam / Nữ) -->
       <div class="space-y-1 text-left">
-        <label class="text-xs text-slate-300 font-bold block">Chọn giới tính:</label>
+        <label class="font-pixel text-[9px] text-slate-300 block">Chọn giới tính:</label>
         <div class="grid grid-cols-2 gap-2">
-          <button id="btn-gender-male" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
+          <button id="btn-gender-male" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 cursor-pointer">
             <span>👦</span>
             <span>Nam</span>
           </button>
-          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
+          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 cursor-pointer">
             <span>👧</span>
             <span>Nữ</span>
           </button>
         </div>
       </div>
 
-      <!-- Start Game Button (Enabled when name + gender are set) -->
-      <button id="btn-start-game" type="button" disabled class="w-full bg-slate-800 text-slate-500 font-pixel text-xs py-3 rounded-xl border-2 border-slate-700 cursor-not-allowed transition">
+      <button id="btn-start-game" type="button" disabled class="w-full bg-slate-800 text-slate-500 font-pixel text-[9px] py-3 rounded-xl border-2 border-slate-700 cursor-not-allowed transition">
         BẮT ĐẦU HÀNH TRÌNH
       </button>
 
-      <p class="text-[10px] text-slate-500">Vui lòng nhập tên và chọn giới tính để bắt đầu chuyến đi!</p>
+      <p class="font-retro text-xs text-slate-500">Vui lòng nhập tên và chọn giới tính để bắt đầu chuyến đi!</p>
 
     </div>
   </div>
 
   <!-- IN-GAME SMARTPHONE MODAL (APP HCMC METRO HURC) -->
   <div id="modal-phone" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
-    <div class="phone-bezel w-full max-w-[340px] h-[580px] bg-white rounded-[32px] overflow-hidden flex flex-col relative text-slate-900 font-sans shadow-2xl">
+    <div class="phone-bezel w-full max-w-[340px] h-[570px] bg-white rounded-[32px] overflow-hidden flex flex-col relative text-slate-900 font-sans shadow-2xl">
       
       <!-- Phone Top Notch & Status Bar -->
-      <div class="bg-blue-900 text-white px-4 py-1.5 flex justify-between items-center text-[10px] shrink-0 font-mono">
+      <div class="bg-blue-900 text-white px-3 py-1 flex justify-between items-center text-[9px] shrink-0 font-mono">
         <div class="flex items-center gap-1">
           <span>☁️ 33°C</span>
           <span class="text-blue-300">| Ga Thủ Đức</span>
         </div>
         <div class="flex items-center gap-1">
-          <span>🌐 Tiếng Việt ˅</span>
+          <span>🌐 Tiếng Việt</span>
           <span>🔋 98%</span>
         </div>
       </div>
@@ -286,8 +289,7 @@
       <!-- App Header Bar with Official HURC Logo -->
       <div class="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-700 text-white p-2.5 flex items-center justify-between shadow shrink-0">
         <div class="flex items-center gap-2">
-          <!-- HURC Logo Tile -->
-          <div class="w-8 h-8 bg-white rounded-lg flex items-center justify-center p-0.5 shadow-md">
+          <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center p-0.5 shadow-md">
             <svg viewBox="0 0 100 100" class="w-full h-full">
               <path d="M 20 40 A 30 30 0 0 1 80 40" stroke="#dc2626" stroke-width="12" fill="none" stroke-linecap="round"/>
               <path d="M 20 80 L 45 35 L 50 45 L 55 35 L 80 80" stroke="#1d4ed8" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
@@ -296,7 +298,7 @@
           </div>
           <div>
             <h2 class="font-bold text-xs leading-none">HCMC Metro HURC</h2>
-            <p class="text-[9px] text-blue-200">Official Metro Line 1 App</p>
+            <p class="text-[8px] text-blue-200">Official Metro Line 1 App</p>
           </div>
         </div>
         <button id="btn-close-phone" type="button" class="text-white hover:text-red-200 text-base font-bold bg-blue-800/60 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">✕</button>
@@ -308,129 +310,119 @@
         <!-- VIEW 1: APP HOME SCREEN -->
         <div id="view-app-home" class="p-3 space-y-3">
           
-          <!-- Top Metro Train Banner -->
           <div class="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-2xl p-3 text-white shadow-md relative overflow-hidden">
             <div class="relative z-10 space-y-1">
-              <span class="bg-white/20 text-[9px] px-2 py-0.5 rounded-full font-bold">Official App</span>
-              <h3 class="font-extrabold text-sm leading-tight">Tuyến Số 1 Metro<br>Bến Thành - Suối Tiên</h3>
-              <p class="text-[9px] text-cyan-100">Vé Sinh Viên giảm 50% | Thanh toán QR linh hoạt</p>
+              <span class="bg-white/20 text-[8px] px-2 py-0.5 rounded-full font-bold">Official App</span>
+              <h3 class="font-extrabold text-xs leading-tight">Tuyến Số 1 Metro<br>Bến Thành - Suối Tiên</h3>
+              <p class="text-[8px] text-cyan-100">Vé Sinh Viên giảm 50% | Thanh toán QR linh hoạt</p>
             </div>
-            <span class="absolute right-[-10px] bottom-[-10px] text-6xl opacity-30">🚆</span>
+            <span class="absolute right-[-10px] bottom-[-10px] text-5xl opacity-30">Metro</span>
           </div>
 
-          <!-- 8-Icon Grid Menu -->
-          <div class="grid grid-cols-4 gap-2 text-center text-[10px]">
+          <div class="grid grid-cols-4 gap-2 text-center text-[9px]">
             <button id="btn-nav-buy" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">🎟️</span>
+              <span class="text-lg">🎟️</span>
               <span class="font-bold text-slate-800">Mua vé</span>
             </button>
             <button id="btn-nav-tickets" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">📱</span>
+              <span class="text-lg">📱</span>
               <span class="font-bold text-slate-800">Vé của tôi</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">🔲</span>
+              <span class="text-lg">🔲</span>
               <span class="font-medium text-slate-700">Đổi mã vé</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">ℹ️</span>
+              <span class="text-lg">ℹ️</span>
               <span class="font-medium text-slate-700">Thông tin vé</span>
             </button>
             <button id="btn-nav-map" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">🗺️</span>
+              <span class="text-lg">🗺️</span>
               <span class="font-bold text-slate-800">Hành trình</span>
             </button>
-            <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">🔗</span>
-              <span class="font-medium text-slate-700">Tiện ích</span>
+            <button id="btn-nav-utilities" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-blue-300 shadow-sm flex flex-col items-center gap-1 cursor-pointer ring-2 ring-blue-400">
+              <span class="text-lg">🔗</span>
+              <span class="font-bold text-blue-900">Tiện ích</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">💬</span>
+              <span class="text-lg">💬</span>
               <span class="font-medium text-slate-700">Hỗ trợ</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">👤</span>
+              <span class="text-lg">👤</span>
               <span class="font-medium text-slate-700">Tài khoản</span>
             </button>
           </div>
 
-          <!-- Promo Banner Card -->
-          <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-2xl p-3 shadow space-y-1">
-            <div class="flex justify-between items-center text-[10px]">
-              <span class="bg-amber-400 text-slate-950 font-bold px-1.5 py-0.5 rounded">HAPPY NEW YEAR 2026 🎉</span>
-              <span class="text-slate-300">HURC Metro</span>
+          <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-2xl p-2.5 shadow space-y-1">
+            <div class="flex justify-between items-center text-[9px]">
+              <span class="bg-amber-400 text-slate-950 font-bold px-1.5 py-0.5 rounded">HURC OFFICIAL METRO LINE 1</span>
             </div>
             <h4 class="font-bold text-xs">Chào mừng Tuyến Metro số 1 chính thức vận hành!</h4>
-            <p class="text-[9px] text-slate-200">Nhấn để trải nghiệm hành trình tiện lợi ngay hôm nay.</p>
+            <p class="text-[8px] text-slate-200">Trải nghiệm dịch vụ chuyển tiếp xe buýt & xe đạp công cộng.</p>
           </div>
 
         </div>
 
-        <!-- VIEW 2: MUA VÉ -->
+        <!-- VIEW 2: MUA VÉ (MATCHING REFERENCE IMAGES 1000081723.jpg & 1000081725.jpg) -->
         <div id="view-app-buy" class="p-3 space-y-3 hidden">
-          
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
             <button id="btn-back-home-1" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
-            <h3 class="font-bold text-sm text-blue-950">Mua vé Metro</h3>
-          </div>
-
-          <!-- Guidance Note -->
-          <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-2 text-[10px] leading-tight">
-            💡 <b>Ghi chú:</b> Chạm vào bất kỳ loại vé nào bên dưới ➔ Màn hình sẽ chuyển sang trang <b>Thanh Toán</b> ngay lập tức!
+            <h3 class="font-bold text-sm text-slate-800">Mua vé</h3>
           </div>
 
           <!-- Student Verification Box -->
-          <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-200 space-y-1.5">
+          <div class="bg-blue-50 p-2 rounded-xl border border-blue-200 space-y-1">
             <div class="flex justify-between items-center text-xs">
-              <span class="font-bold text-blue-900">🎓 Xác thực Sinh Viên:</span>
-              <span id="student-status-badge" class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold">Chưa xác thực</span>
+              <span class="font-bold text-blue-900 text-[10px]">🎓 Xác thực Sinh Viên:</span>
+              <span id="student-status-badge" class="text-[8px] bg-slate-200 text-slate-600 px-1 py-0.5 rounded font-bold">Chưa xác thực</span>
             </div>
             <div class="flex gap-1.5">
               <input type="text" id="input-student-id" placeholder="Nhập MSSV (VD: SV2026)" class="bg-white border border-slate-300 rounded px-2 py-1 text-xs flex-1 text-slate-900 focus:outline-none focus:border-blue-600" />
-              <button id="btn-verify-student" type="button" class="bg-blue-700 hover:bg-blue-800 text-white text-xs px-2.5 py-1 rounded-lg font-bold cursor-pointer">
+              <button id="btn-verify-student" type="button" class="bg-blue-700 hover:bg-blue-800 text-white text-[10px] px-2 py-1 rounded-lg font-bold cursor-pointer">
                 Xác Thực
               </button>
             </div>
           </div>
 
           <!-- Section 1: 🔥 Nổi bật 🔥 -->
-          <div class="space-y-1.5">
+          <div class="space-y-2">
             <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1">🔥 Nổi bật 🔥</h4>
 
-            <!-- Ticket Item: Vé 1 Ngày -->
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 1 ngày', 40000)">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️1</div>
+            <!-- Vé 1 ngày -->
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 1 ngày', 40000)">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">🎟️1</div>
                 <div>
-                  <h5 class="font-bold text-xs text-slate-800">Vé 1 ngày</h5>
-                  <p class="text-[10px] text-blue-700 font-bold">40.000 đ</p>
+                  <h5 class="font-bold text-xs text-slate-900">Vé 1 ngày</h5>
+                  <p class="text-[10px] text-slate-500 font-medium">40.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-[10px] bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
             </div>
 
-            <!-- Ticket Item: Vé 3 Ngày -->
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 3 ngày', 90000)">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️3</div>
+            <!-- Vé 3 ngày -->
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 3 ngày', 90000)">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">🎟️3</div>
                 <div>
-                  <h5 class="font-bold text-xs text-slate-800">Vé 3 ngày</h5>
-                  <p class="text-[10px] text-blue-700 font-bold">90.000 đ</p>
+                  <h5 class="font-bold text-xs text-slate-900">Vé 3 ngày</h5>
+                  <p class="text-[10px] text-slate-500 font-medium">90.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-[10px] bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
             </div>
 
-            <!-- Ticket Item: Vé Tháng Adult -->
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng người lớn', 300000)">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️30</div>
+            <!-- Vé tháng -->
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng người lớn', 300000)">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs border border-blue-100">🎟️30</div>
                 <div>
-                  <h5 class="font-bold text-xs text-slate-800">Vé tháng</h5>
-                  <p class="text-[10px] text-blue-700 font-bold">300.000 đ</p>
+                  <h5 class="font-bold text-xs text-slate-900">Vé tháng</h5>
+                  <p class="text-[10px] text-slate-500 font-medium">300.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-[10px] bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
             </div>
           </div>
 
@@ -438,43 +430,87 @@
           <div class="space-y-1.5 pt-1">
             <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1">Ưu đãi Học sinh 🎒 Sinh viên 🎓</h4>
 
-            <div id="card-hssv-ticket" class="bg-gradient-to-r from-blue-50 to-indigo-50 p-2.5 rounded-xl border border-blue-300 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng HSSV', 150000, true)">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">🎓</div>
+            <div id="card-hssv-ticket" class="bg-white hover:border-blue-400 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng HSSV', 150000, true)">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-indigo-600 flex items-center justify-center font-bold text-xs border border-indigo-100">🎓30</div>
                 <div>
                   <h5 class="font-bold text-xs text-slate-900">Vé tháng HSSV</h5>
-                  <p class="text-[10px] text-indigo-700 font-bold">150.000 đ <span class="text-[9px] bg-indigo-200 text-indigo-800 px-1 rounded ml-1">Giảm 50%</span></p>
+                  <p class="text-[10px] text-slate-500 font-medium">150.000 đ <span class="text-[8px] bg-indigo-100 text-indigo-800 px-1 rounded ml-1 font-bold">Giảm 50%</span></p>
                 </div>
               </div>
-              <span class="text-xs bg-indigo-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-[10px] bg-indigo-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
             </div>
           </div>
 
-          <!-- Section 3: 14 Stations List -->
+          <!-- Section 3: Full 14 Stations List (Image 1000081723 & 1000081725) -->
           <div class="space-y-1.5 pt-2 border-t border-slate-200">
-            <h4 class="text-xs font-bold text-slate-800">Danh sách các ga Tuyến 1:</h4>
-            <div class="space-y-1 max-h-36 overflow-y-auto pr-1 text-xs custom-scrollbar">
-              <div class="flex justify-between items-center bg-white p-1.5 rounded border border-slate-200 cursor-pointer" onclick="selectAppTicket('Vé ga Bến Thành', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Bến Thành</span>
-                <span class="text-blue-600 font-bold text-[10px]">Thanh toán ➔</span>
+            <h4 class="text-xs font-bold text-slate-900">Vé chặng theo lượt (14 ga):</h4>
+            
+            <div class="space-y-1 max-h-48 overflow-y-auto pr-1 custom-scrollbar">
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Bến Thành', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Bến Thành</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-1.5 rounded border border-slate-200 cursor-pointer" onclick="selectAppTicket('Vé ga Nhà hát Thành phố', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Nhà hát Thành phố</span>
-                <span class="text-blue-600 font-bold text-[10px]">Thanh toán ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Nhà hát Thành phố', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Nhà hát Thành phố</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-1.5 rounded border border-slate-200 cursor-pointer" onclick="selectAppTicket('Vé ga Ba Son', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Ba Son</span>
-                <span class="text-blue-600 font-bold text-[10px]">Thanh toán ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Ba Son', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Ba Son</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-1.5 rounded border border-slate-200 cursor-pointer" onclick="selectAppTicket('Vé ga Thủ Đức', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Thủ Đức (Ga hiện tại)</span>
-                <span class="text-blue-600 font-bold text-[10px]">Thanh toán ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Văn Thánh', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Văn Thánh</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-1.5 rounded border border-slate-200 cursor-pointer" onclick="selectAppTicket('Vé ga Bến xe Suối Tiên', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Bến xe Suối Tiên</span>
-                <span class="text-blue-600 font-bold text-[10px]">Thanh toán ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Tân Cảng', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Tân Cảng</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Thảo Điền', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Thảo Điền</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga An Phú', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga An Phú</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Rạch Chiếc', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Rạch Chiếc</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Phước Long', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Phước Long</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Bình Thái', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Bình Thái</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-blue-50/80 p-2 rounded-xl border border-blue-200 text-xs shadow-sm cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Vé ga Thủ Đức', 15000)">
+                <span class="font-bold text-blue-900">Đi từ ga Thủ Đức (Ga hiện tại)</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Khu Công nghệ cao', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Khu Công nghệ cao</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Đại học Quốc gia', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Đại học Quốc gia</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
+              </div>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-100 text-xs shadow-sm cursor-pointer hover:border-blue-300" onclick="selectAppTicket('Vé ga Bến xe Suối Tiên', 15000)">
+                <span class="font-semibold text-slate-800">Đi từ ga Bến xe Suối Tiên</span>
+                <span class="text-blue-700 text-[10px] font-bold">Xem chi tiết</span>
               </div>
             </div>
+          </div>
+
+          <!-- Orange/Red Footer Disclaimer Note (Image 1000081725.jpg) -->
+          <div class="pt-2 border-t border-slate-200">
+            <p class="text-[9px] text-amber-700 leading-tight italic font-medium bg-amber-50 p-2 rounded-lg border border-amber-200">
+              *Học sinh, sinh viên, người cao tuổi, người có công... cần có căn cước gắn chip để đi tàu miễn phí.
+            </p>
           </div>
 
         </div>
@@ -482,59 +518,30 @@
         <!-- VIEW 3: DEDICATED PAYMENT SCREEN -->
         <div id="view-app-payment" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
-            <button id="btn-back-buy-screen" type="button" class="text-blue-700 font-bold text-xs cursor-pointer bg-blue-50 px-2 py-1 rounded border border-blue-200">⬅ Đổi vé khác</button>
-            <h3 class="font-bold text-sm text-blue-950">Màn Hình Thanh Toán</h3>
+            <button id="btn-back-buy-screen" type="button" class="text-blue-700 font-bold text-xs cursor-pointer bg-blue-50 px-2 py-1 rounded border border-blue-200">⬅ Đổi vé</button>
+            <h3 class="font-bold text-xs text-blue-950">Màn Hình Thanh Toán</h3>
           </div>
 
-          <!-- Guidance Note -->
-          <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-2 text-[10px] leading-tight">
-            💡 <b>Ghi chú:</b> Sau khi nhấn <b>THANH TOÁN NGAY</b>, vé sẽ được chuyển thẳng vào mục <b>"Vé Của Tôi"</b> để sẵn sàng quét mã QR qua cổng!
+          <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-2 text-[9px] leading-tight">
+            💡 Sau khi nhấn <b>THANH TOÁN NGAY</b>, vé sẽ chuyển sang mục <b>"Vé Của Tôi"</b> để sẵn sàng quét QR!
           </div>
 
-          <!-- Ticket Breakdown Card -->
-          <div class="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white p-3.5 rounded-2xl shadow-lg space-y-2 border border-blue-500">
-            <div class="flex justify-between items-center text-xs">
+          <div class="bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white p-3 rounded-2xl shadow space-y-1.5 border border-blue-500">
+            <div class="flex justify-between items-center text-[10px]">
               <span class="text-slate-300">Dịch vụ:</span>
               <span class="font-bold text-cyan-300">Metro Line 1 HURC</span>
             </div>
-            <div class="flex justify-between items-center text-xs">
-              <span class="text-slate-300">Loại vé đã chọn:</span>
-              <span id="payment-ticket-name" class="font-bold text-amber-300 text-sm">Vé tháng HSSV</span>
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-300">Vé đã chọn:</span>
+              <span id="payment-ticket-name" class="font-bold text-amber-300 text-xs">Vé tháng HSSV</span>
             </div>
-            <div class="flex justify-between items-center text-xs border-t border-slate-700 pt-2">
-              <span class="text-slate-300">Tổng tiền thanh toán:</span>
-              <span id="payment-ticket-price" class="font-bold text-emerald-400 text-base">150.000 đ</span>
-            </div>
-          </div>
-
-          <!-- Payment Methods -->
-          <div class="space-y-1.5">
-            <h4 class="text-xs font-bold text-slate-800">Phương thức thanh toán:</h4>
-            <div class="space-y-1.5">
-              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border-2 border-blue-600 cursor-pointer shadow-sm">
-                <div class="flex items-center gap-2">
-                  <span class="text-lg">📱</span>
-                  <div>
-                    <h5 class="text-xs font-bold text-slate-800">Ví MoMo / ZaloPay</h5>
-                    <p class="text-[9px] text-slate-500">Thanh toán tức thì 0đ phí</p>
-                  </div>
-                </div>
-                <input type="radio" name="pay-method" checked class="accent-blue-600 w-4 h-4" />
-              </label>
-              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 cursor-pointer">
-                <div class="flex items-center gap-2">
-                  <span class="text-lg">💳</span>
-                  <div>
-                    <h5 class="text-xs font-bold text-slate-800">Thẻ ATM / Visa / Napas</h5>
-                    <p class="text-[9px] text-slate-500">Cổng thanh toán ngân hàng</p>
-                  </div>
-                </div>
-                <input type="radio" name="pay-method" class="accent-blue-600 w-4 h-4" />
-              </label>
+            <div class="flex justify-between items-center text-xs border-t border-slate-700 pt-1.5">
+              <span class="text-slate-300">Tổng tiền:</span>
+              <span id="payment-ticket-price" class="font-bold text-emerald-400 text-sm">150.000 đ</span>
             </div>
           </div>
 
-          <button id="btn-buy-ticket-now" type="button" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs py-3 rounded-xl shadow-lg cursor-pointer transform hover:scale-[1.01] transition animate-pulse">
+          <button id="btn-buy-ticket-now" type="button" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs py-2.5 rounded-xl shadow cursor-pointer animate-pulse">
             💳 THANH TOÁN NGAY & NHẬN VÉ QR
           </button>
         </div>
@@ -543,94 +550,136 @@
         <div id="view-app-tickets" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
             <button id="btn-back-home-2" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
-            <h3 class="font-bold text-sm text-blue-950">Vé của tôi</h3>
+            <h3 class="font-bold text-xs text-blue-950">Vé của tôi</h3>
           </div>
 
-          <!-- Guidance Note -->
-          <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-2 text-[10px] leading-tight">
-            💡 <b>Ghi chú:</b> Nhấn nút <b>"QUÉT MÃ QR QUA CỔNG"</b> bên dưới để mở cổng soát vé turnstile!
+          <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-lg p-2 text-[9px] leading-tight">
+            💡 Bấm nút <b>"QUÉT MÃ QR QUA CỔNG"</b> để mở cổng soát vé Turnstile!
           </div>
 
-          <div id="no-tickets-msg" class="text-center py-8 space-y-2">
-            <span class="text-4xl">🎫</span>
+          <div id="no-tickets-msg" class="text-center py-6 space-y-2">
+            <span class="text-3xl">🎫</span>
             <p class="text-xs text-slate-500 font-bold">Bạn chưa sở hữu vé nào.</p>
             <button onclick="switchAppTab('tab-buy')" class="text-xs bg-blue-700 text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer">Mua vé ngay ➔</button>
           </div>
 
-          <!-- Active QR Ticket Card -->
-          <div id="active-ticket-card" class="bg-gradient-to-b from-blue-900 to-indigo-950 text-white p-3.5 rounded-2xl shadow-lg space-y-3 hidden border border-blue-400">
-            <div class="flex justify-between items-center border-b border-blue-800 pb-2">
-              <span class="bg-emerald-400 text-slate-950 text-[9px] font-bold px-2 py-0.5 rounded-full">ĐÁNG SỬ DỤNG</span>
-              <span id="ticket-display-type" class="font-bold text-xs text-amber-300">Vé Tháng HSSV (150.000đ)</span>
+          <div id="active-ticket-card" class="bg-gradient-to-b from-blue-900 to-indigo-950 text-white p-3 rounded-2xl shadow space-y-2 hidden border border-blue-400">
+            <div class="flex justify-between items-center border-b border-blue-800 pb-1.5">
+              <span class="bg-emerald-400 text-slate-950 text-[8px] font-bold px-2 py-0.5 rounded-full">SẴN SÀNG QUÉT</span>
+              <span id="ticket-display-type" class="font-bold text-xs text-amber-300">Vé Tháng HSSV</span>
             </div>
 
-            <!-- 8-Bit Pixel QR Code Canvas -->
-            <div class="bg-white p-3 rounded-xl flex flex-col items-center justify-center space-y-1 shadow-inner">
-              <canvas id="qrCanvas" width="120" height="120" class="w-28 h-28 border border-slate-300"></canvas>
-              <span class="text-[9px] text-slate-500 font-mono">Mã Vé: HURC-2026-METRO-LINE1</span>
+            <div class="bg-white p-2.5 rounded-xl flex flex-col items-center justify-center space-y-1 shadow-inner">
+              <canvas id="qrCanvas" width="110" height="110" class="w-24 h-24 border border-slate-300"></canvas>
+              <span class="text-[8px] text-slate-500 font-mono">HURC-2026-METRO-LINE1</span>
             </div>
 
-            <button id="btn-scan-qr-gate" type="button" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs py-2.5 rounded-xl shadow-md cursor-pointer animate-pulse">
+            <button id="btn-scan-qr-gate" type="button" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs py-2 rounded-xl shadow cursor-pointer animate-pulse">
               📲 QUÉT MÃ QR QUA CỔNG TURNSTILE
             </button>
           </div>
-
         </div>
 
         <!-- VIEW 5: MAP REALTIME TRACKING -->
         <div id="view-app-map" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
             <button id="btn-back-home-3" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
-            <h3 class="font-bold text-sm text-blue-950">Sơ Đồ Vị Trí Tàu Realtime</h3>
+            <h3 class="font-bold text-xs text-blue-950">Sơ Đồ Tàu Realtime</h3>
           </div>
 
-          <div class="bg-slate-900 text-white p-3 rounded-2xl space-y-2 border border-slate-700">
-            <div class="flex justify-between items-center text-[10px]">
+          <div class="bg-slate-900 text-white p-3 rounded-2xl space-y-2 border border-slate-700 text-[10px]">
+            <div class="flex justify-between items-center">
               <span class="text-cyan-400 font-bold">Tuyến số 1: Bến Thành ↔ Suối Tiên</span>
-              <span class="bg-emerald-500 text-slate-950 px-1 rounded text-[9px] font-bold">Đang chạy</span>
+              <span class="bg-emerald-500 text-slate-950 px-1 rounded text-[8px] font-bold">Đang vận hành</span>
             </div>
+            <div class="space-y-1 font-mono text-[9px] pt-1 leading-snug">
+              <div class="text-amber-300">1. Ga Bến Thành (Trung Tâm)</div>
+              <div class="text-slate-300">2. Nhà hát TP ➔ 3. Ba Son ➔ 4. Văn Thánh</div>
+              <div class="text-slate-300">5. Tân Cảng ➔ 6. Thảo Điền ➔ 7. An Phú</div>
+              <div class="text-slate-300">8. Rạch Chiếc ➔ 9. Phước Long ➔ 10. Bình Thái</div>
+              <div class="text-cyan-300 font-bold bg-cyan-950/60 p-1 rounded border border-cyan-800">
+                🟢 11. Ga Thủ Đức (Vị trí hiện tại)
+              </div>
+              <div class="text-slate-400">12. Khu CNC ➔ 13. ĐH Quốc Gia ➔ 14. Suối Tiên</div>
+            </div>
+          </div>
+        </div>
 
-            <!-- Visual 14-Station Line Diagram -->
-            <div class="relative py-4 px-2 space-y-2 font-mono text-[10px]">
-              <div class="flex items-center gap-2 text-amber-300">
-                <span class="w-3 h-3 rounded-full bg-red-500 flex items-center justify-center text-[8px] font-bold text-white">1</span>
-                <span>Bến Thành (Ga Trung Tâm)</span>
-              </div>
-              <div class="flex items-center gap-2 text-slate-300">
-                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                <span>Nhà hát TP ➔ Ba Son ➔ Văn Thánh</span>
-              </div>
-              <div class="flex items-center gap-2 text-cyan-300 font-bold bg-cyan-950/60 p-1 rounded border border-cyan-800">
-                <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
-                <span>Thủ Đức (Vị trí hiện tại của bạn)</span>
-              </div>
-              <div class="flex items-center gap-2 text-slate-300">
-                <span class="w-3 h-3 rounded-full bg-amber-400"></span>
-                <span>Khu Công nghệ cao ➔ Suối Tiên</span>
-              </div>
-              <div class="flex items-center gap-2 text-slate-400">
-                <span class="w-3 h-3 rounded-full bg-slate-600"></span>
-                <span>Bến xe Miền Đông mới</span>
-              </div>
+        <!-- VIEW 6: UTILITIES SCREEN (MATCHING REFERENCE IMAGE 1000081737.jpg) -->
+        <div id="view-app-utilities" class="p-3 space-y-3 hidden">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-200">
+            <div class="flex items-center gap-2">
+              <button id="btn-back-home-4" type="button" class="w-6 h-6 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-700 text-xs font-bold cursor-pointer">←</button>
+              <h3 class="font-bold text-sm text-slate-800">Tiện ích</h3>
             </div>
           </div>
 
+          <div class="grid grid-cols-3 gap-2.5 text-center text-[10px] pt-1">
+            <button type="button" onclick="showUtilityInfo('Go!Bus HCMC', 'Ứng dụng tra cứu xe buýt TP.HCM. Chuyển tiếp dễ dàng từ các Ga Metro đến mạng lưới xe buýt toàn thành phố!')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center p-1">
+                <span class="text-2xl">🟢</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">Go!Bus<br>HCMC</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('TTGT TP.HCM', 'Cổng thông tin giao thông TP.HCM realtime, cảnh báo kẹt xe & theo dõi camera hạ tầng.')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center p-1">
+                <span class="text-2xl">🚦</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">TTGT<br>Tp Hồ Chí Minh</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('Công dân số TPHCM', 'Nền tảng dịch vụ công trực tuyến & tiện ích đô thị số dành cho người dân TP.HCM.')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center p-1">
+                <span class="text-2xl">🏛️</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">Công dân số<br>TPHCM</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('Xe Đạp Công Cộng TNGo', 'Thuê xe đạp công cộng ngay tại cửa ra các Ga Metro Bến Thành, Nhà Hát TP, Ba Son với giá chỉ 5.000đ/30 phút!')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+                <span class="text-xl">🚲</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">TNGo</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('Mua Vé Suối Tiên', 'Đặt vé tham quan Khu du lịch văn hóa Suối Tiên liên kết trực tiếp với Ga Metro Suối Tiên.')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-cyan-50 flex items-center justify-center p-1">
+                <span class="text-2xl">🎡</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">Mua vé<br>Suối Tiên</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('VPBank Chạm & Đi', 'Thanh toán vé Metro chạm không tiếp xúc Tap & Go qua thẻ ngân hàng VPBank.')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center p-1">
+                <span class="text-2xl">📡</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">VPBank<br>Chạm & Đi</span>
+            </button>
+
+            <button type="button" onclick="showUtilityInfo('Tài chính tiêu dùng số', 'Dịch vụ ví điện tử & tín dụng tiêu dùng ưu đãi cho hành khách đi tàu Metro.')" class="bg-white p-2.5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center justify-center gap-1.5 hover:shadow-md transition cursor-pointer min-h-[90px]">
+              <div class="w-10 h-10 rounded-xl bg-sky-100 flex items-center justify-center p-1">
+                <span class="text-2xl">💫</span>
+              </div>
+              <span class="font-medium text-slate-700 leading-tight">Tài chính tiêu<br>dùng số</span>
+            </button>
+          </div>
         </div>
 
       </div>
 
       <!-- Phone Bottom Navigation Bar -->
-      <div class="bg-white border-t border-slate-200 p-2 flex justify-around items-center shrink-0">
-        <button id="btn-pill-home" type="button" class="flex flex-col items-center text-blue-700 font-bold text-[9px] cursor-pointer">
-          <span class="text-base">🏠</span>
+      <div class="bg-white border-t border-slate-200 p-1.5 flex justify-around items-center shrink-0">
+        <button id="btn-pill-home" type="button" class="flex flex-col items-center text-blue-700 font-bold text-[8px] cursor-pointer">
+          <span class="text-sm">🏠</span>
           <span>Trang chủ</span>
         </button>
-        <button id="btn-pill-buy" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[9px] cursor-pointer">
-          <span class="text-base">🎟️</span>
+        <button id="btn-pill-buy" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[8px] cursor-pointer">
+          <span class="text-sm">🎟️</span>
           <span>Mua vé</span>
         </button>
-        <button id="btn-pill-tickets" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[9px] cursor-pointer">
-          <span class="text-base">📱</span>
+        <button id="btn-pill-tickets" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[8px] cursor-pointer">
+          <span class="text-sm">📱</span>
           <span>Vé của tôi</span>
         </button>
       </div>
@@ -641,32 +690,22 @@
   <!-- END GAME CONGRATULATIONS MODAL -->
   <div id="screen-end-game" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
     <div class="bg-slate-900 border-2 border-amber-400 rounded-2xl p-4 w-full max-w-sm text-center space-y-3 shadow-2xl">
-      <div class="text-4xl animate-bounce">🏆</div>
+      <div class="text-3xl animate-bounce">🏆</div>
       <h2 class="font-pixel text-xs text-amber-400 tracking-wider">HOÀN THÀNH HÀNH TRÌNH!</h2>
       <div class="bg-amber-950/40 border border-amber-500/50 rounded-xl p-2.5 space-y-1">
-        <span class="bg-amber-400 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Huy Hiệu: Hành Khách Thông Thái 🎖️</span>
-        <p class="text-xs text-slate-200 mt-1">Chúc mừng <b id="end-player-name" class="text-cyan-300"></b> đã hoàn thành xuất sắc chuyến đi từ Ga Thủ Đức đến Trung Tâm Ga Bến Thành!</p>
+        <span class="bg-amber-400 text-slate-950 text-[9px] font-pixel px-2 py-0.5 rounded-full uppercase">Hành Khách Thông Thái 🎖️</span>
+        <p class="font-retro text-base text-slate-200 mt-1">Chúc mừng <b id="end-player-name" class="text-cyan-300"></b> đã đi từ Ga Thủ Đức đến Ga Bến Thành & thành thạo ứng dụng HURC!</p>
       </div>
 
-      <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-left space-y-1.5 text-xs">
-        <h4 class="font-bold text-cyan-400 text-[11px]">THỐNG KÊ TÍNH NĂNG ĐÃ HỌC:</h4>
-        <ul class="space-y-1 text-slate-300 text-[11px]">
-          <li class="flex items-center gap-1.5"><span class="text-emerald-400">✓</span> <span>Xác thực MSSV nhận ưu đãi vé 50%</span></li>
-          <li class="flex items-center gap-1.5"><span class="text-emerald-400">✓</span> <span>Mua vé lẻ / vé tháng & thanh toán online</span></li>
-          <li class="flex items-center gap-1.5"><span class="text-emerald-400">✓</span> <span>Quét mã QR Code qua cổng Turnstile Vào & Ra</span></li>
-          <li class="flex items-center gap-1.5"><span class="text-emerald-400">✓</span> <span>Tra cứu sơ đồ 14 ga Realtime Tuyến 1</span></li>
-        </ul>
-      </div>
-
-      <button id="btn-restart-game" type="button" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-pixel text-xs py-3 rounded-xl border-2 border-cyan-300 shadow-lg cursor-pointer transform hover:scale-[1.02] transition">
-        🔄 CHƠI LẠI / HÀNH TRÌNH MỚI
+      <button id="btn-restart-game" type="button" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-pixel text-[10px] py-3 rounded-xl border-2 border-cyan-300 shadow-lg cursor-pointer transform hover:scale-[1.02] transition">
+        🔄 CHƠI LẠI HÀNH TRÌNH
       </button>
     </div>
   </div>
 
   <!-- JAVASCRIPT GAME ENGINE -->
   <script>
-    // Audio Synthesizer Engine (Web Audio API)
+    // Audio Synthesizer Engine
     class SoundEngine {
       constructor() {
         this.ctx = null;
@@ -729,75 +768,73 @@
 
     const sound = new SoundEngine();
 
-    // Game Core State
+    // Game State
     const state = {
       playerName: '',
-      gender: null, // 'male' or 'female'
-      currentStage: 1, // 1: Thu Duc Ext, 2: Entrance Turnstile Gate, 3: Platform, 4: Train Cutscene, 5: Ben Thanh Plaza & Exit Gate
+      gender: null,
+      currentStage: 1,
       questStep: 0,
       hasTicket: false,
-      ticketScanned: false, // Stage 2 Entrance Turnstile
-      exitScanned: false,   // Stage 5 Exit Turnstile
+      ticketScanned: false,
+      exitScanned: false,
       studentVerified: false,
       selectedTicketName: 'Vé 1 ngày',
       selectedTicketPrice: 40000,
       
-      // Player Physics & Position
+      // Positioned for 360x480 canvas
       playerX: 60,
-      playerY: 480,
+      playerY: 370,
       playerVx: 0,
       playerVy: 0,
       isWalking: false,
       walkCycle: 0,
       facingDir: 'right',
 
-      // Animated Train Dynamics
       trainX: -360,
       trainSpeed: 5,
       trainArrived: false,
       trainDoorProgress: 0,
       cutsceneScroll: 0,
-      mapAnimProgress: 0, // Route Map Animation State (0..1)
+      mapAnimProgress: 0,
+      tungInteracted: false,
+      startMapCutscene: false,
 
-      // Interaction & Idle Timer Tracking
       interactedNPCs: {},
       lastActivityTime: Date.now(),
       toastTimeout: null
     };
 
-    // Keyboard state
     const keysPressed = {};
 
-    // 5 Stages NPC Setup
+    // Enhanced NPC Dialogues for complete app feature explanation
     const stageNPCs = {
       1: [
-        { id: 'guard', name: 'Bác Bảo Vệ', icon: '👮', x: 80, y: 440, dialogue: "Chào cháu! Đây là lối vào Ga Thủ Đức. Cháu hãy hỏi bạn Minh để biết cách mở App HURC màu đỏ mua vé sinh viên hoặc vé 1 ngày nhé!" },
-        { id: 'minh', name: 'Bạn Minh (Sinh Viên)', icon: '🧑‍🎓', x: 270, y: 440, dialogue: "Chào bạn! Hãy chạm vào nút 📱 APP HURC màu đỏ ở góc trên ➔ chọn mục 'Mua Vé' ➔ chạm vào loại vé để sang màn hình Thanh toán ➔ sau khi thanh toán, vào 'Vé của tôi' lấy mã QR quét qua cổng nhé!" },
-        { id: 'station_stairs', name: 'Lối Lên Ga Thủ Đức', icon: '🪜', x: 180, y: 260, dialogue: "Lối lên sảnh soát vé Ga Thủ Đức. Đã mua vé trên App HURC chưa? Tiến lên sảnh soát vé nào!" }
+        { id: 'guard', name: 'Bác Bảo Vệ', icon: '👮', x: 70, y: 340, dialogue: "Chào cháu! Bác giới thiệu nhé: Hãy mở nút 📱 APP HURC màu đỏ góc phải để chọn mua vé lẻ (1 ngày, 3 ngày) hoặc vé tháng. Mục 'Tiện ích' còn hỗ trợ chuyển tiếp sang xe buýt Go!Bus và xe đạp công cộng TNGo nữa đấy!" },
+        { id: 'student_a', name: 'Sinh viên A', icon: '🧑‍🎓', x: 260, y: 340, dialogue: "Chào bạn! Nếu là sinh viên, bạn nhập MSSV ở mục Mua vé ➔ bấm Xác Thực để nhận ngay ưu đãi GIẢM 50% vé tháng (chỉ 150.000đ)! Thanh toán xong nhớ vào 'Vé của tôi' lấy mã QR để quét mở Cổng 2 nhé!" },
+        { id: 'station_stairs', name: 'Lối Lên Ga Thủ Đức', icon: '🪜', x: 180, y: 210, dialogue: "Lối lên sảnh soát vé Ga Thủ Đức. Bạn đã mua vé trên App HURC chưa? Tiến lên sảnh soát vé nào!" }
       ],
       2: [
-        { id: 'gate', name: 'Cổng Soát Vé Turnstile (Vào)', icon: '🚧', x: 180, y: 350, dialogue: "CỔNG AN NINH VÀO ĐANG KHÓA (ĐÈN ĐỎ): 💡 Ghi chú: Hãy bấm 📱 APP HURC màu đỏ ➔ vào mục 'Vé Của Tôi' ➔ nhấn nút 'QUÉT MÃ QR QUA CỔNG' để chuyển cổng sang đèn xanh!" }
+        { id: 'gate', name: 'Cổng Soát Vé (Vào)', icon: '🚧', x: 180, y: 260, dialogue: "CỔNG VÀO ĐANG KHÓA (ĐÈN ĐỎ): Nhấn nút 📱 APP HURC màu đỏ góc phải ➔ mở mục 'Vé Của Tôi' ➔ bấm 'QUÉT MÃ QR QUA CỔNG' để chuyển sang Đèn Xanh!" }
       ],
       3: [
-        { id: 'hoa', name: 'Chị Hoa (Hành Khách)', icon: '👩‍💼', x: 90, y: 360, dialogue: "Chào em! Mở App HURC mục 'Hành Trình' để tra cứu vị trí tàu 14 ga realtime. Tàu sắp vào ga rồi đó!" },
-        { id: 'train_door', name: 'Cửa Tàu Metro', icon: '🚇', x: 180, y: 200, dialogue: "Tàu Metro Line 1 xanh lam đã mở cửa! Lên toa tàu đi về Ga Bến Thành thôi." }
+        { id: 'hoa', name: 'Chị Hoa', icon: '👩‍💼', x: 80, y: 280, dialogue: "Chào em! Trên App HURC em có thể vào mục 'Hành Trình' để theo dõi vị trí tàu chạy qua 14 ga Realtime từ Bến xe Miền Đông mới tới Bến Thành nhé!" },
+        { id: 'train_door', name: 'Cửa Tàu Metro', icon: '🚇', x: 180, y: 155, dialogue: "Tàu Metro Line 1 xanh lam đã mở cửa! Lên tàu đi về Ga Bến Thành thôi." }
       ],
       4: [
-        { id: 'tung', name: 'Anh Tùng (Khách Tàu)', icon: '👨‍💻', x: 250, y: 360, dialogue: "Ngồi trên toa tàu ngắm bãi Container & Landmark 81 cực đẹp! Đi Metro nhanh và hiện đại thật đấy!" }
+        { id: 'tung', name: 'Anh Tùng', icon: '👨‍💻', x: 240, y: 310, dialogue: "Chào bạn! Ngồi trên toa tàu ngắm cảnh rất thích. Đóng lời thoại này lại để xem sơ đồ chuyến tàu di chuyển qua từng ga về Ga Bến Thành nhé!" }
       ],
       5: [
-        { id: 'exit_gate', name: 'Cổng Ra Ga Bến Thành', icon: '🚧', x: 180, y: 360, dialogue: "CỔNG RA BỊ KHÓA (ĐÈN ĐỎ): Mở nút 📱 APP HURC màu đỏ ➔ mục 'Vé của tôi' ➔ bấm 'QUÉT MÃ QR QUA CỔNG' để ra khỏi ga Bến Thành!" },
-        { id: 'city_square', name: 'Chợ Bến Thành', icon: '🏛️', x: 180, y: 160, dialogue: "Chúc mừng! Bạn đã tới Quảng Trường Chợ Bến Thành - Trung tâm TP. Hồ Chí Minh!" }
+        { id: 'exit_gate', name: 'Cổng Ra Ga Bến Thành', icon: '🚧', x: 180, y: 260, dialogue: "CỔNG RA BỊ KHÓA (ĐÈN ĐỎ): Mở 📱 APP HURC ➔ vào mục 'Vé của tôi' ➔ bấm 'QUÉT MÃ QR QUA CỔNG' để mở cửa ra!" },
+        { id: 'guide_transfer', name: 'Anh HDV Chuyển Tiếp', icon: '🚴', x: 280, y: 360, dialogue: "Chào bạn! Ra khỏi Ga Bến Thành, bạn mở mục 'Tiện ích' trên App HURC chọn ứng dụng TNGo để thuê xe đạp công cộng dạo Phố đi bộ Nguyễn Huệ, hoặc chọn Go!Bus để bắt xe buýt nối chuyến nhé!" },
+        { id: 'city_square', name: 'Chợ Bến Thành', icon: '🏛️', x: 180, y: 130, dialogue: "Chúc mừng! Bạn đã tới Quảng Trường Chợ Bến Thành - Trung tâm TP. Hồ Chí Minh!" }
       ]
     };
 
-    // Canvas references
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
     const previewCanvas = document.getElementById('previewCanvas');
     const pCtx = previewCanvas.getContext('2d');
 
-    // Reset Idle Activity Timer
     function resetActivityTimer() {
       state.lastActivityTime = Date.now();
       const banner = document.getElementById('idle-hint-banner');
@@ -806,7 +843,6 @@
       }
     }
 
-    // Custom Retro Toast Banner (Replacing alert())
     function showToast(msg, duration = 3500) {
       const toast = document.getElementById('game-toast');
       const text = document.getElementById('game-toast-text');
@@ -819,7 +855,20 @@
       }, duration);
     }
 
-    // Customization Form Validation & Gender Selection
+    // Dismiss Dialogue Box on Click
+    window.dismissDialogue = function() {
+      sound.clickSound();
+      document.getElementById('dialogue-box').classList.add('hidden');
+      resetActivityTimer();
+
+      // Trigger Stage 4 Map Cutscene after dismissing Anh Tùng's dialogue
+      if (state.currentStage === 4 && state.tungInteracted && !state.startMapCutscene) {
+        state.startMapCutscene = true;
+        state.mapAnimProgress = 0;
+        updateQuestTracker('Tàu đang di chuyển qua các ga từ Thủ Đức về Ga Bến Thành...');
+      }
+    };
+
     const nameInput = document.getElementById('input-player-name');
     const maleBtn = document.getElementById('btn-gender-male');
     const femaleBtn = document.getElementById('btn-gender-female');
@@ -830,10 +879,10 @@
       const nameVal = nameInput.value.trim();
       if (nameVal.length > 0 && state.gender !== null) {
         startBtn.disabled = false;
-        startBtn.className = 'w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-pixel text-xs py-3 rounded-xl border-2 border-emerald-300 cursor-pointer shadow-lg animate-pulse';
+        startBtn.className = 'w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-pixel text-[9px] py-3 rounded-xl border-2 border-emerald-300 cursor-pointer shadow-lg animate-pulse';
       } else {
         startBtn.disabled = true;
-        startBtn.className = 'w-full bg-slate-800 text-slate-500 font-pixel text-xs py-3 rounded-xl border-2 border-slate-700 cursor-not-allowed transition';
+        startBtn.className = 'w-full bg-slate-800 text-slate-500 font-pixel text-[9px] py-3 rounded-xl border-2 border-slate-700 cursor-not-allowed transition';
       }
       renderCharacterPreview();
     }
@@ -843,37 +892,34 @@
     maleBtn.addEventListener('click', () => {
       sound.clickSound();
       state.gender = 'male';
-      maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 shadow-md';
-      femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer';
+      maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 shadow-md';
+      femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 cursor-pointer';
       checkStartValidity();
     });
 
     femaleBtn.addEventListener('click', () => {
       sound.clickSound();
       state.gender = 'female';
-      femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 shadow-md';
-      maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer';
+      femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 shadow-md';
+      maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 font-pixel text-[9px] flex items-center justify-center gap-1 cursor-pointer';
       checkStartValidity();
     });
 
-    // Start Game Button Action
     startBtn.addEventListener('click', () => {
       sound.clickSound();
       state.playerName = nameInput.value.trim();
       document.getElementById('hud-player-name').textContent = state.playerName;
       document.getElementById('screen-customize').classList.add('hidden');
-      updateQuestTracker('Nói chuyện với Bác Bảo Vệ tại Ga Thủ Đức');
+      updateQuestTracker('Nói chuyện với Sinh viên A tại Ga Thủ Đức');
       resetActivityTimer();
     });
 
-    // Render Preview Sprite
     function renderCharacterPreview() {
       pCtx.fillStyle = '#0f172a';
       pCtx.fillRect(0, 0, 90, 90);
       draw8BitPlayerSprite(pCtx, 45, 60, state.gender || 'male', false, 0, 'right');
     }
 
-    // Generic 8-Bit Character Sprite Drawer
     function draw8BitPlayerSprite(context, x, y, gender, isWalking, walkCycle, facingDir) {
       context.save();
       context.translate(x, y);
@@ -884,47 +930,40 @@
 
       const legOffset = isWalking ? Math.sin(walkCycle * 0.4) * 4 : 0;
 
-      // Shadow
       context.fillStyle = 'rgba(0,0,0,0.3)';
       context.beginPath();
-      context.ellipse(0, 16, 12, 5, 0, 0, Math.PI * 2);
+      context.ellipse(0, 16, 11, 4, 0, 0, Math.PI * 2);
       context.fill();
 
       if (gender === 'female') {
-        // Female Student (Skirt + Pink Shirt)
         context.fillStyle = '#db2777';
         context.fillRect(-6, -12, 12, 14);
         context.fillStyle = '#9333ea';
         context.fillRect(-7, 2, 14, 6);
 
-        // Legs
-        context.fillStyle = '#fbcfe8';
+        context.fillStyle = '#ffedd5'; // Fair Skin
         context.fillRect(-5, 8 + legOffset, 4, 8);
         context.fillRect(1, 8 - legOffset, 4, 8);
 
-        // Head & Hair
         context.fillStyle = '#fde047';
         context.fillRect(-8, -24, 16, 14);
-        context.fillStyle = '#f87171';
+        context.fillStyle = '#ffedd5';
         context.fillRect(-6, -20, 12, 10);
         context.fillStyle = '#000';
         context.fillRect(2, -17, 2, 3);
       } else {
-        // Male Student (Blue Shirt + Jeans)
         context.fillStyle = '#2563eb';
         context.fillRect(-6, -12, 12, 14);
         context.fillStyle = '#1e3a8a';
         context.fillRect(-6, 2, 12, 6);
 
-        // Legs
         context.fillStyle = '#3b82f6';
         context.fillRect(-5, 8 + legOffset, 4, 8);
         context.fillRect(1, 8 - legOffset, 4, 8);
 
-        // Head & Hair
         context.fillStyle = '#451a03';
         context.fillRect(-7, -22, 14, 8);
-        context.fillStyle = '#f87171';
+        context.fillStyle = '#ffedd5';
         context.fillRect(-6, -18, 12, 10);
         context.fillStyle = '#000';
         context.fillRect(2, -15, 2, 3);
@@ -933,19 +972,18 @@
       context.restore();
     }
 
-    // Draw Floating Red Exclamation Mark (!)
     function drawExclamationMark(context, x, y) {
       context.save();
       const bounce = Math.sin(Date.now() * 0.008) * 4;
-      context.translate(x, y - 35 + bounce);
+      context.translate(x, y - 32 + bounce);
 
       context.fillStyle = '#ef4444';
       context.beginPath();
-      context.arc(0, 0, 10, 0, Math.PI * 2);
+      context.arc(0, 0, 9, 0, Math.PI * 2);
       context.fill();
 
       context.fillStyle = '#ffffff';
-      context.font = 'bold 12px monospace';
+      context.font = 'bold 11px monospace';
       context.textAlign = 'center';
       context.textBaseline = 'middle';
       context.fillText('!', 0, 0);
@@ -953,109 +991,103 @@
       context.restore();
     }
 
-    // Background Renderers for 5 Stages matching Reference Images
+    // 5 Stages 8-Bit Background Renderer (Scaled for 360x480 canvas)
     function drawStageBackground(context, stage) {
       if (stage === 1) {
-        // Stage 1: Ga Thủ Đức Exterior
         context.fillStyle = '#38bdf8';
-        context.fillRect(0, 0, 360, 250); // Sky
+        context.fillRect(0, 0, 360, 200); // Sky
 
         context.fillStyle = '#ffffff';
-        context.fillRect(40, 40, 60, 18);
-        context.fillRect(200, 60, 80, 20);
+        context.fillRect(30, 30, 50, 14);
+        context.fillRect(220, 45, 60, 16);
 
         context.fillStyle = '#15803d';
-        context.fillRect(0, 180, 100, 70);
+        context.fillRect(0, 160, 100, 50);
 
-        // Concrete Station Structure & Viaduct
         context.fillStyle = '#94a3b8';
-        context.fillRect(40, 80, 320, 140);
+        context.fillRect(40, 70, 320, 130);
         context.fillStyle = '#64748b';
-        context.fillRect(0, 120, 140, 20);
+        context.fillRect(0, 105, 120, 18);
 
-        // Blue Station Sign "Thủ Đức Thu Duc"
+        // Blue Sign "Thủ Đức Thu Duc"
         context.fillStyle = '#1d4ed8';
-        context.fillRect(100, 95, 200, 32);
+        context.fillRect(90, 80, 190, 28);
         context.fillStyle = '#ffffff';
-        context.font = 'bold 12px monospace';
+        context.font = 'bold 11px monospace';
         context.textAlign = 'center';
-        context.fillText('Thủ Đức  Thu Duc', 200, 115);
+        context.fillText('Thủ Đức  Thu Duc', 185, 98);
 
-        // Escalator Central Stairs with Red Dots
+        // Escalators
         context.fillStyle = '#475569';
         context.beginPath();
-        context.moveTo(140, 250);
-        context.lineTo(240, 145);
-        context.lineTo(310, 145);
-        context.lineTo(310, 250);
+        context.moveTo(130, 200);
+        context.lineTo(220, 120);
+        context.lineTo(290, 120);
+        context.lineTo(290, 200);
         context.fill();
 
         context.fillStyle = '#ef4444';
         context.beginPath();
-        context.arc(220, 190, 3, 0, Math.PI * 2);
-        context.arc(270, 190, 3, 0, Math.PI * 2);
+        context.arc(200, 155, 2.5, 0, Math.PI * 2);
+        context.arc(250, 155, 2.5, 0, Math.PI * 2);
         context.fill();
 
-        // Right Elevator Shaft (↑ 🚪 ♿)
+        // Elevator Shaft
         context.fillStyle = '#334155';
-        context.fillRect(310, 145, 45, 105);
+        context.fillRect(290, 120, 40, 80);
         context.fillStyle = '#38bdf8';
-        context.fillRect(315, 155, 35, 40);
+        context.fillRect(295, 130, 30, 30);
 
         // Ground pavement
         context.fillStyle = '#cbd5e1';
-        context.fillRect(0, 250, 360, 390);
+        context.fillRect(0, 200, 360, 280);
         context.fillStyle = '#94a3b8';
-        context.fillRect(0, 250, 360, 8);
+        context.fillRect(0, 200, 360, 6);
 
       } else if (stage === 2) {
-        // Stage 2: Turnstile Security Gate Entrance Hall
         context.fillStyle = '#e2e8f0';
-        context.fillRect(0, 0, 360, 640);
+        context.fillRect(0, 0, 360, 480);
 
-        // Ceiling lights
         context.fillStyle = '#fef08a';
-        context.fillRect(20, 20, 40, 10);
-        context.fillRect(160, 20, 40, 10);
-        context.fillRect(300, 20, 40, 10);
+        context.fillRect(20, 15, 40, 8);
+        context.fillRect(160, 15, 40, 8);
+        context.fillRect(300, 15, 40, 8);
 
-        // Hanging Blue Signs "⛔ Cấm vào / No Entry" & "Cửa 2 / Gate 2"
+        // Hanging Signs
         context.fillStyle = '#1d4ed8';
-        context.fillRect(30, 60, 140, 40);
-        context.fillRect(190, 60, 140, 40);
+        context.fillRect(30, 45, 140, 35);
+        context.fillRect(190, 45, 140, 35);
 
         context.fillStyle = '#dc2626';
         context.beginPath();
-        context.arc(55, 80, 10, 0, Math.PI * 2);
+        context.arc(55, 62, 9, 0, Math.PI * 2);
         context.fill();
         context.fillStyle = '#ffffff';
-        context.fillRect(49, 78, 12, 4);
+        context.fillRect(49, 60, 12, 4);
 
         context.fillStyle = '#ffffff';
         context.font = 'bold 9px monospace';
         context.textAlign = 'left';
-        context.fillText('Cấm vào', 72, 75);
-        context.fillText('No Entry', 72, 88);
+        context.fillText('Cấm vào', 70, 58);
+        context.fillText('No Entry', 70, 70);
 
-        context.fillText('Cửa 2', 230, 75);
-        context.fillText('Gate 2', 230, 88);
+        context.fillText('Cửa 2', 230, 58);
+        context.fillText('Gate 2', 230, 70);
 
-        // Turnstile Stainless Steel Scanner Gates
+        // Turnstiles
         context.fillStyle = '#64748b';
-        context.fillRect(40, 280, 50, 120);
-        context.fillRect(130, 280, 50, 120);
-        context.fillRect(220, 280, 50, 120);
+        context.fillRect(40, 220, 50, 90);
+        context.fillRect(130, 220, 50, 90);
+        context.fillRect(220, 220, 50, 90);
 
-        // QR Screen Indicator (Red = Locked, Green = Scanned)
         const gateColor = state.ticketScanned ? '#22c55e' : '#ef4444';
         context.fillStyle = gateColor;
-        context.fillRect(55, 300, 20, 20);
-        context.fillRect(145, 300, 20, 20);
-        context.fillRect(235, 300, 20, 20);
+        context.fillRect(55, 235, 20, 16);
+        context.fillRect(145, 235, 20, 16);
+        context.fillRect(235, 235, 20, 16);
 
-        // Floor tiles
         context.strokeStyle = '#cbd5e1';
-        for (let i = 400; i < 640; i += 30) {
+        for (let i = 310; i < 480; i += 25) {
           context.beginPath();
           context.moveTo(0, i);
           context.lineTo(360, i);
@@ -1063,22 +1095,18 @@
         }
 
       } else if (stage === 3) {
-        // Stage 3: Platform Trạm Chờ PSD
         context.fillStyle = '#78716c';
-        context.fillRect(0, 0, 360, 640);
+        context.fillRect(0, 0, 360, 480);
 
-        // Glass Arched Roof & Daylight
         context.fillStyle = '#bae6fd';
-        context.fillRect(0, 0, 360, 140);
+        context.fillRect(0, 0, 360, 110);
 
-        // Blue Sign "🚆 SƯỜN MỚI ➔"
         context.fillStyle = '#1d4ed8';
-        context.fillRect(10, 120, 110, 30);
+        context.fillRect(10, 90, 110, 25);
         context.fillStyle = '#ffffff';
         context.font = 'bold 9px monospace';
-        context.fillText('🚆 SƯỜN MỚI ➔', 15, 140);
+        context.fillText('🚆 SƯỜN MỚI ➔', 15, 107);
 
-        // Train Entrance Animation
         if (!state.trainArrived) {
           state.trainX += state.trainSpeed;
           if (state.trainX >= 40) {
@@ -1092,225 +1120,237 @@
           }
         }
 
-        // Animated Moving Train
         context.fillStyle = '#0284c7';
-        context.fillRect(state.trainX, 140, 320, 90);
+        context.fillRect(state.trainX, 110, 320, 75);
         context.fillStyle = '#ffffff';
-        context.fillRect(state.trainX, 160, 320, 20);
+        context.fillRect(state.trainX, 125, 320, 16);
         context.fillStyle = '#eab308';
-        context.fillRect(state.trainX + 310, 185, 8, 8);
+        context.fillRect(state.trainX + 310, 145, 6, 6);
 
-        // PSD Glass Screen & Sliding Door Opening
         context.fillStyle = 'rgba(56, 189, 248, 0.4)';
-        context.fillRect(0, 180, 360, 60);
+        context.fillRect(0, 140, 360, 45);
 
         context.fillStyle = '#1e293b';
-        context.fillRect(160 - state.trainDoorProgress, 180, 20, 60);
-        context.fillRect(180 + state.trainDoorProgress, 180, 20, 60);
+        context.fillRect(160 - state.trainDoorProgress, 140, 20, 45);
+        context.fillRect(180 + state.trainDoorProgress, 140, 20, 45);
 
-        // Platform Floor Pavement
         context.fillStyle = '#d6d3d1';
-        context.fillRect(0, 240, 360, 400);
+        context.fillRect(0, 185, 360, 295);
         context.fillStyle = '#eab308';
-        context.fillRect(0, 248, 360, 8);
+        context.fillRect(0, 190, 360, 6);
 
       } else if (stage === 4) {
-        // Stage 4: Onboard Train & Landscape Cutscene (Slowed Train Cutscene & Route Map)
-        state.cutsceneScroll += 0.8; // Slow train speed
+        state.cutsceneScroll += 0.8;
 
-        if (state.cutsceneScroll < 400) {
-          // Phase 1: Landscape Scrolling past Landmark 81
+        if (!state.startMapCutscene) {
+          // Phase 1: Landscape Window Cutscene Inside Train Carriage
           context.fillStyle = '#38bdf8';
-          context.fillRect(0, 0, 360, 260);
+          context.fillRect(0, 0, 360, 200);
 
           context.fillStyle = '#fef08a';
           context.beginPath();
-          context.arc(300, 50, 20, 0, Math.PI * 2);
+          context.arc(300, 40, 15, 0, Math.PI * 2);
           context.fill();
 
-          // Parallax Landmark 81 Spire
           const landmarkX = Math.max(-50, 320 - state.cutsceneScroll * 0.6);
           context.fillStyle = '#0284c7';
-          context.fillRect(landmarkX, 80, 24, 160);
-          context.fillRect(landmarkX + 9, 40, 6, 40);
+          context.fillRect(landmarkX, 60, 20, 130);
+          context.fillRect(landmarkX + 7, 30, 6, 30);
 
-          // Parallax Container Port Stack
           const containerX = (400 - (state.cutsceneScroll * 1.1) % 450);
           context.fillStyle = '#dc2626';
-          context.fillRect(containerX, 190, 40, 30);
+          context.fillRect(containerX, 155, 35, 25);
           context.fillStyle = '#16a34a';
-          context.fillRect(containerX + 45, 180, 40, 40);
+          context.fillRect(containerX + 40, 145, 35, 35);
           context.fillStyle = '#2563eb';
-          context.fillRect(containerX + 90, 195, 40, 25);
+          context.fillRect(containerX + 80, 160, 35, 20);
 
-          // Viaduct Track & Pillars
           context.fillStyle = '#94a3b8';
-          context.fillRect(0, 220, 360, 40);
+          context.fillRect(0, 180, 360, 30);
           for (let colX = (0 - (state.cutsceneScroll * 2) % 80); colX < 360; colX += 80) {
-            context.fillRect(colX, 230, 25, 60);
+            context.fillRect(colX, 190, 20, 40);
           }
 
-          // Carriage Interior Layout
           context.fillStyle = '#f1f5f9';
-          context.fillRect(0, 270, 360, 370);
+          context.fillRect(0, 210, 360, 270);
 
-          // Windows
           context.fillStyle = '#7dd3fc';
-          context.fillRect(20, 290, 150, 110);
-          context.fillRect(190, 290, 150, 110);
+          context.fillRect(20, 220, 150, 85);
+          context.fillRect(190, 220, 150, 85);
 
-          // Blue Seats
           context.fillStyle = '#2563eb';
-          context.fillRect(0, 440, 160, 50);
-          context.fillRect(200, 440, 160, 50);
+          context.fillRect(0, 340, 150, 40);
+          context.fillRect(210, 340, 150, 40);
 
-          // Hanging Blue Triangular Hand Straps
           context.strokeStyle = '#2563eb';
-          context.lineWidth = 3;
+          context.lineWidth = 2.5;
           for (let x = 40; x < 360; x += 50) {
             context.beginPath();
-            context.moveTo(x, 270);
-            context.lineTo(x, 310);
+            context.moveTo(x, 210);
+            context.lineTo(x, 240);
             context.stroke();
             context.beginPath();
-            context.arc(x, 315, 6, 0, Math.PI * 2);
+            context.arc(x, 245, 5, 0, Math.PI * 2);
             context.stroke();
           }
 
         } else {
-          // Phase 2: 8-Bit Pixel Line 1 Route Map (Simulating Image 1000081706_3.jpg)
+          // Phase 2: FULL 14 STATIONS ROUTE MAP CUTSCENE (TRIGGERED AFTER TALKING TO ANH TÙNG)
           if (state.mapAnimProgress < 1) {
-            state.mapAnimProgress += 0.005;
+            state.mapAnimProgress += 0.0035;
           }
 
-          context.fillStyle = '#0f172a';
-          context.fillRect(0, 0, 360, 640);
+          context.fillStyle = '#0b132b';
+          context.fillRect(0, 0, 360, 480);
 
-          // Route Map Title Header
+          // Route Header Title
           context.fillStyle = '#38bdf8';
-          context.font = 'bold 12px monospace';
+          context.font = 'bold 10px monospace';
           context.textAlign = 'center';
-          context.fillText('SƠ ĐỒ VỊ TRÍ DI CHUYỂN METRO LINE 1', 180, 40);
+          context.fillText('SƠ ĐỒ THỰC TẾ 14 GA METRO LINE 1', 180, 20);
 
-          // Dark Background Train Silhouette
-          context.fillStyle = '#1e293b';
-          context.fillRect(20, 60, 320, 520);
+          // Dark Metro Silhouette Frame
+          context.fillStyle = '#1c2541';
+          context.fillRect(15, 30, 330, 440);
           context.strokeStyle = '#0284c7';
           context.lineWidth = 2;
-          context.strokeRect(20, 60, 320, 520);
+          context.strokeRect(15, 30, 330, 440);
 
-          // Yellow Line Path Coordinates (From Suối Tiên top right to Bến Thành bottom left)
-          const startX = 290, startY = 100;
-          const endX = 70, endY = 500;
-
-          context.strokeStyle = '#eab308';
-          context.lineWidth = 6;
-          context.beginPath();
-          context.moveTo(startX, startY);
-          context.lineTo(240, 160);
-          context.lineTo(200, 240);
-          context.lineTo(150, 340);
-          context.lineTo(100, 420);
-          context.lineTo(endX, endY);
-          context.stroke();
-
-          // Draw Station Yellow/Red Dots and Labels
-          const stations = [
-            { name: 'Bến xe Miền Đông mới', x: 290, y: 100 },
-            { name: 'Suối Tiên', x: 260, y: 135 },
-            { name: 'Khu Công nghệ cao', x: 240, y: 160 },
-            { name: 'Thủ Đức (Ga đi)', x: 220, y: 195 },
-            { name: 'Bình Thái', x: 200, y: 240 },
-            { name: 'Phước Long', x: 185, y: 275 },
-            { name: 'Rạch Chiếc', x: 170, y: 305 },
-            { name: 'An Phú', x: 150, y: 340 },
-            { name: 'Thảo Điền', x: 135, y: 370 },
-            { name: 'Tân Cảng', x: 120, y: 395 },
-            { name: 'Văn Thánh', x: 100, y: 420 },
-            { name: 'Ba Son', x: 85, y: 460 },
-            { name: 'Bến Thành (Ga đến)', x: 70, y: 500 }
+          const all14Stations = [
+            { name: 'Bến xe Miền Đông mới', x: 285, y: 50, isTerminal: true },
+            { name: 'Suối Tiên', x: 260, y: 77 },
+            { name: 'Đại học Quốc gia', x: 240, y: 104 },
+            { name: 'Khu Công nghệ cao', x: 220, y: 131 },
+            { name: 'Thủ Đức (Ga đi)', x: 200, y: 158, isStart: true },
+            { name: 'Bình Thái', x: 180, y: 185 },
+            { name: 'Phước Long', x: 162, y: 212 },
+            { name: 'Rạch Chiếc', x: 145, y: 239 },
+            { name: 'An Phú', x: 130, y: 266 },
+            { name: 'Thảo Điền', x: 115, y: 293 },
+            { name: 'Tân Cảng', x: 100, y: 320 },
+            { name: 'Văn Thánh', x: 85, y: 347 },
+            { name: 'Ba Son', x: 70, y: 374 },
+            { name: 'Bến Thành', x: 55, y: 406, isTerminal: true }
           ];
 
-          stations.forEach((st, idx) => {
-            context.fillStyle = idx === 0 || idx === 12 ? '#ef4444' : '#fef08a';
+          // Draw Golden Dotted Route Line
+          context.strokeStyle = '#eab308';
+          context.lineWidth = 4;
+          context.setLineDash([4, 3]);
+          context.beginPath();
+          context.moveTo(all14Stations[0].x, all14Stations[0].y);
+          for (let i = 1; i < all14Stations.length; i++) {
+            context.lineTo(all14Stations[i].x, all14Stations[i].y);
+          }
+          context.stroke();
+          context.setLineDash([]);
+
+          // Determine current station being passed through (indices 4 to 13)
+          const startIdx = 4; // Thủ Đức
+          const endIdx = 13; // Bến Thành
+          const currentPassedIdx = Math.min(endIdx, startIdx + Math.floor(state.mapAnimProgress * (endIdx - startIdx + 1)));
+
+          // Draw Station Nodes & Text Labels with Active Station Highlight
+          all14Stations.forEach((st, idx) => {
+            const isActive = idx === currentPassedIdx && state.mapAnimProgress < 1;
+            
+            if (isActive) {
+              // Glowing aura ring around current passing station
+              const auraSize = 8 + Math.sin(Date.now() * 0.01) * 3;
+              context.fillStyle = 'rgba(56, 189, 248, 0.4)';
+              context.beginPath();
+              context.arc(st.x, st.y, auraSize, 0, Math.PI * 2);
+              context.fill();
+            }
+
+            context.fillStyle = isActive ? '#38bdf8' : (st.isTerminal ? '#ef4444' : '#fef08a');
             context.beginPath();
-            context.arc(st.x, st.y, 6, 0, Math.PI * 2);
+            context.arc(st.x, st.y, isActive ? 7 : (st.isTerminal ? 6 : 4), 0, Math.PI * 2);
             context.fill();
 
-            context.fillStyle = idx === 3 || idx === 12 ? '#38bdf8' : '#ffffff';
-            context.font = 'bold 8px monospace';
+            context.fillStyle = isActive ? '#38bdf8' : ((st.isStart || idx === 13) ? '#fde047' : '#ffffff');
+            context.font = isActive ? 'bold 9px monospace' : 'bold 8px monospace';
             context.textAlign = 'left';
-            context.fillText(st.name, st.x + 10, st.y + 3);
+            context.fillText(st.name + (isActive ? ' ◀' : ''), st.x + 10, st.y + 3);
           });
 
-          // Draw 8-Bit Ben Thanh Market Golden Clock Tower Icon at Destination
+          // Draw Ben Thanh Market Golden Clock Tower Icon at Destination
           context.fillStyle = '#eab308';
-          context.fillRect(40, 480, 20, 20);
+          context.fillRect(25, 396, 20, 20);
           context.fillStyle = '#ffffff';
-          context.fillRect(47, 485, 6, 6);
+          context.fillRect(32, 401, 6, 6);
 
-          // Animated Mini Metro Train along Route Line
+          // Animated 8-bit Mini Train moving smoothly from Thủ Đức (index 4) to Bến Thành (index 13)
+          const startNode = all14Stations[4]; // Thủ Đức
+          const endNode = all14Stations[13];  // Bến Thành
           const t = state.mapAnimProgress;
-          // Interpolate position from Thủ Đức (idx 3) to Bến Thành (idx 12)
-          const currX = 220 + (70 - 220) * t;
-          const currY = 195 + (500 - 195) * t;
+          const currX = startNode.x + (endNode.x - startNode.x) * t;
+          const currY = startNode.y + (endNode.y - startNode.y) * t;
 
           context.fillStyle = '#0284c7';
-          context.fillRect(currX - 10, currY - 6, 20, 12);
+          context.fillRect(currX - 9, currY - 6, 18, 12);
           context.fillStyle = '#ffffff';
-          context.fillRect(currX - 6, currY - 4, 12, 4);
+          context.fillRect(currX - 5, currY - 4, 10, 4);
 
-          // Transition to Stage 5 automatically when mini train reaches Bến Thành
+          // Station Name Toast Banner at bottom of map cutscene
+          const currentStationName = all14Stations[currentPassedIdx].name;
+          context.fillStyle = '#0284c7';
+          context.fillRect(30, 435, 300, 24);
+          context.strokeStyle = '#38bdf8';
+          context.strokeRect(30, 435, 300, 24);
+          context.fillStyle = '#ffffff';
+          context.font = 'bold 9px monospace';
+          context.textAlign = 'center';
+          context.fillText(`🚆 TÀU ĐANG QUA: ${currentStationName.toUpperCase()}`, 180, 451);
+
+          // Auto transition to Stage 5 when mini train reaches Bến Thành
           if (t >= 0.99 && state.currentStage === 4) {
             state.currentStage = 5;
             state.playerX = 60;
-            state.playerY = 480;
+            state.playerY = 370;
             document.getElementById('current-location-text').textContent = 'Ga Bến Thành & Quảng Trường';
             updateQuestTracker('Mở App HURC quét mã QR tại cổng ra để hoàn thành chuyến đi!');
           }
         }
 
       } else if (stage === 5) {
-        // Stage 5: Ga Bến Thành & Quảng Trường
         context.fillStyle = '#94a3b8';
-        context.fillRect(0, 0, 360, 320); // Station Interior
+        context.fillRect(0, 0, 360, 240); // Underground Station
 
-        // Blue Exit Sign "Lối ra 1 ➔ 2"
         context.fillStyle = '#1d4ed8';
-        context.fillRect(100, 60, 160, 32);
+        context.fillRect(100, 35, 160, 26);
         context.fillStyle = '#ffffff';
-        context.font = 'bold 10px monospace';
+        context.font = 'bold 9px monospace';
         context.textAlign = 'center';
-        context.fillText('← 2  Lối ra / Exit  1 →', 180, 80);
+        context.fillText('← 2  Lối ra / Exit  1 →', 180, 52);
 
-        // Underground Staircase
         context.fillStyle = '#cbd5e1';
-        context.fillRect(80, 160, 200, 160);
+        context.fillRect(80, 110, 200, 130);
         context.fillStyle = '#64748b';
-        for (let y = 160; y < 320; y += 16) {
-          context.fillRect(80, y, 200, 3);
+        for (let y = 110; y < 240; y += 13) {
+          context.fillRect(80, y, 200, 2);
         }
 
-        // Exit Turnstile Gates Barrier at y=320..360
+        // Exit turnstiles at y=240
         context.fillStyle = '#475569';
-        context.fillRect(40, 320, 280, 15);
+        context.fillRect(40, 240, 280, 12);
         const exitColor = state.exitScanned ? '#22c55e' : '#ef4444';
         context.fillStyle = exitColor;
-        context.fillRect(60, 322, 12, 11);
-        context.fillRect(180, 322, 12, 11);
-        context.fillRect(280, 322, 12, 11);
+        context.fillRect(60, 241, 12, 10);
+        context.fillRect(180, 241, 12, 10);
+        context.fillRect(280, 241, 12, 10);
 
-        // Ben Thanh Plaza Ground
+        // Ben Thanh Plaza
         context.fillStyle = '#fef08a';
-        context.fillRect(0, 360, 360, 280);
+        context.fillRect(0, 252, 360, 228);
 
-        // Ben Thanh Market Clock Tower
+        // Clock Tower
         context.fillStyle = '#b45309';
-        context.fillRect(130, 200, 100, 80);
-        context.fillRect(150, 140, 60, 60);
+        context.fillRect(140, 140, 80, 60);
+        context.fillRect(155, 90, 50, 50);
         context.fillStyle = '#fef08a';
         context.beginPath();
-        context.arc(180, 165, 10, 0, Math.PI * 2);
+        context.arc(180, 110, 8, 0, Math.PI * 2);
         context.fill();
       }
     }
@@ -1338,7 +1378,7 @@
       const dx = touch.clientX - joyCenterX;
       const dy = touch.clientY - joyCenterY;
       const dist = Math.hypot(dx, dy);
-      const maxDist = 36;
+      const maxDist = 32;
 
       const angle = Math.atan2(dy, dx);
       const moveDist = Math.min(dist, maxDist);
@@ -1349,8 +1389,8 @@
       joyStick.style.transform = `translate(calc(-50% + ${stickX}px), calc(-50% + ${stickY}px))`;
 
       const normSpeed = moveDist / maxDist;
-      state.playerVx = Math.cos(angle) * normSpeed * 3.2;
-      state.playerVy = Math.sin(angle) * normSpeed * 3.2;
+      state.playerVx = Math.cos(angle) * normSpeed * 3.0;
+      state.playerVy = Math.sin(angle) * normSpeed * 3.0;
 
       state.isWalking = moveDist > 4;
       if (Math.abs(state.playerVx) > 0.2) {
@@ -1370,7 +1410,6 @@
     window.addEventListener('pointermove', handleJoystickMove);
     window.addEventListener('pointerup', handleJoystickEnd);
 
-    // Keyboard Controls Support
     window.addEventListener('keydown', (e) => {
       resetActivityTimer();
       const k = e.key.toLowerCase();
@@ -1383,7 +1422,6 @@
       keysPressed[e.key.toLowerCase()] = false;
     });
 
-    // Touch / Click directly on NPC on Canvas to Interact
     canvas.addEventListener('click', (e) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -1392,7 +1430,7 @@
       const clickY = (e.clientY - rect.top) * scaleY;
 
       const npcs = stageNPCs[state.currentStage] || [];
-      const clickedNPC = npcs.find(npc => Math.hypot(clickX - npc.x, clickY - npc.y) < 55);
+      const clickedNPC = npcs.find(npc => Math.hypot(clickX - npc.x, clickY - npc.y) < 65);
       if (clickedNPC) {
         triggerInteraction();
       }
@@ -1404,10 +1442,10 @@
       let vx = 0;
       let vy = 0;
 
-      if (keysPressed['arrowleft'] || keysPressed['a']) vx -= 3;
-      if (keysPressed['arrowright'] || keysPressed['d']) vx += 3;
-      if (keysPressed['arrowup'] || keysPressed['w']) vy -= 3;
-      if (keysPressed['arrowdown'] || keysPressed['s']) vy += 3;
+      if (keysPressed['arrowleft'] || keysPressed['a']) vx -= 2.8;
+      if (keysPressed['arrowright'] || keysPressed['d']) vx += 2.8;
+      if (keysPressed['arrowup'] || keysPressed['w']) vy -= 2.8;
+      if (keysPressed['arrowdown'] || keysPressed['s']) vy += 2.8;
 
       state.playerVx = vx;
       state.playerVy = vy;
@@ -1418,7 +1456,7 @@
       }
     }
 
-    // Phone Modal Controller & Tab Routing
+    // Phone Modal Controller
     const phoneModal = document.getElementById('modal-phone');
     document.getElementById('btn-open-phone').onclick = () => {
       resetActivityTimer();
@@ -1439,6 +1477,7 @@
       document.getElementById('view-app-payment').classList.add('hidden');
       document.getElementById('view-app-tickets').classList.add('hidden');
       document.getElementById('view-app-map').classList.add('hidden');
+      document.getElementById('view-app-utilities').classList.add('hidden');
 
       if (tabId === 'tab-home') {
         document.getElementById('view-app-home').classList.remove('hidden');
@@ -1450,12 +1489,15 @@
         document.getElementById('view-app-tickets').classList.remove('hidden');
       } else if (tabId === 'tab-map') {
         document.getElementById('view-app-map').classList.remove('hidden');
+      } else if (tabId === 'tab-utilities') {
+        document.getElementById('view-app-utilities').classList.remove('hidden');
       }
     }
 
     document.getElementById('btn-nav-buy').onclick = () => switchAppTab('tab-buy');
     document.getElementById('btn-nav-tickets').onclick = () => switchAppTab('tab-tickets');
     document.getElementById('btn-nav-map').onclick = () => switchAppTab('tab-map');
+    document.getElementById('btn-nav-utilities').onclick = () => switchAppTab('tab-utilities');
     document.getElementById('btn-pill-home').onclick = () => switchAppTab('tab-home');
     document.getElementById('btn-pill-buy').onclick = () => switchAppTab('tab-buy');
     document.getElementById('btn-pill-tickets').onclick = () => switchAppTab('tab-tickets');
@@ -1463,7 +1505,13 @@
     document.getElementById('btn-back-home-1').onclick = () => switchAppTab('tab-home');
     document.getElementById('btn-back-home-2').onclick = () => switchAppTab('tab-home');
     document.getElementById('btn-back-home-3').onclick = () => switchAppTab('tab-home');
+    document.getElementById('btn-back-home-4').onclick = () => switchAppTab('tab-home');
     document.getElementById('btn-back-buy-screen').onclick = () => switchAppTab('tab-buy');
+
+    window.showUtilityInfo = function(name, desc) {
+      sound.clickSound();
+      showToast(`🔗 ${name}: ${desc}`, 5000);
+    };
 
     window.selectAppTicket = function(ticketName, price, isHssv = false) {
       sound.clickSound();
@@ -1481,7 +1529,6 @@
       switchAppTab('tab-payment');
     };
 
-    // Student ID Verification
     document.getElementById('btn-verify-student').onclick = () => {
       resetActivityTimer();
       const val = document.getElementById('input-student-id').value.trim();
@@ -1496,7 +1543,6 @@
       }
     };
 
-    // Buy Ticket Confirmation (Payment View)
     document.getElementById('btn-buy-ticket-now').onclick = () => {
       resetActivityTimer();
       sound.scanSuccessSound();
@@ -1512,7 +1558,6 @@
       updateQuestTracker('Đã thanh toán vé thành công! Bấm Quét Mã QR để mở cổng qua ga.');
     };
 
-    // Scan QR Code via App (Unlocks Entrance or Exit Gate)
     document.getElementById('btn-scan-qr-gate').onclick = () => {
       resetActivityTimer();
       sound.scanSuccessSound();
@@ -1531,15 +1576,14 @@
       }
     };
 
-    // Render 8-Bit Pixel QR Code Canvas
     function renderPixelQR() {
       const qCanvas = document.getElementById('qrCanvas');
       const qCtx = qCanvas.getContext('2d');
       qCtx.fillStyle = '#ffffff';
-      qCtx.fillRect(0, 0, 120, 120);
+      qCtx.fillRect(0, 0, 110, 110);
 
       qCtx.fillStyle = '#0f172a';
-      const size = 6;
+      const size = 5.5;
       for (let r = 0; r < 20; r++) {
         for (let c = 0; c < 20; c++) {
           if ((r < 6 && c < 6) || (r < 6 && c > 13) || (r > 13 && c < 6) || Math.random() > 0.5) {
@@ -1549,12 +1593,10 @@
       }
     }
 
-    // Quest Tracker Updater
     function updateQuestTracker(msg) {
       document.getElementById('quest-tracker-text').textContent = msg;
     }
 
-    // Interactive Action Handler (NPCs & Triggers)
     document.getElementById('btn-interact').onclick = triggerInteraction;
 
     function triggerInteraction() {
@@ -1572,23 +1614,21 @@
         }
       });
 
-      if (closestNPC && minDist < 85) {
+      if (closestNPC && minDist < 110) {
         showDialogue(closestNPC.name, closestNPC.icon, closestNPC.dialogue);
 
-        // Turn OFF red exclamation mark for interacted object
         state.interactedNPCs[`${state.currentStage}_${closestNPC.id}`] = true;
 
-        // Stage Progression Interactions
         if (state.currentStage === 1) {
           if (closestNPC.id === 'guard') {
             state.questStep = 1;
-            updateQuestTracker('Hỏi bạn Minh cách mở App HURC màu đỏ mua vé sinh viên');
-          } else if (closestNPC.id === 'minh') {
+            updateQuestTracker('Hỏi Sinh viên A cách mở App HURC màu đỏ mua vé sinh viên');
+          } else if (closestNPC.id === 'student_a') {
             updateQuestTracker('Mở nút 📱 APP HURC màu đỏ ở góc phải để mua vé');
           } else if (closestNPC.id === 'station_stairs') {
             state.currentStage = 2;
             state.playerX = 60;
-            state.playerY = 480;
+            state.playerY = 370;
             document.getElementById('current-location-text').textContent = 'Sảnh Soát Vé Turnstile';
             updateQuestTracker('Tiến lại cổng Turnstile và Quét Mã QR để qua cổng');
           }
@@ -1599,7 +1639,7 @@
             } else {
               state.currentStage = 3;
               state.playerX = 60;
-              state.playerY = 420;
+              state.playerY = 320;
               state.trainX = -360;
               state.trainArrived = false;
               state.trainDoorProgress = 0;
@@ -1615,16 +1655,15 @@
             }
             state.currentStage = 4;
             state.playerX = 60;
-            state.playerY = 420;
+            state.playerY = 350;
+            state.startMapCutscene = false;
+            state.tungInteracted = false;
             document.getElementById('current-location-text').textContent = 'Toa Tàu Metro (Đang Chạy)';
-            updateQuestTracker('Thưởng thức cảnh ngắm bãi Container & Landmark 81');
-            setTimeout(() => {
-              state.currentStage = 5;
-              state.playerX = 60;
-              state.playerY = 480;
-              document.getElementById('current-location-text').textContent = 'Ga Bến Thành & Quảng Trường';
-              updateQuestTracker('Mở App HURC quét mã QR tại cổng ra để hoàn thành chuyến đi!');
-            }, 5500);
+            updateQuestTracker('Nói chuyện với Anh Tùng trên toa tàu để xem sơ đồ hành trình');
+          }
+        } else if (state.currentStage === 4) {
+          if (closestNPC.id === 'tung') {
+            state.tungInteracted = true;
           }
         } else if (state.currentStage === 5) {
           if (closestNPC.id === 'exit_gate') {
@@ -1646,14 +1685,12 @@
       }
     }
 
-    // End Game Screen Trigger
     function showEndGameScreen() {
       sound.scanSuccessSound();
       document.getElementById('end-player-name').textContent = state.playerName || 'Bạn';
       document.getElementById('screen-end-game').classList.remove('hidden');
     }
 
-    // Reset Game Handler
     document.getElementById('btn-restart-game').onclick = () => {
       sound.clickSound();
       document.getElementById('screen-end-game').classList.add('hidden');
@@ -1665,136 +1702,120 @@
       state.exitScanned = false;
       state.studentVerified = false;
       state.playerX = 60;
-      state.playerY = 480;
+      state.playerY = 370;
       state.trainX = -360;
       state.trainArrived = false;
       state.trainDoorProgress = 0;
+      state.tungInteracted = false;
+      state.startMapCutscene = false;
       state.interactedNPCs = {};
 
       document.getElementById('no-tickets-msg').classList.remove('hidden');
       document.getElementById('active-ticket-card').classList.add('hidden');
       document.getElementById('student-status-badge').textContent = 'Chưa xác thực';
-      document.getElementById('student-status-badge').className = 'text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold';
+      document.getElementById('student-status-badge').className = 'text-[8px] bg-slate-200 text-slate-600 px-1 py-0.5 rounded font-bold';
       document.getElementById('hud-student-badge').classList.add('hidden');
 
       document.getElementById('current-location-text').textContent = 'Bên ngoài Ga Thủ Đức';
-      updateQuestTracker('Nói chuyện với Bác Bảo Vệ tại Ga Thủ Đức');
+      updateQuestTracker('Nói chuyện với Sinh viên A tại Ga Thủ Đức');
 
       document.getElementById('screen-customize').classList.remove('hidden');
     };
 
-    // Dialogue Box Control
     function showDialogue(name, icon, text) {
       sound.dialogueBeep();
+      resetActivityTimer();
       document.getElementById('npc-name').textContent = name;
       document.getElementById('npc-avatar').textContent = icon;
       document.getElementById('dialogue-text').textContent = text;
       document.getElementById('dialogue-box').classList.remove('hidden');
     }
 
-    document.getElementById('dialogue-box').onclick = () => {
-      document.getElementById('dialogue-box').classList.add('hidden');
-    };
-
-    // Main Game Loop
     function gameLoop() {
-      ctx.clearRect(0, 0, 360, 640);
+      ctx.clearRect(0, 0, 360, 480);
 
-      // Keyboard Controls Physics Update
       updateKeyboardControls();
 
-      // Check 5-Second Idle Inactivity Timer
-      if (Date.now() - state.lastActivityTime > 5000) {
+      // Check Idle Inactivity Timer (10 seconds if dialogue open, 5 seconds otherwise)
+      const isDialogueOpen = !document.getElementById('dialogue-box').classList.contains('hidden');
+      const idleThreshold = isDialogueOpen ? 10000 : 5000;
+
+      if (Date.now() - state.lastActivityTime > idleThreshold) {
         document.getElementById('idle-hint-banner').classList.remove('hidden');
       }
 
-      // Move player with velocity
       state.playerX += state.playerVx;
       state.playerY += state.playerVy;
 
-      // Stage Collision Boundaries & Gate Lock Physics
       if (state.currentStage === 2) {
-        // Entrance Turnstile Gate Barrier at y = 360
-        if (!state.ticketScanned && state.playerY < 360) {
-          state.playerY = 360; // Block movement past gate
+        if (!state.ticketScanned && state.playerY < 260) {
+          state.playerY = 260;
           showToast('Cổng an ninh bị khóa! Mở App HURC ➔ Vé của tôi ➔ Quét mã QR qua cổng');
         }
       } else if (state.currentStage === 5) {
-        // Exit Turnstile Gate Barrier at y = 360
-        if (!state.exitScanned && state.playerY < 360) {
-          state.playerY = 360; // Block movement past exit gate
+        if (!state.exitScanned && state.playerY < 260) {
+          state.playerY = 260;
           showToast('Cửa ra bị khóa! Mở App HURC ➔ Vé của tôi ➔ Quét mã QR ra khỏi ga');
         }
       }
 
-      // Canvas Edge Boundaries & Carriage Floor Restriction
       if (state.currentStage === 4) {
-        // Strict boundary inside train carriage floor
-        state.playerX = Math.max(50, Math.min(310, state.playerX));
-        state.playerY = Math.max(440, Math.min(520, state.playerY));
+        state.playerX = Math.max(40, Math.min(320, state.playerX));
+        state.playerY = Math.max(330, Math.min(410, state.playerY));
       } else {
-        state.playerX = Math.max(20, Math.min(340, state.playerX));
-        state.playerY = Math.max(130, Math.min(580, state.playerY));
+        state.playerX = Math.max(15, Math.min(345, state.playerX));
+        state.playerY = Math.max(90, Math.min(450, state.playerY));
       }
 
       if (state.isWalking) {
         state.walkCycle += 1;
       }
 
-      // Render 8-Bit Stage Background
       drawStageBackground(ctx, state.currentStage);
 
-      // Render Stage NPCs
       const npcs = stageNPCs[state.currentStage] || [];
       npcs.forEach(npc => {
-        ctx.font = '24px sans-serif';
+        ctx.font = '22px sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(npc.icon, npc.x, npc.y);
 
-        // Draw NPC Name Label
         ctx.fillStyle = '#0f172a';
-        ctx.fillRect(npc.x - 40, npc.y + 6, 80, 14);
+        ctx.fillRect(npc.x - 38, npc.y + 5, 76, 13);
         ctx.fillStyle = '#38bdf8';
-        ctx.font = 'bold 9px monospace';
-        ctx.fillText(npc.name, npc.x, npc.y + 16);
+        ctx.font = 'bold 8px monospace';
+        ctx.fillText(npc.name, npc.x, npc.y + 14);
 
-        // Render Red Exclamation Mark (!) ONLY if not yet interacted
         const npcKey = `${state.currentStage}_${npc.id}`;
         if (!state.interactedNPCs[npcKey]) {
-          drawExclamationMark(ctx, npc.x, npc.y - 10);
+          drawExclamationMark(ctx, npc.x, npc.y - 8);
         }
       });
 
-      // Highlight interact button if player is close to an NPC
       const interactBtn = document.getElementById('btn-interact');
-      const nearby = npcs.some(npc => Math.hypot(state.playerX - npc.x, state.playerY - npc.y) < 85);
+      const nearby = npcs.some(npc => Math.hypot(state.playerX - npc.x, state.playerY - npc.y) < 110);
       if (nearby) {
         interactBtn.classList.add('ring-4', 'ring-amber-300', 'animate-pulse');
       } else {
         interactBtn.classList.remove('ring-4', 'ring-amber-300', 'animate-pulse');
       }
 
-      // Render Player Character Sprite
       draw8BitPlayerSprite(ctx, state.playerX, state.playerY, state.gender || 'male', state.isWalking, state.walkCycle, state.facingDir);
 
-      // Render Player Name Badge
       ctx.fillStyle = '#0284c7';
-      ctx.fillRect(state.playerX - 30, state.playerY - 36, 60, 14);
+      ctx.fillRect(state.playerX - 28, state.playerY - 34, 56, 13);
       ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 9px monospace';
+      ctx.font = 'bold 8px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(state.playerName || 'Anh', state.playerX, state.playerY - 25);
+      ctx.fillText(state.playerName || 'Anh', state.playerX, state.playerY - 24);
 
       requestAnimationFrame(gameLoop);
     }
 
-    // Audio Toggle
     document.getElementById('btn-audio-toggle').onclick = () => {
       sound.enabled = !sound.enabled;
       document.getElementById('btn-audio-toggle').textContent = sound.enabled ? '🔊' : '🔇';
     };
 
-    // Initialize Game Engine
     window.onload = () => {
       checkStartValidity();
       renderCharacterPreview();
@@ -1803,4 +1824,4 @@
   </script>
 </body>
 </html>
-```
+
