@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>HCMC Metro HURC Quest: Hành Trình Đến Trung Tâm</title>
   
   <!-- Tailwind CSS CDN -->
@@ -16,15 +15,19 @@
     * {
       box-sizing: border-box;
       touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    body {
-      background-color: #030712;
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: fixed;
+      background-color: #020617;
       color: #f1f5f9;
       font-family: 'VT323', monospace;
       user-select: none;
       -webkit-user-select: none;
-      overflow-x: hidden;
     }
 
     .font-pixel {
@@ -41,55 +44,58 @@
       image-rendering: crisp-edges;
     }
 
-    /* CRT TV Filter Scanline Overlay */
+    /* CRT Filter Subtle Overlay */
     .crt-overlay::after {
       content: " ";
       display: block;
       position: absolute;
       top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 255, 0, 0.02));
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.015));
       z-index: 15;
       background-size: 100% 3px, 6px 100%;
       pointer-events: none;
     }
 
-    /* Custom scrollbars */
+    /* Custom Mobile Scrollbars */
     .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
+      width: 3px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
       background: #0f172a;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #0284c7;
-      border-radius: 3px;
+      border-radius: 2px;
     }
 
-    /* 9:12 Vertical Aspect Ratio Container */
-    .game-container-9-12 {
-      max-width: 380px;
+    /* Responsive Mobile Frame with Safe Areas */
+    .mobile-game-wrapper {
       width: 100%;
-      aspect-ratio: 9 / 12;
+      height: 100dvh;
+      max-width: 440px;
+      margin: 0 auto;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
 
-    /* 360 Virtual Drag Joystick Knob */
+    /* 360 Virtual Drag Joystick Base & Knob */
     #joystick-base {
-      width: 84px;
-      height: 84px;
-      background: rgba(15, 23, 42, 0.85);
+      width: 96px;
+      height: 96px;
+      background: rgba(15, 23, 42, 0.88);
       border: 3px solid rgba(56, 189, 248, 0.85);
       border-radius: 50%;
       position: absolute;
-      bottom: 12px;
-      left: 12px;
+      bottom: 20px;
+      left: 16px;
       touch-action: none;
       z-index: 25;
-      box-shadow: 0 0 16px rgba(2, 132, 199, 0.6);
+      box-shadow: 0 0 20px rgba(2, 132, 199, 0.6), inset 0 0 12px rgba(0, 0, 0, 0.7);
     }
 
     #joystick-stick {
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
       background: radial-gradient(circle, #38bdf8 0%, #0284c7 100%);
       border: 2px solid #ffffff;
       border-radius: 50%;
@@ -98,52 +104,57 @@
       left: 50%;
       transform: translate(-50%, -50%);
       pointer-events: none;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.8);
     }
 
-    /* Smartphone Frame Bezel */
-    .phone-bezel {
-      border: 8px solid #1e293b;
-      border-radius: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.95), inset 0 0 10px rgba(0,0,0,0.7);
+    /* Smartphone Frame Inside */
+    .phone-sheet {
+      border: 6px solid #1e293b;
+      border-radius: 24px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.95);
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-1 sm:p-3 bg-slate-950">
+<body class="flex items-center justify-center bg-slate-950">
 
-  <!-- MAIN 9:12 VERTICAL PORTRAIT GAME CONTAINER -->
-  <div id="game-app" class="game-container-9-12 flex flex-col relative rounded-2xl overflow-hidden border-2 sm:border-4 border-slate-800 bg-slate-900 shadow-2xl mx-auto">
+  <!-- MAIN FULL-SCREEN SMARTPHONE GAME WRAPPER -->
+  <div id="game-app" class="mobile-game-wrapper flex flex-col relative overflow-hidden bg-slate-900 shadow-2xl border-x border-slate-800">
     
-    <!-- TOP HEADER HUD BAR -->
-    <header class="bg-slate-900 border-b-2 border-slate-700 px-3 py-1.5 flex items-center justify-between text-amber-400 z-20 shrink-0">
+    <!-- TOP HEADER HUD (MOBILE OPTIMIZED) -->
+    <header class="bg-slate-950/95 border-b-2 border-slate-700 px-3 py-2 flex items-center justify-between text-amber-400 z-20 shrink-0">
       <div class="flex items-center gap-1.5">
-        <span class="text-lg">🚇</span>
-        <div>
-          <h1 class="font-pixel text-[9px] text-cyan-400 tracking-wider leading-none">HCMC METRO HURC</h1>
-          <p class="text-[10px] text-slate-300">Tuyến 1: Bến Thành ↔ Suối Tiên</p>
+        <span class="text-xl">🚇</span>
+        <div class="leading-none">
+          <h1 class="font-pixel text-[10px] text-cyan-400 tracking-wider">HCMC METRO HURC</h1>
+          <p class="text-[11px] text-slate-300 mt-0.5">Tuyến 1: Bến Thành ↔ Suối Tiên</p>
         </div>
       </div>
 
       <div class="flex items-center gap-1.5 text-xs">
-        <div class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700 flex items-center gap-1">
+        <div class="bg-slate-800/90 px-2 py-1 rounded-lg border border-slate-700 flex items-center gap-1">
           <span class="text-slate-400 text-[10px]">Tên:</span>
-          <span id="hud-player-name" class="font-bold text-emerald-400 text-xs">Sinh viên</span>
+          <span id="hud-player-name" class="font-bold text-emerald-400 text-xs">Học sinh</span>
           <span id="hud-student-badge" class="bg-indigo-600 text-white text-[9px] px-1 rounded font-sans hidden">50%</span>
         </div>
 
-        <button id="btn-audio-toggle" type="button" class="bg-slate-800 hover:bg-slate-700 p-1.5 rounded border border-slate-700 text-xs cursor-pointer active:scale-95 transition" title="Bật/Tắt Nhạc Nền Game">
+        <button id="btn-guide-toggle" type="button" class="bg-amber-600/90 hover:bg-amber-500 text-slate-950 font-bold px-2 py-1.5 rounded-lg border border-amber-300 text-[10px] cursor-pointer active:scale-95 transition flex items-center gap-1 shadow" title="Mở Bảng Hướng Dẫn">
+          <span>📖</span>
+          <span class="font-pixel hidden sm:inline text-[8px]">HƯỚNG DẪN</span>
+        </button>
+
+        <button id="btn-audio-toggle" type="button" class="bg-slate-800 hover:bg-slate-700 p-2 rounded-lg border border-slate-700 text-xs cursor-pointer active:scale-95 transition" title="Bật/Tắt Nhạc Nền 8-Bit">
           🔊
         </button>
       </div>
     </header>
 
     <!-- QUEST TRACKER BANNER -->
-    <div class="bg-slate-950 border-b-2 border-cyan-900 px-3 py-1 flex items-center justify-between text-xs shrink-0 z-20">
+    <div class="bg-slate-950 border-b border-cyan-900/80 px-3 py-1 flex items-center justify-between text-xs shrink-0 z-20">
       <div class="flex items-center gap-1.5 overflow-hidden mr-1">
-        <span class="text-amber-400 font-bold text-[10px] shrink-0">NHIỆM VỤ:</span>
-        <span id="quest-tracker-text" class="truncate text-white font-retro text-sm leading-none">Lái xe máy kẹt xe Xa Lộ Hà Nội & gửi xe tại Bãi Xe Ga Thủ Đức</span>
+        <span class="text-amber-400 font-bold text-[10px] shrink-0 font-pixel">NV:</span>
+        <span id="quest-tracker-text" class="truncate text-white font-retro text-base leading-none">Lái xe máy kẹt xe Xa Lộ Hà Nội & gửi xe tại Bãi Xe Ga Thủ Đức</span>
       </div>
-      <div class="bg-cyan-950 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-800 text-[9px] shrink-0 font-bold">
+      <div class="bg-cyan-950 text-cyan-300 px-2 py-0.5 rounded border border-cyan-800 text-[10px] shrink-0 font-bold">
         <span id="current-location-text" class="text-amber-300">Xa Lộ Hà Nội & Bãi Xe</span>
       </div>
     </div>
@@ -151,14 +162,13 @@
     <!-- CANVAS & INTERACTIVE DISPLAY AREA (360x480) -->
     <div id="canvas-container" class="w-full flex-1 relative bg-slate-950 overflow-hidden crt-overlay flex items-center justify-center">
       
-      <!-- 9:12 CANVAS (360x480) -->
       <canvas id="gameCanvas" width="360" height="480" class="w-full h-full object-cover block cursor-default"></canvas>
 
-      <!-- IDLE HINT BANNER (Appears after 5-10s idle delay) -->
-      <div id="idle-hint-banner" class="absolute top-[80px] left-3 right-3 bg-amber-500/95 text-slate-950 border-2 border-amber-300 rounded-xl p-2 z-20 shadow-2xl text-center backdrop-blur hidden animate-bounce pointer-events-none">
-        <p class="font-bold text-[11px] leading-tight">
-          💡 <b>GHI CHÚ HƯỚNG DẪN:</b><br>
-          Kéo cần Joystick góc trái để di chuyển | Bấm nút <b class="text-red-950 uppercase">💬 TƯƠNG TÁC</b> để nói chuyện với NPC!
+      <!-- IDLE HINT BANNER -->
+      <div id="idle-hint-banner" class="absolute top-[80px] left-3 right-3 bg-amber-500/95 text-slate-950 border-2 border-amber-300 rounded-xl p-2.5 z-20 shadow-2xl text-center backdrop-blur hidden animate-bounce pointer-events-none">
+        <p class="font-bold text-[12px] leading-tight">
+          💡 <b>GỢI Ý DI CHUYỂN:</b><br>
+          Kéo cần gạt tròn bên trái để di chuyển | Bấm nút <b class="text-red-950 uppercase">💬 TƯƠNG TÁC</b> để nói chuyện với NPC!
         </p>
       </div>
 
@@ -167,10 +177,9 @@
         <p id="game-toast-text" class="font-retro text-base text-cyan-200 leading-tight">Thông báo game...</p>
       </div>
 
-      <!-- TOP RIGHT: SMARTPHONE HURC APP BUTTON WITH LOGO (Hidden until interacting with Bác Bảo Vệ & Sinh Viên A) -->
+      <!-- TOP RIGHT: SMARTPHONE HURC APP BUTTON (MOBILE FLOATING) -->
       <div class="absolute top-2 right-2 z-30">
-        <button id="btn-open-phone" type="button" class="bg-gradient-to-r from-red-600 via-red-500 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white border-2 border-red-300 font-pixel text-[9px] px-2 py-1 rounded-xl flex items-center gap-1.5 shadow-2xl animate-bounce cursor-pointer active:scale-95 hidden">
-          <!-- HURC Official SVG Logo Icon -->
+        <button id="btn-open-phone" type="button" class="bg-gradient-to-r from-red-600 via-red-500 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white border-2 border-red-300 font-pixel text-[9px] px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow-2xl animate-bounce cursor-pointer active:scale-95 hidden">
           <div class="w-6 h-6 bg-white rounded-lg flex items-center justify-center p-0.5 shadow shrink-0">
             <svg viewBox="0 0 100 100" class="w-full h-full">
               <path d="M 20 40 A 30 30 0 0 1 80 40" stroke="#dc2626" stroke-width="12" fill="none" stroke-linecap="round"/>
@@ -185,103 +194,219 @@
         </button>
       </div>
 
-      <!-- BOTTOM RIGHT: INTERACT ACTION BUTTON -->
-      <div class="absolute bottom-3 right-3 z-25">
-        <button id="btn-interact" type="button" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold font-pixel text-xs px-3 py-2.5 rounded-2xl shadow-2xl border-2 border-amber-300 flex items-center gap-1 active:scale-95 transition cursor-pointer">
-          <span class="text-base">💬</span>
+      <!-- BOTTOM RIGHT: MOBILE INTERACT ACTION BUTTON -->
+      <div class="absolute bottom-5 right-4 z-25">
+        <button id="btn-interact" type="button" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold font-pixel text-[11px] px-4 py-3.5 rounded-2xl shadow-2xl border-2 border-amber-300 flex items-center gap-1.5 active:scale-90 transition cursor-pointer">
+          <span class="text-xl">💬</span>
           <span>TƯƠNG TÁC</span>
         </button>
       </div>
 
-      <!-- BOTTOM LEFT: 360 DEGREE VIRTUAL JOYSTICK -->
+      <!-- BOTTOM LEFT: 360 DEGREE MOBILE JOYSTICK -->
       <div id="joystick-base">
         <div id="joystick-stick"></div>
       </div>
 
-      <!-- DIALOGUE BOX MODAL OVERLAY (Tap anywhere on dialogue box to dismiss instantly) -->
-      <div id="dialogue-box" class="absolute bottom-16 left-2 right-2 bg-slate-900/95 border-2 border-cyan-400 rounded-xl p-3 z-40 shadow-2xl backdrop-blur hidden cursor-pointer active:opacity-90">
-        <div class="flex items-center gap-2 mb-1 border-b border-cyan-900 pb-1 pointer-events-none">
-          <span id="npc-avatar" class="text-2xl">👮</span>
+      <!-- DIALOGUE BOX MODAL OVERLAY -->
+      <div id="dialogue-box" class="absolute bottom-24 left-3 right-3 bg-slate-900/95 border-2 border-cyan-400 rounded-2xl p-3 z-40 shadow-2xl backdrop-blur hidden cursor-pointer active:opacity-90">
+        <div class="flex items-center gap-2 mb-1.5 border-b border-cyan-900 pb-1.5 pointer-events-none">
+          <span id="npc-avatar" class="text-3xl">👮</span>
           <div>
-            <h3 id="npc-name" class="font-bold text-cyan-300 text-sm">Bác Bảo Vệ</h3>
+            <h3 id="npc-name" class="font-bold text-cyan-300 text-base">Bác Bảo Vệ</h3>
             <p class="text-[10px] text-slate-400">Ga Thủ Đức - Metro Line 1</p>
           </div>
         </div>
-        <p id="dialogue-text" class="text-white font-retro text-lg leading-snug min-h-[44px] py-1 pointer-events-none">
+        <p id="dialogue-text" class="text-white font-retro text-xl leading-snug min-h-[48px] py-1 pointer-events-none">
           Xin chào cháu! Hãy mở App HURC trên điện thoại để mua vé tàu sinh viên nhé.
         </p>
-        <div class="flex justify-between items-center pt-1 border-t border-slate-800 text-[10px] text-cyan-400 pointer-events-none">
-          <span>Chạm vào đây để tắt hội thoại...</span>
-          <span class="animate-pulse">✕</span>
+        <div class="flex justify-between items-center pt-1 border-t border-slate-800 text-[11px] text-cyan-400 pointer-events-none">
+          <span>Chạm vào hộp này để tiếp tục...</span>
+          <span class="animate-pulse text-sm">✕</span>
         </div>
       </div>
 
     </div>
 
-    <!-- FOOTER HELPER TEXT -->
-    <footer class="bg-slate-900 border-t border-slate-800 px-2 py-1 text-center text-[9px] text-slate-400 shrink-0 z-20">
-      Cần gạt Joystick 360° | Bấm TƯƠNG TÁC hoặc chạm nhân vật để làm nhiệm vụ
+    <!-- POPUP PHÁT MEDIA VIDEO QUẢNG CÁO LED (media.mp4) -->
+    <div id="modal-led-video" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
+      <div class="bg-slate-900 border-2 border-cyan-400 rounded-3xl p-3 w-full max-w-sm text-slate-100 space-y-3 shadow-2xl relative">
+        <div class="flex items-center justify-between border-b border-cyan-800 pb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl animate-pulse">📺</span>
+            <div>
+              <h2 class="font-pixel text-[11px] text-cyan-400 tracking-wider">MÀN HÌNH LED QUẢNG CÁO</h2>
+              <p class="text-xs text-slate-300 font-retro">Đang phát: media.mp4 - Ga Metro Line 1</p>
+            </div>
+          </div>
+          <button id="btn-close-led-video" type="button" class="text-slate-400 hover:text-white bg-slate-800 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold border border-slate-700 cursor-pointer active:scale-90">✕</button>
+        </div>
+
+        <!-- Video Player Container -->
+        <div class="relative w-full rounded-2xl overflow-hidden bg-black border border-cyan-900/60 shadow-inner aspect-video flex items-center justify-center">
+          <video id="led-media-player" class="w-full h-full object-cover" controls playsinline preload="metadata">
+            <source src="media.mp4" type="video/mp4">
+            Trình duyệt của bạn không hỗ trợ phát thẻ video.
+          </video>
+        </div>
+
+        <p class="text-[10px] text-slate-400 text-center font-retro">
+          *Đang phát clip truyền thông & tiện ích tuyến Metro Tuyến 1 (media.mp4)
+        </p>
+
+        <button id="btn-dismiss-video" type="button" class="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold font-pixel text-xs py-2.5 rounded-xl shadow-md cursor-pointer active:scale-95">
+          QUAY LẠI GA TÀU ➔
+        </button>
+      </div>
+    </div>
+
+    <!-- MOBILE FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 px-3 py-1.5 text-center text-[10px] text-slate-400 shrink-0 z-20 flex justify-between items-center">
+      <span>🕹️ Kéo cần gạt ảo để chạy</span>
+      <span class="text-amber-400">HCMC Metro Line 1</span>
     </footer>
 
   </div>
 
-  <!-- CHARACTER CUSTOMIZATION MODAL (SCREEN 1) -->
-  <div id="screen-customize" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-3">
-    <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-4 w-full max-w-xs text-center space-y-3 shadow-2xl max-h-[95vh] overflow-y-auto custom-scrollbar">
+  <!-- CHARACTER CUSTOMIZATION MODAL (START SCREEN) -->
+  <div id="screen-customize" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-3">
+    <div class="bg-slate-900 border-2 border-cyan-500 rounded-2xl p-4 w-full max-w-xs text-center space-y-3.5 shadow-2xl max-h-[92vh] overflow-y-auto custom-scrollbar">
       
       <div class="space-y-1">
-        <span class="text-3xl">🚇</span>
+        <span class="text-4xl">🚇</span>
         <h2 class="font-pixel text-xs text-cyan-400 tracking-wider">HCMC METRO HURC QUEST</h2>
-        <p class="text-xs text-slate-300">Hành Trình Sinh Viên Đến Trung Tâm TP.HCM</p>
+        <p class="text-xs text-slate-300">Hành Trình Đến Trung Tâm TP.HCM</p>
       </div>
 
       <!-- Character 8-Bit Pixel Preview Canvas -->
-      <div class="bg-slate-950 border border-slate-700 rounded-xl p-2 flex flex-col items-center justify-center">
-        <canvas id="previewCanvas" width="80" height="80" class="w-18 h-18 bg-slate-900 rounded-lg border border-slate-800"></canvas>
+      <div class="bg-slate-950 border border-slate-700 rounded-2xl p-2.5 flex flex-col items-center justify-center shadow-inner">
+        <canvas id="previewCanvas" width="80" height="80" class="w-20 h-20 bg-slate-900 rounded-xl border border-slate-800"></canvas>
       </div>
 
       <!-- Player Name Input -->
       <div class="space-y-1 text-left">
-        <label class="text-xs text-slate-300 font-bold block">Tên nhân vật của bạn:</label>
-        <input type="text" id="input-player-name" value="" placeholder="Nhập tên nhân vật..." maxlength="14" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-retro text-lg focus:outline-none focus:border-cyan-400 text-center" />
+        <label class="text-xs text-slate-300 font-bold block">Tên nhân vật:</label>
+        <input type="text" id="input-player-name" value="" placeholder="Nhập tên học sinh/sinh viên..." maxlength="14" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-white font-retro text-xl focus:outline-none focus:border-cyan-400 text-center shadow-inner" />
       </div>
 
-      <!-- Gender Selection Toggle -->
+      <!-- Skin & Character Selection Toggle -->
       <div class="space-y-1 text-left">
-        <label class="text-xs text-slate-300 font-bold block">Chọn giới tính:</label>
-        <div class="grid grid-cols-2 gap-2">
-          <button id="btn-gender-male" type="button" class="bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 shadow-md">
-            <span>👦</span>
-            <span>Nam</span>
+        <label class="text-xs text-slate-300 font-bold block">Chọn Nhân Vật / Trang Phục:</label>
+        <div class="grid grid-cols-3 gap-1.5">
+          <button id="btn-gender-male" type="button" class="bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95">
+            <span class="text-lg">👦</span>
+            <span class="text-[10px]">Nam (Đồng phục)</span>
           </button>
-          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer">
-            <span>👧</span>
-            <span>Nữ</span>
+          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95">
+            <span class="text-lg">👧</span>
+            <span class="text-[10px]">Nữ (Đồng phục)</span>
+          </button>
+          <button id="btn-skin-kazuma" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95">
+            <span class="text-lg">🗡️</span>
+            <span class="text-[10px]">Kazuma</span>
           </button>
         </div>
       </div>
 
       <!-- Start Game Button -->
-      <button id="btn-start-game" type="button" class="w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-pixel text-xs py-3 rounded-xl border-2 border-emerald-300 cursor-pointer shadow-lg animate-pulse">
+      <button id="btn-start-game" type="button" class="w-full bg-slate-800 text-slate-500 font-pixel text-xs py-3.5 rounded-xl border-2 border-slate-700 cursor-not-allowed transition">
         BẮT ĐẦU HÀNH TRÌNH
+      </button>
+
+      <button id="btn-quick-guide-start" type="button" class="w-full bg-slate-800/80 hover:bg-slate-700 text-amber-300 font-retro text-base py-1.5 rounded-xl border border-amber-400/50 flex items-center justify-center gap-1.5 cursor-pointer">
+        <span>📖</span>
+        <span>Xem Hướng Dẫn Cách Chơi</span>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- POPUP BẢNG HƯỚNG DẪN SỬ DỤNG VÀ CHƠI GAME (CÓ PHÁT ÂM THANH KHI MỞ) -->
+  <div id="modal-game-guide" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
+    <div class="bg-slate-900 border-2 border-amber-400 rounded-3xl p-4 w-full max-w-sm text-slate-100 space-y-3 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar relative">
+      
+      <!-- Header Bảng Hướng Dẫn -->
+      <div class="flex items-center justify-between border-b border-amber-500/40 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl animate-pulse">📖</span>
+          <div>
+            <h2 class="font-pixel text-[11px] text-amber-400 tracking-wider">HƯỚNG DẪN SỬ DỤNG</h2>
+            <p class="text-xs text-slate-300 font-retro">Cách chơi & Trải nghiệm HCMC Metro</p>
+          </div>
+        </div>
+        <button id="btn-close-guide" type="button" class="text-slate-400 hover:text-white bg-slate-800 rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold border border-slate-700 cursor-pointer active:scale-90">✕</button>
+      </div>
+
+      <!-- Nội dung các bước hướng dẫn -->
+      <div class="space-y-2 text-xs leading-relaxed font-sans">
+        
+        <!-- Mục 1: Thao tác điều khiển -->
+        <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-1">
+          <h3 class="font-bold text-cyan-300 flex items-center gap-1.5 text-[11px]">
+            <span>🕹️</span> 1. Di Chuyển & Tương Tác
+          </h3>
+          <p class="text-slate-300 text-[11px]">
+            • <b>Cần gạt Joystick tròn (góc trái dưới):</b> Chạm và kéo 360° để điều khiển nhân vật chạy tự do.<br>
+            • <b>Nút TƯƠNG TÁC (góc phải dưới):</b> Bấm khi lại gần NPC hoặc xe bán hàng có dấu <b class="text-red-400">(!)</b> để nói chuyện hoặc làm nhiệm vụ.<br>
+            • <b>Chạm trực tiếp:</b> Có thể chạm thẳng vào NPC trên màn hình để nói chuyện.
+          </p>
+        </div>
+
+        <!-- Mục 2: Xe Bánh Mì & Gửi Xe Máy -->
+        <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-1">
+          <h3 class="font-bold text-amber-300 flex items-center gap-1.5 text-[11px]">
+            <span>🥖</span> 2. Xe Bánh Mì Cafe & Bãi Gửi Xe
+          </h3>
+          <p class="text-slate-300 text-[11px]">
+            • <b>Xe Bánh Mì & Cà Phê Sài Gòn:</b> Tương tác tại góc bãi xe để nạp năng lượng <b>tăng tốc chạy 35%</b>.<br>
+            • <b>Bác Trông Xe:</b> Gặp bác gửi xe máy an toàn (vé 4.000đ) trước khi bước qua cổng vào ga Metro.
+          </p>
+        </div>
+
+        <!-- Mục 3: Mua Vé Trên App HURC -->
+        <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-1">
+          <h3 class="font-bold text-emerald-300 flex items-center gap-1.5 text-[11px]">
+            <span>📱</span> 3. Ứng Dụng HCMC Metro HURC
+          </h3>
+          <p class="text-slate-300 text-[11px]">
+            • Gặp Bác Bảo Vệ & Sinh Viên A để mở khóa nút <b class="text-red-400">MỞ APP HURC</b> ở góc trên bên phải.<br>
+            • <b>Học sinh / Sinh viên:</b> Nhập MSSV và bấm <i>Xác Thực</i> để nhận ưu đãi <b>giảm 50% vé tháng (150.000đ)</b>.<br>
+            • <b>Quét Mã QR:</b> Vào mục <i>"Vé của tôi"</i> và bấm <i>"Quét mã QR qua cổng"</i> để đổi đèn xanh qua cửa an ninh và cửa ra ga Bến Thành.
+          </p>
+        </div>
+
+        <!-- Mục 4: Tiện ích mở rộng -->
+        <div class="bg-slate-950/70 p-2.5 rounded-xl border border-slate-800 space-y-1">
+          <h3 class="font-bold text-indigo-300 flex items-center gap-1.5 text-[11px]">
+            <span>🔗</span> 4. Tiện Ích Chuyển Tiếp Xanh
+          </h3>
+          <p class="text-slate-300 text-[11px]">
+            • Trong App HURC có mục <b>Tiện ích</b> để tra cứu kết nối xe buýt <b>Go!Bus</b> và xe đạp công cộng <b>TNGo</b> tại các trạm ga.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Nút Đã hiểu & Đóng -->
+      <button id="btn-confirm-guide" type="button" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold font-pixel text-xs py-3 rounded-xl shadow-lg cursor-pointer active:scale-95">
+        ĐÃ HIỂU - TIẾP TỤC CHƠI ➔
       </button>
 
     </div>
   </div>
 
   <!-- IN-GAME SMARTPHONE MODAL (APP HCMC METRO HURC) -->
-  <div id="modal-phone" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-2 hidden">
-    <div class="phone-bezel w-full max-w-[330px] h-[560px] bg-white rounded-[28px] overflow-hidden flex flex-col relative text-slate-900 font-sans shadow-2xl">
+  <div id="modal-phone" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
+    <div class="phone-sheet w-full max-w-[340px] h-[580px] bg-white rounded-3xl overflow-hidden flex flex-col relative text-slate-900 font-sans shadow-2xl">
       
       <!-- Phone Top Notch & Status Bar -->
-      <div class="bg-blue-900 text-white px-3 py-1 flex justify-between items-center text-[9px] shrink-0 font-mono">
+      <div class="bg-blue-900 text-white px-3 py-1 flex justify-between items-center text-[10px] shrink-0 font-mono">
         <div class="flex items-center gap-1">
           <span>☁️ 33°C</span>
           <span class="text-blue-300">| Ga Thủ Đức</span>
         </div>
-        <div class="flex items-center gap-1">
-          <span>🌐 Tiếng Việt</span>
-          <span>🔋 98%</span>
+        <div class="flex items-center gap-1.5">
+          <button id="btn-lang-toggle" type="button" class="bg-blue-800 px-1 py-0.5 rounded text-[8px] font-bold text-amber-300">🇻🇳 VI</button>
+          <span>🔋 99%</span>
         </div>
       </div>
 
@@ -300,7 +425,7 @@
             <p class="text-[9px] text-blue-200">Official Metro Line 1 App</p>
           </div>
         </div>
-        <button id="btn-close-phone" type="button" class="text-white hover:text-red-200 text-base font-bold bg-blue-800/60 rounded-full w-6 h-6 flex items-center justify-center cursor-pointer">✕</button>
+        <button id="btn-close-phone" type="button" class="text-white hover:text-red-200 text-base font-bold bg-blue-800/80 rounded-full w-7 h-7 flex items-center justify-center cursor-pointer active:scale-90">✕</button>
       </div>
 
       <!-- APP CONTENT VIEWS CONTAINER -->
@@ -312,43 +437,43 @@
             <div class="relative z-10 space-y-1">
               <span class="bg-white/20 text-[9px] px-2 py-0.5 rounded-full font-bold">Official App</span>
               <h3 class="font-extrabold text-sm leading-tight">Tuyến Số 1 Metro<br>Bến Thành - Suối Tiên</h3>
-              <p class="text-[9px] text-cyan-100">Vé Sinh Viên giảm 50% | Thanh toán QR linh hoạt</p>
+              <p class="text-[10px] text-cyan-100">Vé Sinh Viên giảm 50% | Quét mã QR 1 chạm</p>
             </div>
             <span class="absolute right-[-10px] bottom-[-10px] text-6xl opacity-30">🚆</span>
           </div>
 
           <!-- 8-Icon Grid Menu -->
           <div class="grid grid-cols-4 gap-2 text-center text-[10px]">
-            <button id="btn-nav-buy" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">🎟️</span>
+            <button id="btn-nav-buy" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer active:scale-95">
+              <span class="text-2xl">🎟️</span>
               <span class="font-bold text-slate-800">Mua vé</span>
             </button>
-            <button id="btn-nav-tickets" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">📱</span>
+            <button id="btn-nav-tickets" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer active:scale-95">
+              <span class="text-2xl">📱</span>
               <span class="font-bold text-slate-800">Vé của tôi</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">🔲</span>
+              <span class="text-2xl">🔲</span>
               <span class="font-medium text-slate-700">Đổi mã vé</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">ℹ️</span>
+              <span class="text-2xl">ℹ️</span>
               <span class="font-medium text-slate-700">Thông tin</span>
             </button>
-            <button id="btn-nav-map" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">🗺️</span>
+            <button id="btn-nav-map" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer active:scale-95">
+              <span class="text-2xl">🗺️</span>
               <span class="font-bold text-slate-800">Hành trình</span>
             </button>
-            <button id="btn-nav-utilities" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer">
-              <span class="text-xl">🔗</span>
+            <button id="btn-nav-utilities" type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 cursor-pointer active:scale-95">
+              <span class="text-2xl">🔗</span>
               <span class="font-bold text-slate-800">Tiện ích</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">💬</span>
+              <span class="text-2xl">💬</span>
               <span class="font-medium text-slate-700">Hỗ trợ</span>
             </button>
             <button type="button" class="bg-white hover:bg-blue-50 p-2 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center gap-1 opacity-60">
-              <span class="text-xl">👤</span>
+              <span class="text-2xl">👤</span>
               <span class="font-medium text-slate-700">Tài khoản</span>
             </button>
           </div>
@@ -357,29 +482,29 @@
         <!-- VIEW 2: MUA VÉ -->
         <div id="view-app-buy" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
-            <button id="btn-back-home-1" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
-            <h3 class="font-bold text-sm text-blue-950">Mua vé</h3>
+            <button id="btn-back-home-1" type="button" class="text-blue-700 font-bold text-base cursor-pointer">🏠</button>
+            <h3 class="font-bold text-sm text-blue-950">Mua vé Tuyến Số 1</h3>
           </div>
 
           <!-- Student Verification Box -->
-          <div class="bg-blue-50 p-2 rounded-xl border border-blue-200 space-y-1">
+          <div class="bg-blue-50 p-2.5 rounded-xl border border-blue-200 space-y-1.5">
             <div class="flex justify-between items-center text-xs">
               <span class="font-bold text-blue-900">🎓 Xác thực Sinh Viên:</span>
               <span id="student-status-badge" class="text-[9px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-bold">Chưa xác thực</span>
             </div>
-            <div class="flex gap-1">
-              <input type="text" id="input-student-id" placeholder="Nhập MSSV (VD: SV2026)" class="bg-white border border-slate-300 rounded px-2 py-1 text-xs flex-1 text-slate-900 focus:outline-none focus:border-blue-600" />
-              <button id="btn-verify-student" type="button" class="bg-blue-700 hover:bg-blue-800 text-white text-xs px-2 py-1 rounded-lg font-bold cursor-pointer">
+            <div class="flex gap-1.5">
+              <input type="text" id="input-student-id" placeholder="Nhập MSSV (VD: SV2026)" class="bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-xs flex-1 text-slate-900 focus:outline-none focus:border-blue-600 shadow-inner" />
+              <button id="btn-verify-student" type="button" class="bg-blue-700 hover:bg-blue-800 text-white text-xs px-3 py-1.5 rounded-lg font-bold cursor-pointer active:scale-95">
                 Xác Thực
               </button>
             </div>
           </div>
 
-          <!-- Section 1: 🔥 Nổi bật 🔥 -->
+          <!-- Section 1: Nổi bật -->
           <div class="space-y-1.5">
             <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1">🔥 Nổi bật 🔥</h4>
 
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 1 ngày', 40000)">
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer active:scale-98" onclick="selectAppTicket('Vé 1 ngày', 40000)">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️1</div>
                 <div>
@@ -387,10 +512,10 @@
                   <p class="text-[10px] text-blue-700 font-bold">40.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-xs bg-blue-600 text-white font-bold px-2.5 py-1 rounded-lg">Chọn ➔</span>
             </div>
 
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé 3 ngày', 90000)">
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer active:scale-98" onclick="selectAppTicket('Vé 3 ngày', 90000)">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️3</div>
                 <div>
@@ -398,10 +523,10 @@
                   <p class="text-[10px] text-blue-700 font-bold">90.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-xs bg-blue-600 text-white font-bold px-2.5 py-1 rounded-lg">Chọn ➔</span>
             </div>
 
-            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng người lớn', 300000)">
+            <div class="bg-white hover:border-blue-400 p-2.5 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between cursor-pointer active:scale-98" onclick="selectAppTicket('Vé tháng người lớn', 300000)">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">🎟️30</div>
                 <div>
@@ -409,96 +534,55 @@
                   <p class="text-[10px] text-blue-700 font-bold">300.000 đ</p>
                 </div>
               </div>
-              <span class="text-xs bg-blue-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-xs bg-blue-600 text-white font-bold px-2.5 py-1 rounded-lg">Chọn ➔</span>
             </div>
           </div>
 
-          <!-- Section 2: Ưu đãi Học sinh 🎒 Sinh viên 🎓 -->
+          <!-- Section 2: Ưu đãi Sinh viên -->
           <div class="space-y-1.5 pt-1">
             <h4 class="text-xs font-bold text-slate-900 flex items-center gap-1">Ưu đãi Học sinh 🎒 Sinh viên 🎓</h4>
 
-            <div id="card-hssv-ticket" class="bg-gradient-to-r from-blue-50 to-indigo-50 p-2.5 rounded-xl border border-blue-300 shadow-sm flex items-center justify-between cursor-pointer" onclick="selectAppTicket('Vé tháng HSSV', 150000, true)">
+            <div id="card-hssv-ticket" class="bg-gradient-to-r from-blue-50 to-indigo-50 p-2.5 rounded-xl border border-blue-300 shadow-sm flex items-center justify-between cursor-pointer active:scale-98" onclick="selectAppTicket('Vé tháng HSSV', 150000, true)">
               <div class="flex items-center gap-2">
                 <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">🎓</div>
                 <div>
                   <h5 class="font-bold text-xs text-slate-900">Vé tháng HSSV</h5>
-                  <p class="text-[10px] text-indigo-700 font-bold">150.000 đ <span class="text-[9px] bg-indigo-200 text-indigo-800 px-1 rounded ml-1">Giảm 50%</span></p>
+                  <p class="text-[10px] text-indigo-700 font-bold">150.000 đ <span class="text-[9px] bg-indigo-200 text-indigo-800 px-1 rounded ml-1 font-sans">Giảm 50%</span></p>
                 </div>
               </div>
-              <span class="text-xs bg-indigo-600 text-white font-bold px-2 py-1 rounded-lg">Chọn ➔</span>
+              <span class="text-xs bg-indigo-600 text-white font-bold px-2.5 py-1 rounded-lg">Chọn ➔</span>
             </div>
           </div>
 
-          <!-- Section 3: Full 14 Station Ticket List -->
+          <!-- Section 3: Vé theo chặng 14 ga -->
           <div class="space-y-1 pt-2 border-t border-slate-200">
-            <h4 class="text-xs font-bold text-slate-800">Vé đi từ các ga Tuyến 1:</h4>
-            <div class="space-y-1 max-h-48 overflow-y-auto pr-1 text-xs custom-scrollbar">
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Bến Thành', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Bến Thành</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
+            <h4 class="text-xs font-bold text-slate-800">Chọn ga đi:</h4>
+            <div class="space-y-1 max-h-44 overflow-y-auto pr-1 text-xs custom-scrollbar">
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-blue-400 bg-blue-50/60 cursor-pointer" onclick="selectAppTicket('Đi từ ga Thủ Đức', 15000)">
+                <span class="font-bold text-blue-900">Ga Thủ Đức (Ga hiện tại của bạn)</span>
+                <span class="text-blue-600 font-bold text-[10px]">15.000 đ ➔</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Nhà hát Thành phố', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Nhà hát Thành phố</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer" onclick="selectAppTicket('Đi từ ga Bến Thành', 15000)">
+                <span class="font-medium text-slate-800">Ga Bến Thành</span>
+                <span class="text-blue-600 font-bold text-[10px]">15.000 đ ➔</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Ba Son', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Ba Son</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer" onclick="selectAppTicket('Đi từ ga Ba Son', 15000)">
+                <span class="font-medium text-slate-800">Ga Ba Son</span>
+                <span class="text-blue-600 font-bold text-[10px]">15.000 đ ➔</span>
               </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Văn Thánh', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Văn Thánh</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Tân Cảng', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Tân Cảng</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Thảo Điền', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Thảo Điền</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga An Phú', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga An Phú</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Rạch Chiếc', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Rạch Chiếc</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Phước Long', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Phước Long</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Bình Thái', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Bình Thái</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-blue-300 bg-blue-50/50 cursor-pointer hover:border-blue-500" onclick="selectAppTicket('Đi từ ga Thủ Đức', 15000)">
-                <span class="font-bold text-blue-900">Đi từ ga Thủ Đức (Ga hiện tại)</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Khu Công nghệ cao', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Khu Công nghệ cao</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Đại học Quốc gia', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Đại học Quốc gia</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
-              </div>
-              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer hover:border-blue-400" onclick="selectAppTicket('Đi từ ga Bến xe Suối Tiên', 15000)">
-                <span class="font-medium text-slate-800">Đi từ ga Bến xe Suối Tiên</span>
-                <span class="text-blue-600 font-bold text-[10px]">Xem chi tiết ➔</span>
+              <div class="flex justify-between items-center bg-white p-2 rounded-xl border border-slate-200 cursor-pointer" onclick="selectAppTicket('Đi từ ga Suối Tiên', 15000)">
+                <span class="font-medium text-slate-800">Ga Bến xe Suối Tiên</span>
+                <span class="text-blue-600 font-bold text-[10px]">15.000 đ ➔</span>
               </div>
             </div>
 
-            <!-- Mandatory Free Ticket Rule Note -->
             <p class="text-[9px] text-amber-600 font-medium italic pt-1 leading-tight">
-              *Người cao tuổi, Người có công với cách mạng, Người khuyết tật, Trẻ em dưới 6 tuổi (đi kèm với người lớn) được đi tàu miễn phí (cần xuất trình giấy tờ xác minh).
+              *Miễn phí vé: Người cao tuổi, Người có công, Người khuyết tật, Trẻ em dưới 6 tuổi (đi kèm người lớn).
             </p>
           </div>
         </div>
 
-        <!-- VIEW 3: DEDICATED PAYMENT SCREEN -->
+        <!-- VIEW 3: PAYMENT SCREEN -->
         <div id="view-app-payment" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
             <button id="btn-back-buy-screen" type="button" class="text-blue-700 font-bold text-xs cursor-pointer bg-blue-50 px-2 py-1 rounded border border-blue-200">⬅ Đổi vé khác</button>
@@ -523,37 +607,23 @@
           <div class="space-y-1.5">
             <h4 class="text-xs font-bold text-slate-800">Phương thức thanh toán:</h4>
             <div class="space-y-1.5">
-              <!-- Option 1: Ví điện tử -->
-              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border-2 border-blue-600 cursor-pointer shadow-sm hover:border-blue-500">
+              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border-2 border-blue-600 cursor-pointer shadow-sm">
                 <div class="flex items-center gap-2">
-                  <span class="text-lg">📱</span>
+                  <span class="text-xl">📱</span>
                   <div>
                     <h5 class="text-xs font-bold text-slate-800">Ví Điện Tử (MoMo / ZaloPay / ShopeePay)</h5>
-                    <p class="text-[9px] text-slate-500">Thanh toán tức thì 0đ phí giao dịch</p>
+                    <p class="text-[9px] text-slate-500">Thanh toán tức thì 0đ phí</p>
                   </div>
                 </div>
                 <input type="radio" name="pay-method" checked class="accent-blue-600 w-4 h-4" />
               </label>
 
-              <!-- Option 2: Thẻ quốc tế -->
-              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 cursor-pointer shadow-sm hover:border-blue-400">
+              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 cursor-pointer shadow-sm">
                 <div class="flex items-center gap-2">
-                  <span class="text-lg">💳</span>
+                  <span class="text-xl">🏦</span>
                   <div>
-                    <h5 class="text-xs font-bold text-slate-800">Thẻ Quốc Tế (Visa / Mastercard / JCB)</h5>
-                    <p class="text-[9px] text-slate-500">Thanh toán thẻ tín dụng/ghi nợ quốc tế</p>
-                  </div>
-                </div>
-                <input type="radio" name="pay-method" class="accent-blue-600 w-4 h-4" />
-              </label>
-
-              <!-- Option 3: Thẻ ATM / NAPAS / VPBank -->
-              <label class="flex items-center justify-between bg-white p-2.5 rounded-xl border border-slate-200 cursor-pointer shadow-sm hover:border-blue-400">
-                <div class="flex items-center gap-2">
-                  <span class="text-lg">🏦</span>
-                  <div>
-                    <h5 class="text-xs font-bold text-slate-800">Thẻ ATM Nội Địa / VPBank Chạm & Đi (NAPAS)</h5>
-                    <p class="text-[9px] text-slate-500">Thẻ ngân hàng Việt Nam & Chạm NFC</p>
+                    <h5 class="text-xs font-bold text-slate-800">Thẻ ATM / VPBank Chạm & Đi (NAPAS)</h5>
+                    <p class="text-[9px] text-slate-500">Thẻ ngân hàng & Chạm NFC</p>
                   </div>
                 </div>
                 <input type="radio" name="pay-method" class="accent-blue-600 w-4 h-4" />
@@ -561,39 +631,39 @@
             </div>
           </div>
 
-          <button id="btn-buy-ticket-now" type="button" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs py-3 rounded-xl shadow-lg cursor-pointer transform hover:scale-[1.01] transition animate-pulse">
+          <button id="btn-buy-ticket-now" type="button" class="w-full bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-bold text-xs py-3.5 rounded-xl shadow-lg cursor-pointer active:scale-95 animate-pulse">
             💳 THANH TOÁN NGAY & NHẬN VÉ QR
           </button>
         </div>
 
-        <!-- VIEW 4: MY TICKETS & QR CODE SCANNER -->
+        <!-- VIEW 4: MY TICKETS & QR SCANNER -->
         <div id="view-app-tickets" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
-            <button id="btn-back-home-2" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
+            <button id="btn-back-home-2" type="button" class="text-blue-700 font-bold text-base cursor-pointer">🏠</button>
             <h3 class="font-bold text-sm text-blue-950">Vé của tôi</h3>
           </div>
 
           <div id="no-tickets-msg" class="text-center py-8 space-y-2">
-            <span class="text-4xl">🎫</span>
+            <span class="text-5xl">🎫</span>
             <p class="text-xs text-slate-500 font-bold">Bạn chưa sở hữu vé nào.</p>
-            <button onclick="switchAppTab('tab-buy')" class="text-xs bg-blue-700 text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer">Mua vé ngay ➔</button>
+            <button onclick="switchAppTab('tab-buy')" class="text-xs bg-blue-700 text-white font-bold px-3 py-1.5 rounded-lg cursor-pointer active:scale-95">Mua vé ngay ➔</button>
           </div>
 
           <!-- Active QR Ticket Card -->
           <div id="active-ticket-card" class="bg-gradient-to-b from-blue-900 to-indigo-950 text-white p-3.5 rounded-2xl shadow-lg space-y-3 hidden border border-blue-400">
             <div class="flex justify-between items-center border-b border-blue-800 pb-2">
-              <span class="bg-emerald-400 text-slate-950 text-[9px] font-bold px-2 py-0.5 rounded-full">ĐÁNG SỬ DỤNG</span>
+              <span class="bg-emerald-400 text-slate-950 text-[9px] font-bold px-2 py-0.5 rounded-full font-sans">ĐANG HOẠT ĐỘNG</span>
               <span id="ticket-display-type" class="font-bold text-xs text-amber-300">Vé Tháng HSSV (150.000đ)</span>
             </div>
 
             <!-- 8-Bit Pixel QR Code Canvas -->
-            <div class="bg-white p-3 rounded-xl flex flex-col items-center justify-center space-y-1 shadow-inner">
-              <canvas id="qrCanvas" width="120" height="120" class="w-28 h-28 border border-slate-300"></canvas>
-              <span class="text-[9px] text-slate-500 font-mono">Mã Vé: HURC-2026-METRO-LINE1</span>
+            <div class="bg-white p-3 rounded-xl flex flex-col items-center justify-center space-y-1.5 shadow-inner">
+              <canvas id="qrCanvas" width="120" height="120" class="w-32 h-32 border border-slate-300"></canvas>
+              <span class="text-[9px] text-slate-600 font-mono">Mã: HURC-METRO1-2026</span>
             </div>
 
-            <button id="btn-scan-qr-gate" type="button" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs py-2.5 rounded-xl shadow-md cursor-pointer animate-pulse">
-              📲 QUÉT MÃ QR QUA CỔNG TURNSTILE
+            <button id="btn-scan-qr-gate" type="button" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold text-xs py-3.5 rounded-xl shadow-md cursor-pointer active:scale-95 animate-pulse">
+              📲 CHẠM QUÉT MÃ QUA CỔNG SOÁT VÉ
             </button>
           </div>
         </div>
@@ -601,38 +671,34 @@
         <!-- VIEW 5: UTILITIES VIEW -->
         <div id="view-app-utilities" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
-            <button id="btn-back-home-4" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
-            <h3 class="font-bold text-sm text-blue-950">Tiện ích</h3>
+            <button id="btn-back-home-4" type="button" class="text-blue-700 font-bold text-base cursor-pointer">🏠</button>
+            <h3 class="font-bold text-sm text-blue-950">Tiện ích Tuyến Metro</h3>
           </div>
 
           <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
-            <button type="button" onclick="showUtilityInfo('Go!Bus HCMC', 'Ứng dụng tra cứu tuyến xe buýt kết nối trực tiếp các ga Metro Line 1.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="showUtilityInfo('Go!Bus HCMC', 'Tra cứu các tuyến xe buýt kết nối trực tiếp các ga Metro Line 1.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
               <span class="text-2xl">🚌</span>
-              <span class="font-bold text-slate-800 leading-tight">Go!Bus HCMC</span>
+              <span class="font-bold text-slate-800 leading-tight">Go!Bus</span>
             </button>
-            <button type="button" onclick="showUtilityInfo('TTGT Tp Hồ Chí Minh', 'Cổng thông tin giao thông theo dõi kẹt xe realtime TPHCM.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="showUtilityInfo('TTGT Tp Hồ Chí Minh', 'Theo dõi camera tình trạng kẹt xe giao thông realtime TPHCM.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
               <span class="text-2xl">🚦</span>
-              <span class="font-bold text-slate-800 leading-tight">TTGT Tp Hồ Chí Minh</span>
+              <span class="font-bold text-slate-800 leading-tight">TTGT TPHCM</span>
             </button>
-            <button type="button" onclick="showUtilityInfo('Công dân số TPHCM', 'Tích hợp tài khoản công dân số và vé giao thông định danh.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
-              <span class="text-2xl">🏛️</span>
-              <span class="font-bold text-slate-800 leading-tight">Công dân số TPHCM</span>
-            </button>
-            <button type="button" onclick="showUtilityInfo('TNGo', 'Dịch vụ xe đạp công cộng: 2.000đ/lượt (ban ngày 6h-18h), 2.000-6.000đ/lượt tùy thời gian.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="showUtilityInfo('TNGo Xe Đạp', 'Dịch vụ xe đạp công cộng: 2.000đ/lượt (6h-18h) kết nối các ga.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
               <span class="text-2xl">🚲</span>
               <span class="font-bold text-slate-800 leading-tight">TNGo</span>
             </button>
-            <button type="button" onclick="showUtilityInfo('Mua vé Suối Tiên', 'Đặt vé tham quan Công viên Văn hóa Suối Tiên kết hợp ga Metro.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
-              <span class="text-2xl">🏰</span>
-              <span class="font-bold text-slate-800 leading-tight">Mua vé Suối Tiên</span>
-            </button>
-            <button type="button" onclick="showUtilityInfo('VPBank Chạm & Đi', 'Thanh toán chạm không tiếp xúc trực tiếp tại cổng turnstile.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
+            <button type="button" onclick="showUtilityInfo('VPBank Chạm & Đi', 'Chạm thẻ NAPAS/VPBank trực tiếp tại cổng soát vé không cần mua vé trước.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
               <span class="text-2xl">📶</span>
-              <span class="font-bold text-slate-800 leading-tight">VPBank Chạm & Đi</span>
+              <span class="font-bold text-slate-800 leading-tight">VPBank Chạm</span>
             </button>
-            <button type="button" onclick="showUtilityInfo('Tài chính tiêu dùng số', 'Hỗ trợ ví điện tử và hạn mức thanh toán giao thông công cộng.')" class="bg-white hover:bg-blue-50 p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 cursor-pointer">
-              <span class="text-2xl">💫</span>
-              <span class="font-bold text-slate-800 leading-tight">Tài chính tiêu dùng số</span>
+            <button type="button" onclick="showUtilityInfo('Vé Suối Tiên', 'Gói combo Metro + vé cổng Công viên Du lịch Văn hóa Suối Tiên.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
+              <span class="text-2xl">🏰</span>
+              <span class="font-bold text-slate-800 leading-tight">Suối Tiên</span>
+            </button>
+            <button type="button" onclick="showUtilityInfo('Công Dân Số', 'Đồng bộ thẻ đi lại Metro Line 1 vào hệ thống Công Dân Số TPHCM.')" class="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex flex-col items-center justify-center gap-1.5 active:scale-95">
+              <span class="text-2xl">🏛️</span>
+              <span class="font-bold text-slate-800 leading-tight">Công Dân Số</span>
             </button>
           </div>
         </div>
@@ -640,7 +706,7 @@
         <!-- VIEW 6: MAP REALTIME TRACKING -->
         <div id="view-app-map" class="p-3 space-y-3 hidden">
           <div class="flex items-center gap-2 pb-1 border-b border-slate-200">
-            <button id="btn-back-home-3" type="button" class="text-blue-700 font-bold text-sm cursor-pointer">🏠</button>
+            <button id="btn-back-home-3" type="button" class="text-blue-700 font-bold text-base cursor-pointer">🏠</button>
             <h3 class="font-bold text-sm text-blue-950">Sơ Đồ Vị Trí Tàu Realtime</h3>
           </div>
 
@@ -650,14 +716,14 @@
               <span class="bg-emerald-500 text-slate-950 px-1 rounded text-[9px] font-bold">Đang chạy</span>
             </div>
 
-            <div class="relative py-3 px-2 space-y-2 font-mono text-[10px]">
+            <div class="relative py-2 px-1 space-y-2 font-mono text-[10px]">
               <div class="flex items-center gap-2 text-amber-300">
                 <span class="w-3 h-3 rounded-full bg-red-500 flex items-center justify-center text-[8px] font-bold text-white">1</span>
                 <span>Bến xe Miền Đông mới ➔ Suối Tiên</span>
               </div>
-              <div class="flex items-center gap-2 text-cyan-300 font-bold bg-cyan-950/60 p-1 rounded border border-cyan-800">
+              <div class="flex items-center gap-2 text-cyan-300 font-bold bg-cyan-950/80 p-1.5 rounded-lg border border-cyan-800">
                 <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
-                <span>Thủ Đức (Ga hiện tại của bạn)</span>
+                <span>Thủ Đức (Vị trí hiện tại của bạn)</span>
               </div>
               <div class="flex items-center gap-2 text-slate-300">
                 <span class="w-3 h-3 rounded-full bg-amber-400"></span>
@@ -669,7 +735,7 @@
               </div>
               <div class="flex items-center gap-2 text-amber-300 font-bold">
                 <span class="w-3 h-3 rounded-full bg-red-500 flex items-center justify-center text-[8px] font-bold text-white">14</span>
-                <span>Bến Thành (Ga Trung Tâm)</span>
+                <span>Bến Thành (Ga Ngầm Trung Tâm)</span>
               </div>
             </div>
           </div>
@@ -678,17 +744,17 @@
       </div>
 
       <!-- Phone Bottom Navigation Bar -->
-      <div class="bg-white border-t border-slate-200 p-2 flex justify-around items-center shrink-0">
-        <button id="btn-pill-home" type="button" class="flex flex-col items-center text-blue-700 font-bold text-[9px] cursor-pointer">
-          <span class="text-base">🏠</span>
+      <div class="bg-white border-t border-slate-200 p-2.5 flex justify-around items-center shrink-0">
+        <button id="btn-pill-home" type="button" class="flex flex-col items-center text-blue-700 font-bold text-[10px] cursor-pointer">
+          <span class="text-lg">🏠</span>
           <span>Trang chủ</span>
         </button>
-        <button id="btn-pill-buy" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[9px] cursor-pointer">
-          <span class="text-base">🎟️</span>
+        <button id="btn-pill-buy" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[10px] cursor-pointer">
+          <span class="text-lg">🎟️</span>
           <span>Mua vé</span>
         </button>
-        <button id="btn-pill-tickets" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[9px] cursor-pointer">
-          <span class="text-base">📱</span>
+        <button id="btn-pill-tickets" type="button" class="flex flex-col items-center text-slate-500 hover:text-blue-700 font-medium text-[10px] cursor-pointer">
+          <span class="text-lg">📱</span>
           <span>Vé của tôi</span>
         </button>
       </div>
@@ -698,15 +764,15 @@
 
   <!-- END GAME CONGRATULATIONS MODAL -->
   <div id="screen-end-game" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
-    <div class="bg-slate-900 border-2 border-amber-400 rounded-2xl p-4 w-full max-w-xs text-center space-y-3 shadow-2xl">
-      <div class="text-4xl animate-bounce">🏆</div>
+    <div class="bg-slate-900 border-2 border-amber-400 rounded-3xl p-5 w-full max-w-xs text-center space-y-3.5 shadow-2xl">
+      <div class="text-5xl animate-bounce">🏆</div>
       <h2 class="font-pixel text-xs text-amber-400 tracking-wider">HOÀN THÀNH HÀNH TRÌNH!</h2>
-      <div class="bg-amber-950/40 border border-amber-500/50 rounded-xl p-2.5 space-y-1">
-        <span class="bg-amber-400 text-slate-950 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Huy Hiệu: Hành Khách Thông Thái 🎖️</span>
-        <p class="text-xs text-slate-200 mt-1">Chúc mừng <b id="end-player-name" class="text-cyan-300"></b> đã hoàn thành xuất sắc chuyến đi từ Ga Thủ Đức đến Ga Bến Thành!</p>
+      <div class="bg-amber-950/40 border border-amber-500/50 rounded-2xl p-3 space-y-1.5">
+        <span class="bg-amber-400 text-slate-950 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase font-sans">Huy Hiệu: Hành Khách Thông Thái 🎖️</span>
+        <p class="text-sm text-slate-200 mt-1">Chúc mừng <b id="end-player-name" class="text-cyan-300"></b> đã hoàn thành xuất sắc chuyến đi từ Ga Thủ Đức đến Ga Bến Thành!</p>
       </div>
 
-      <button id="btn-restart-game" type="button" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-pixel text-xs py-3 rounded-xl border-2 border-cyan-300 shadow-lg cursor-pointer">
+      <button id="btn-restart-game" type="button" class="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold font-pixel text-xs py-3.5 rounded-xl border-2 border-cyan-300 shadow-lg cursor-pointer active:scale-95">
         🔄 CHƠI LẠI HÀNH TRÌNH MỚI
       </button>
     </div>
@@ -714,14 +780,17 @@
 
   <!-- JAVASCRIPT GAME ENGINE -->
   <script>
-    // Web Audio Synthesizer Engine (Fast, Reliable 0-External Load)
+    // Web Audio Synthesizer with 8-Bit BGM Loop Generator
     class SoundEngine {
       constructor() {
         this.ctx = null;
         this.enabled = true;
-        this.bgmOsc = null;
-        this.bgmGain = null;
-        this.bgmInterval = null;
+        this.bgmTimer = null;
+        this.bgmStep = 0;
+        this.bgmNotes = [
+          261.63, 329.63, 392.00, 523.25, 440.00, 392.00, 349.23, 329.63,
+          293.66, 349.23, 440.00, 587.33, 523.25, 440.00, 392.00, 329.63
+        ];
       }
       init() {
         if (!this.ctx) {
@@ -734,6 +803,29 @@
           this.ctx.resume();
         }
       }
+      startBgmLoop() {
+        if (this.bgmTimer) return;
+        this.bgmTimer = setInterval(() => {
+          if (!this.enabled || !this.ctx) return;
+          try {
+            const freq = this.bgmNotes[this.bgmStep % this.bgmNotes.length];
+            this.bgmStep++;
+
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+            gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.22);
+
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.22);
+          } catch(e){}
+        }, 240);
+      }
       clickSound() {
         if (!this.enabled) return;
         this.init();
@@ -744,12 +836,33 @@
           osc.type = 'square';
           osc.frequency.setValueAtTime(440, this.ctx.currentTime);
           osc.frequency.exponentialRampToValueAtTime(880, this.ctx.currentTime + 0.08);
-          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
           gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.08);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start();
           osc.stop(this.ctx.currentTime + 0.08);
+        } catch(e){}
+      }
+      guideChimeSound() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        try {
+          // Chuông báo 3 nốt vui tươi khi mở bảng hướng dẫn
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime + idx * 0.07);
+            gain.gain.setValueAtTime(0.08, this.ctx.currentTime + idx * 0.07);
+            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + idx * 0.07 + 0.22);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(this.ctx.currentTime + idx * 0.07);
+            osc.stop(this.ctx.currentTime + idx * 0.07 + 0.22);
+          });
         } catch(e){}
       }
       scanSuccessSound() {
@@ -761,14 +874,14 @@
           const gain = this.ctx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(523.25, this.ctx.currentTime);
-          osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.1);
-          osc.frequency.setValueAtTime(783.99, this.ctx.currentTime + 0.2);
-          gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-          gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.35);
+          osc.frequency.setValueAtTime(659.25, this.ctx.currentTime + 0.08);
+          osc.frequency.setValueAtTime(783.99, this.ctx.currentTime + 0.16);
+          gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+          gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.3);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start();
-          osc.stop(this.ctx.currentTime + 0.35);
+          osc.stop(this.ctx.currentTime + 0.3);
         } catch(e){}
       }
       dialogueBeep() {
@@ -780,7 +893,7 @@
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
           osc.frequency.setValueAtTime(320, this.ctx.currentTime);
-          gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
           gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.04);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
@@ -797,11 +910,20 @@
 
     const sound = new SoundEngine();
 
-    // Core Game State
+    // Mobile First Audio Context Initializer
+    window.addEventListener('touchstart', () => { sound.init(); sound.startBgmLoop(); }, { once: true });
+    window.addEventListener('pointerdown', () => { sound.init(); sound.startBgmLoop(); }, { once: true });
+
+    // Core Game State (With LocalStorage Persistence)
+    const savedName = localStorage.getItem('hurc_player_name') || '';
+    const savedSkin = localStorage.getItem('hurc_player_skin') || 'male';
+
     const state = {
-      playerName: '',
-      gender: 'male',
-      currentStage: 0, // 0: Xa Lộ & Bãi Xe, 1: Ga Thủ Đức, 2: Turnstile, 3: Platform, 4: Toa Tàu/Cutscene 15 Ga, 5: Ga Bến Thành
+      playerName: savedName,
+      gender: savedSkin,
+      moveSpeedBonus: 1.0,
+      hasSpeedBoost: false,
+      currentStage: 0,
       questStep: 0,
       hasTicket: false,
       motorBikeParked: false,
@@ -818,6 +940,7 @@
       playerVy: 0,
       isWalking: false,
       walkCycle: 0,
+      idleTimer: 0,
       facingDir: 'right',
 
       trainX: -360,
@@ -841,12 +964,14 @@
     const stageNPCs = {
       0: [
         { id: 'traffic_npc', name: 'Anh Đi Đường', icon: '🛵', x: 90, y: 350, dialogue: "Xa Lộ Hà Nội kẹt xe quá! Bạn lái xe luồn qua đường, ghé Bãi Gửi Xe Ga Thủ Đức gửi xe máy rồi đi Metro cho tiện và nhanh nhé!" },
-        { id: 'parking_guard', name: 'Bác Trông Xe', icon: '🅿️', x: 270, y: 340, dialogue: "Chào cháu! Giá vé gửi xe Ga Metro theo quy định:\n• Xe máy: 4.000 – 6.000đ/lượt (dưới 12h), tối đa 10.000đ/lượt (trên 12h).\n• Xe đạp: 2.000đ/lượt (6h - 18h), 2.000 – 6.000đ/lượt (tùy thời gian).\nBác đã ghi vé 4.000đ cho cháu! Gửi xe máy xong cháu bước sang Cổng Vào Ga ở bên phải nhé!" },
+        { id: 'banhmi_cart', name: 'Xe Bánh Mì & Cà Phê Dạo', icon: '🥖', x: 250, y: 390, dialogue: "🥖 Xe Bánh Mì & Cà Phê Sữa Đá Sài Gòn đây em ơi! Nạp một ổ bánh mì giòn rụm với ly cà phê đá trước khi lên tàu nhé. Uống xong bạn chạy siêu nhanh luôn!" },
+        { id: 'parking_guard', name: 'Bác Trông Xe', icon: '🅿️', x: 270, y: 330, dialogue: "Chào cháu! Giá vé gửi xe Ga Metro theo quy định:\n• Xe máy: 4.000 – 6.000đ/lượt (dưới 12h), tối đa 10.000đ/lượt (trên 12h).\n• Xe đạp: 2.000đ/lượt (6h - 18h), 2.000 – 6.000đ/lượt (tùy thời gian).\nBác đã ghi vé 4.000đ cho cháu! Gửi xe máy xong cháu bước sang Cổng Vào Ga ở bên phải nhé!" },
         { id: 'gate_to_station', name: 'Cổng Vào Ga Thủ Đức', icon: '🪜', x: 335, y: 220, dialogue: "Lối vào Ga Thủ Đức. Bạn đã gửi xe máy an toàn chưa? Bước qua đây để tiến vào khuôn viên Ga Thủ Đức!" }
       ],
       1: [
+        { id: 'led_billboard', name: 'Bảng Quảng Cáo LED', icon: '📺', x: 300, y: 280, dialogue: "Màn hình LED quảng cáo điện tử tại Ga Thủ Đức! Đang mở video media.mp4 giới thiệu tiện ích Metro..." },
         { id: 'guard', name: 'Bác Bảo Vệ', icon: '👮', x: 70, y: 340, dialogue: "Chào cháu! Mở nút 📱 APP HURC màu đỏ ở góc trên bên phải để mua vé nhé. App có vé 1 ngày (40k), 3 ngày (90k), vé tháng (300k) và mục 'Tiện ích' hỗ trợ chuyển tiếp xe buýt Go!Bus hay xe đạp TNGo nữa đó!" },
-        { id: 'student_a', name: 'Sinh viên A', icon: '🧑‍🎓', x: 260, y: 340, dialogue: "Chào bạn! Nếu là sinh viên, bạn bấm Mua Vé ➔ nhập MSSV ➔ bấm Xác Thực để nhận ưu đãi GIẢM 50% vé tháng (chỉ 150.000đ)! Thanh toán xong nhớ mở 'Vé của tôi' lấy QR để quét mở Cổng 2 nhé!" },
+        { id: 'student_a', name: 'Sinh viên A', icon: '🧑‍🎓', x: 230, y: 340, dialogue: "Chào bạn! Nếu là sinh viên, bạn bấm Mua Vé ➔ nhập MSSV ➔ bấm Xác Thực để nhận ưu đãi GIẢM 50% vé tháng (chỉ 150.000đ)! Thanh toán xong nhớ mở 'Vé của tôi' lấy QR để quét mở Cổng 2 nhé!" },
         { id: 'station_stairs', name: 'Lối Lên Ga Thủ Đức', icon: '🪜', x: 180, y: 210, dialogue: "Lối lên sảnh soát vé Ga Thủ Đức. Bạn đã mua vé trên App HURC chưa? Tiến lên sảnh soát vé nào!" }
       ],
       2: [
@@ -899,10 +1024,10 @@
       const nameVal = nameInput.value.trim();
       if (nameVal.length > 0 && state.gender !== null) {
         startBtn.disabled = false;
-        startBtn.className = 'w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-pixel text-xs py-3 rounded-xl border-2 border-emerald-300 cursor-pointer shadow-lg animate-pulse';
+        startBtn.className = 'w-full bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-pixel text-xs py-3.5 rounded-xl border-2 border-emerald-300 cursor-pointer shadow-lg active:scale-95 animate-pulse';
       } else {
         startBtn.disabled = true;
-        startBtn.className = 'w-full bg-slate-800 text-slate-500 font-pixel text-xs py-3 rounded-xl border-2 border-slate-700 cursor-not-allowed transition';
+        startBtn.className = 'w-full bg-slate-800 text-slate-500 font-pixel text-xs py-3.5 rounded-xl border-2 border-slate-700 cursor-not-allowed transition';
       }
       renderCharacterPreview();
     }
@@ -911,10 +1036,10 @@
       if (!pCtx) return;
       pCtx.fillStyle = '#0f172a';
       pCtx.fillRect(0, 0, 80, 80);
-      draw8BitPlayerSprite(pCtx, 40, 50, state.gender || 'male', false, 0, 'right');
+      draw8BitPlayerSprite(pCtx, 40, 52, state.gender || 'male', false, 0, 'right');
     }
 
-    // 8-Bit Character Sprite Drawer with Fair Skin Tone (#ffedd5)
+    // 8-Bit Pixel Character Sprite Drawer (Vietnamese Student Uniforms & Kazuma)
     function draw8BitPlayerSprite(context, x, y, gender, isWalking, walkCycle, facingDir) {
       context.save();
       context.translate(x, y);
@@ -923,11 +1048,14 @@
         context.scale(-1, 1);
       }
 
+      // Breathing animation when idle
+      const breathOffset = (!isWalking) ? Math.sin(Date.now() * 0.005) * 1.2 : 0;
       const legOffset = isWalking ? Math.sin(walkCycle * 0.4) * 4 : 0;
 
-      context.fillStyle = 'rgba(0,0,0,0.3)';
+      // Drop shadow
+      context.fillStyle = 'rgba(0,0,0,0.35)';
       context.beginPath();
-      context.ellipse(0, 16, 11, 4, 0, 0, Math.PI * 2);
+      context.ellipse(0, 16, 12, 4, 0, 0, Math.PI * 2);
       context.fill();
 
       // Motorbike in Stage 0
@@ -944,37 +1072,228 @@
       }
 
       if (gender === 'female') {
-        context.fillStyle = '#db2777';
-        context.fillRect(-6, -12, 12, 14);
-        context.fillStyle = '#9333ea';
-        context.fillRect(-7, 2, 14, 6);
+        // === ĐỒNG PHỤC HỌC SINH NỮ (ÁO SƠ MI TRẮNG, NƠ ĐỎ, VÁY XẾP LY XANH ĐEN, TÓC CỘT ĐUÔI NGỰA) ===
+        
+        // 1. Chân & Vớ trắng & Giày quai đen
+        context.fillStyle = '#ffedd5'; // Chân
+        context.fillRect(-5, 9 + legOffset, 4, 7);
+        context.fillRect(1, 9 - legOffset, 4, 7);
+        // Vớ trắng cổ ngắn
+        context.fillStyle = '#ffffff';
+        context.fillRect(-5, 12 + legOffset, 4, 3);
+        context.fillRect(1, 12 - legOffset, 4, 3);
+        // Giày búp bê học sinh đen
+        context.fillStyle = '#0f172a';
+        context.fillRect(-6, 14 + legOffset, 5, 3);
+        context.fillRect(1, 14 - legOffset, 5, 3);
 
-        context.fillStyle = '#ffedd5'; // Fair Skin
-        context.fillRect(-5, 8 + legOffset, 4, 8);
-        context.fillRect(1, 8 - legOffset, 4, 8);
+        // 2. Váy xếp ly màu xanh đen (Navy Blue Pleated Skirt)
+        context.fillStyle = '#1e293b';
+        context.fillRect(-8, 2 + breathOffset, 16, 8);
+        context.fillStyle = '#0f172a';
+        context.fillRect(-8, 9 + breathOffset, 16, 1); // Viền chân váy
+        // Nếp gấp váy
+        context.fillStyle = '#334155';
+        context.fillRect(-4, 3 + breathOffset, 2, 6);
+        context.fillRect(2, 3 + breathOffset, 2, 6);
 
-        context.fillStyle = '#fde047';
-        context.fillRect(-8, -24, 16, 14);
-        context.fillStyle = '#ffedd5';
-        context.fillRect(-6, -20, 12, 10);
-        context.fillStyle = '#000';
-        context.fillRect(2, -17, 2, 3);
-      } else {
+        // 3. Áo sơ mi trắng học sinh & Nơ cổ màu đỏ thắm
+        context.fillStyle = '#f8fafc';
+        context.fillRect(-6, -11 + breathOffset, 12, 13);
+        // Nơ đỏ / Khăn quàng học sinh
+        context.fillStyle = '#dc2626';
+        context.fillRect(-3, -11 + breathOffset, 6, 4);
+        context.fillRect(-1, -7 + breathOffset, 2, 4);
+        // Cổ áo sơ mi
+        context.fillStyle = '#e2e8f0';
+        context.fillRect(-5, -12 + breathOffset, 10, 2);
+        // Bảng tên học sinh xanh lam ở ngực trái
         context.fillStyle = '#2563eb';
-        context.fillRect(-6, -12, 12, 14);
-        context.fillStyle = '#1e3a8a';
-        context.fillRect(-6, 2, 12, 6);
+        context.fillRect(-5, -8 + breathOffset, 3, 2);
 
-        context.fillStyle = '#3b82f6';
-        context.fillRect(-5, 8 + legOffset, 4, 8);
-        context.fillRect(1, 8 - legOffset, 4, 8);
-
-        context.fillStyle = '#451a03';
-        context.fillRect(-7, -22, 14, 8);
+        // Tay áo ngắn màu trắng & Cánh tay học sinh
+        context.fillStyle = '#f8fafc';
+        context.fillRect(-8, -10 + breathOffset, 3, 5);
+        context.fillRect(5, -10 + breathOffset, 3, 5);
         context.fillStyle = '#ffedd5';
-        context.fillRect(-6, -18, 12, 10);
-        context.fillStyle = '#000';
-        context.fillRect(2, -15, 2, 3);
+        context.fillRect(-8, -5 + breathOffset, 3, 6);
+        context.fillRect(5, -5 + breathOffset, 3, 6);
+
+        // Balo quai học sinh hồng tím sau lưng
+        context.fillStyle = '#ec4899';
+        context.fillRect(-9, -8 + breathOffset, 2, 9);
+
+        // 4. Khuôn mặt & Nụ cười
+        context.fillStyle = '#ffedd5';
+        context.fillRect(-7, -22 + breathOffset, 14, 11);
+        // Đôi mắt to tròn đen
+        context.fillStyle = '#0f172a';
+        context.fillRect(-4, -18 + breathOffset, 3, 3);
+        context.fillRect(2, -18 + breathOffset, 3, 3);
+        // Đốm sáng mắt
+        context.fillStyle = '#ffffff';
+        context.fillRect(-3, -18 + breathOffset, 1, 1);
+        context.fillRect(3, -18 + breathOffset, 1, 1);
+        // Má hồng
+        context.fillStyle = '#fca5a5';
+        context.fillRect(-5, -15 + breathOffset, 2, 2);
+        context.fillRect(4, -15 + breathOffset, 2, 2);
+
+        // 5. Mái tóc đen/nâu hạt dẻ cột đuôi ngựa với kẹp nơ
+        context.fillStyle = '#1e1b18';
+        context.fillRect(-8, -25 + breathOffset, 16, 6);
+        // Tóc mái ngang dễ thương
+        context.fillRect(-8, -22 + breathOffset, 16, 4);
+        // Đuôi ngựa vểnh sau lưng
+        context.fillRect(-12, -24 + breathOffset, 5, 8);
+        context.fillRect(-11, -16 + breathOffset, 4, 4);
+        // Thun cột tóc đỏ
+        context.fillStyle = '#ef4444';
+        context.fillRect(-9, -23 + breathOffset, 2, 3);
+
+      } else if (gender === 'male') {
+        // === ĐỒNG PHỤC HỌC SINH NAM (ÁO SƠ MI TRẮNG, BẢNG TÊN, QUẦN TÂY XANH ĐEN, THẮT LƯNG, BALO) ===
+        
+        // 1. Quần tây xanh đen (Navy Trousers) & Giày bata thể thao
+        context.fillStyle = '#0f172a';
+        context.fillRect(-6, 7 + legOffset, 5, 9);
+        context.fillRect(1, 7 - legOffset, 5, 9);
+        // Giày bata trắng đen
+        context.fillStyle = '#ffffff';
+        context.fillRect(-7, 14 + legOffset, 6, 3);
+        context.fillRect(1, 14 - legOffset, 6, 3);
+        context.fillStyle = '#0284c7';
+        context.fillRect(-5, 14 + legOffset, 3, 2);
+        context.fillRect(3, 14 - legOffset, 3, 2);
+
+        // 2. Thắt lưng học sinh đen khóa bạc
+        context.fillStyle = '#1e293b';
+        context.fillRect(-7, 2 + breathOffset, 14, 3);
+        context.fillStyle = '#cbd5e1';
+        context.fillRect(-2, 2 + breathOffset, 4, 3);
+
+        // 3. Áo sơ mi trắng học sinh đóng thùng
+        context.fillStyle = '#f8fafc';
+        context.fillRect(-7, -12 + breathOffset, 14, 14);
+        // Cổ áo sơ mi
+        context.fillStyle = '#e2e8f0';
+        context.fillRect(-5, -13 + breathOffset, 10, 2);
+        // Hàng cúc áo & Cà vạt / Khăn quàng đỏ học sinh
+        context.fillStyle = '#dc2626';
+        context.fillRect(-2, -12 + breathOffset, 4, 7);
+        // Bảng tên trường học sinh màu xanh lam ở ngực trái
+        context.fillStyle = '#2563eb';
+        context.fillRect(-6, -8 + breathOffset, 3, 2);
+
+        // Tay áo ngắn sơ mi trắng & Cánh tay
+        context.fillStyle = '#f8fafc';
+        context.fillRect(-9, -11 + breathOffset, 3, 6);
+        context.fillRect(6, -11 + breathOffset, 3, 6);
+        context.fillStyle = '#ffedd5';
+        context.fillRect(-9, -5 + breathOffset, 3, 6);
+        context.fillRect(6, -5 + breathOffset, 3, 6);
+
+        // Quai Balo học sinh xanh dương qua vai
+        context.fillStyle = '#1d4ed8';
+        context.fillRect(-8, -12 + breathOffset, 2, 11);
+
+        // 4. Khuôn mặt & Tai
+        context.fillStyle = '#ffedd5';
+        context.fillRect(-7, -22 + breathOffset, 14, 10);
+        // Mắt đen sáng
+        context.fillStyle = '#0f172a';
+        context.fillRect(-4, -18 + breathOffset, 3, 3);
+        context.fillRect(2, -18 + breathOffset, 3, 3);
+        context.fillStyle = '#ffffff';
+        context.fillRect(-3, -18 + breathOffset, 1, 1);
+        context.fillRect(3, -18 + breathOffset, 1, 1);
+
+        // 5. Mái tóc nam sinh rẽ ngôi ngắn gọn gàng (Side-part Black Hair)
+        context.fillStyle = '#1c1917';
+        context.fillRect(-8, -25 + breathOffset, 16, 6);
+        context.fillRect(-8, -22 + breathOffset, 6, 3);
+        context.fillRect(-1, -22 + breathOffset, 9, 2);
+        context.fillRect(-9, -21 + breathOffset, 2, 4);
+        context.fillRect(7, -21 + breathOffset, 2, 4);
+
+      } else {
+        // === KAZUMA PIXEL ART SPRITE ===
+        // 1. Quần sẫm màu & Chân
+        context.fillStyle = '#0b0f19';
+        context.fillRect(-7, 8 + legOffset, 6, 8);
+        context.fillRect(1, 8 - legOffset, 6, 8);
+        context.fillStyle = '#3f4254';
+        context.fillRect(-6, 9 + legOffset, 4, 6);
+        context.fillRect(2, 9 - legOffset, 4, 6);
+
+        // 2. Thắt lưng da & Khóa nẹp vàng
+        context.fillStyle = '#111827';
+        context.fillRect(-8, 3 + breathOffset, 16, 5);
+        context.fillStyle = '#6b4f3b';
+        context.fillRect(-7, 4 + breathOffset, 14, 3);
+        context.fillStyle = '#d4af37';
+        context.fillRect(-2, 4 + breathOffset, 4, 3);
+
+        // 3. Áo choàng màu xanh mòng két viền vàng
+        const capeWave = isWalking ? Math.sin(walkCycle * 0.35) * 3 : 0;
+        context.fillStyle = '#1f5761';
+        context.fillRect(-13 - capeWave, -5 + breathOffset, 5, 12);
+        context.fillStyle = '#e5b352';
+        context.fillRect(-13 - capeWave, 7 + breathOffset, 5, 2);
+
+        context.fillStyle = '#0f172a';
+        context.fillRect(-11, -8 + breathOffset, 22, 12);
+        context.fillStyle = '#2a6f7b';
+        context.fillRect(-10, -7 + breathOffset, 20, 10);
+        
+        context.fillStyle = '#f3c467';
+        context.fillRect(-10, 1 + breathOffset, 20, 2);
+        context.fillRect(-7, -4 + breathOffset, 3, 7);
+        context.fillRect(4, -4 + breathOffset, 3, 7);
+
+        context.fillStyle = '#ffffff';
+        context.fillRect(-4, -6 + breathOffset, 8, 9);
+        context.fillStyle = '#334155';
+        context.fillRect(-1, -6 + breathOffset, 2, 4);
+
+        context.fillStyle = '#fde2c8';
+        context.fillRect(-11, 4 + legOffset * 0.5 + breathOffset, 3, 4);
+        context.fillRect(8, 4 - legOffset * 0.5 + breathOffset, 3, 4);
+
+        // 4. Khuôn mặt & Cổ
+        context.fillStyle = '#111827';
+        context.fillRect(-10, -22 + breathOffset, 20, 15);
+        context.fillStyle = '#fde2c8';
+        context.fillRect(-9, -21 + breathOffset, 18, 13);
+
+        context.fillStyle = '#0f172a';
+        context.fillRect(-6, -15 + breathOffset, 4, 2);
+        context.fillRect(2, -15 + breathOffset, 4, 2);
+        context.fillStyle = '#44b8a6';
+        context.fillRect(-6, -13 + breathOffset, 4, 3);
+        context.fillRect(2, -13 + breathOffset, 4, 3);
+        context.fillStyle = '#0f766e';
+        context.fillRect(-5, -13 + breathOffset, 2, 2);
+        context.fillRect(3, -13 + breathOffset, 2, 2);
+
+        // 5. Mái tóc nâu nhiều nhánh nhọn
+        context.fillStyle = '#1c150e';
+        context.fillRect(-11, -26 + breathOffset, 22, 10);
+        context.fillRect(-12, -22 + breathOffset, 3, 8);
+        context.fillRect(9, -22 + breathOffset, 3, 8);
+        context.fillRect(1, -29 + breathOffset, 4, 4);
+
+        context.fillStyle = '#875237';
+        context.fillRect(-10, -25 + breathOffset, 20, 8);
+        context.fillRect(2, -28 + breathOffset, 2, 3);
+
+        context.fillStyle = '#a06345';
+        context.fillRect(-9, -21 + breathOffset, 5, 4);
+        context.fillRect(-2, -21 + breathOffset, 4, 5);
+        context.fillRect(5, -21 + breathOffset, 4, 4);
+
+        context.fillStyle = '#5c321b';
+        context.fillRect(-1, -17 + breathOffset, 2, 3);
       }
 
       context.restore();
@@ -1002,7 +1321,6 @@
     // Stage Background Renderer (360x480)
     function drawStageBackground(context, stage) {
       if (stage === 0) {
-        // Stage 0: Traffic Jam on Xa Lộ Hà Nội & Parking Lot
         context.fillStyle = '#38bdf8';
         context.fillRect(0, 0, 360, 180);
 
@@ -1033,13 +1351,42 @@
           context.fillRect(bx + 8, 238, 4, 4);
         }
 
+        // Vẽ Xe Bánh Mì & Cà Phê Dạo Sài Gòn Pixel Art ở góc bãi xe (x = 230..270, y = 370..420)
+        context.fillStyle = '#e2e8f0';
+        context.fillRect(235, 380, 32, 22); // Thùng xe kính
+        context.fillStyle = '#d97706';
+        context.fillRect(235, 375, 32, 6);  // Mái bạt che màu cam
+        context.fillStyle = '#ef4444';
+        context.fillRect(235, 381, 32, 3);  // Chữ BÁNH MÌ đỏ
+        context.fillStyle = '#ffffff';
+        context.font = 'bold 5px monospace';
+        context.textAlign = 'center';
+        context.fillText('BÁNH MÌ CAFE', 251, 384);
+        
+        // Ổ bánh mì vàng trong tủ kính
+        context.fillStyle = '#f59e0b';
+        context.fillRect(238, 388, 8, 3);
+        context.fillRect(248, 388, 8, 3);
+        // Ly cà phê đá nâu
+        context.fillStyle = '#78350f';
+        context.fillRect(258, 387, 4, 6);
+        context.fillStyle = '#ef4444'; // Ống hút đỏ
+        context.fillRect(259, 384, 1, 3);
+
+        // Bánh xe đẩy màu đen
+        context.fillStyle = '#0f172a';
+        context.beginPath();
+        context.arc(241, 405, 4, 0, Math.PI * 2);
+        context.arc(261, 405, 4, 0, Math.PI * 2);
+        context.fill();
+
         // Roadway Traffic Jam
         context.fillStyle = '#475569';
         context.fillRect(0, 180, 220, 300);
         context.fillStyle = '#fef08a';
         context.fillRect(105, 180, 10, 300);
 
-        // Safety Barrier dividing Roadway and Parking Lot after parking
+        // Safety Barrier
         if (state.motorBikeParked) {
           context.fillStyle = '#ef4444';
           context.fillRect(216, 180, 6, 300);
@@ -1052,7 +1399,7 @@
           context.fillText('⛔ HÀNG RÀO AN TOÀN', 160, 195);
         }
 
-        // Traffic Cars & Buses
+        // Moving traffic
         const carOffset = (Date.now() * 0.05) % 80;
         context.fillStyle = '#dc2626';
         context.fillRect(20, 200 + carOffset, 30, 50);
@@ -1060,7 +1407,6 @@
         context.fillRect(60, 300 - carOffset, 35, 60);
 
       } else if (stage === 1) {
-        // Stage 1: Ga Thủ Đức Exterior
         context.fillStyle = '#38bdf8';
         context.fillRect(0, 0, 360, 180);
 
@@ -1074,7 +1420,6 @@
         context.textAlign = 'center';
         context.fillText('Thủ Đức  Thu Duc', 180, 93);
 
-        // Escalator
         context.fillStyle = '#475569';
         context.beginPath();
         context.moveTo(140, 180);
@@ -1092,12 +1437,39 @@
         context.fillStyle = '#cbd5e1';
         context.fillRect(0, 180, 360, 300);
 
+        // BẢNG QUẢNG CÁO LED ĐIỆN TỬ TẠI GA (x: 275..325, y: 250..300)
+        context.fillStyle = '#1e293b';
+        context.fillRect(275, 240, 52, 42); // Khung ngoài LED
+        context.fillStyle = '#0f172a';
+        context.fillRect(278, 243, 46, 36); // Màn hình hiển thị
+        
+        // Hiệu ứng đèn LED quét đổi màu neon nhấp nháy
+        const ledPulse = Math.sin(Date.now() * 0.006);
+        context.fillStyle = ledPulse > 0 ? '#06b6d4' : '#3b82f6';
+        context.fillRect(280, 245, 42, 22);
+
+        // Icon Play & chữ LED
+        context.fillStyle = '#ffffff';
+        context.beginPath();
+        context.moveTo(298, 252);
+        context.lineTo(306, 256);
+        context.lineTo(298, 260);
+        context.fill();
+
+        context.fillStyle = '#fef08a';
+        context.font = 'bold 6px monospace';
+        context.textAlign = 'center';
+        context.fillText('LED MEDIA', 301, 275);
+
+        // Cột trụ đỡ bảng LED
+        context.fillStyle = '#64748b';
+        context.fillRect(298, 282, 6, 20);
+
       } else if (stage === 2) {
-        // Stage 2: Turnstile Security Gate & Ticket Vending Machines
         context.fillStyle = '#f1f5f9';
         context.fillRect(0, 0, 360, 480);
 
-        // Paid Area Wall (Above Turnstiles)
+        // Paid Area Wall
         context.fillStyle = '#cbd5e1';
         context.fillRect(0, 0, 360, 140);
         context.fillStyle = '#0284c7';
@@ -1107,7 +1479,7 @@
         context.textAlign = 'center';
         context.fillText('KHU VỰC ĐÃ SOÁT VÉ ➔ LÊN PLATFORM TRẠM TÀU', 180, 126);
 
-        // Turnstile Gate Barrier Line at y = 160..200
+        // Turnstile Gate Barrier Line
         context.fillStyle = '#1d4ed8';
         context.fillRect(30, 145, 140, 20);
         context.fillRect(190, 145, 140, 20);
@@ -1129,11 +1501,11 @@
         context.fillRect(145, 175, 20, 12);
         context.fillRect(235, 175, 20, 12);
 
-        // Unpaid Floor Area (y = 210..480) BEFORE turnstiles
+        // Unpaid Floor Area
         context.fillStyle = '#e2e8f0';
         context.fillRect(0, 210, 360, 270);
 
-        // 8-Bit Ticket Vending Machines (TVMs) BEFORE Turnstiles
+        // Metallic TVM Cabinet
         context.fillStyle = '#1e293b';
         context.fillRect(15, 230, 125, 20);
         context.fillStyle = '#38bdf8';
@@ -1141,30 +1513,26 @@
         context.textAlign = 'center';
         context.fillText('MÁY BÁN VÉ TVM', 77, 243);
 
-        // Metallic TVM Cabinet in Unpaid Area (x = 15..140, y = 250..340)
         context.fillStyle = '#64748b';
         context.fillRect(15, 250, 125, 90);
         context.fillStyle = '#0f172a';
-        context.fillRect(25, 258, 105, 42); // Screen
+        context.fillRect(25, 258, 105, 42);
         context.fillStyle = '#0284c7';
         context.fillRect(30, 263, 95, 32);
         context.fillStyle = '#ffffff';
         context.font = '7px monospace';
         context.fillText('MÁY BÁN VÉ TỰ ĐỘNG', 77, 278);
 
-        // Coin & Card Slots
         context.fillStyle = '#1e293b';
         context.fillRect(28, 305, 30, 14);
         context.fillRect(87, 305, 30, 14);
         context.fillStyle = '#334155';
-        context.fillRect(35, 323, 80, 12); // Ticket Tray
+        context.fillRect(35, 323, 80, 12);
 
       } else if (stage === 3) {
-        // Stage 3: Platform with PSD Screen Doors
         context.fillStyle = '#78716c';
         context.fillRect(0, 0, 360, 480);
 
-        // Train Arrival Physics
         if (!state.trainArrived) {
           state.trainX += state.trainSpeed;
           if (state.trainX >= 40) {
@@ -1173,13 +1541,12 @@
             sound.scanSuccessSound();
           }
         } else {
-          // Automatic PSD Glass Sliding Door Animation when player approaches
           if (state.playerY < 240 && state.psdDoorProgress < 24) {
             state.psdDoorProgress += 0.8;
           }
         }
 
-        // Metro Train Body behind PSD Doors
+        // Metro Train Body
         context.fillStyle = '#0284c7';
         context.fillRect(state.trainX, 110, 320, 80);
         context.fillStyle = '#ffffff';
@@ -1191,7 +1558,7 @@
         context.fillStyle = '#3b82f6';
         context.fillRect(0, 95, 360, 15);
 
-        // LED Digital Clock Banner (09:33)
+        // LED Digital Clock
         context.fillStyle = '#000000';
         context.fillRect(15, 60, 60, 25);
         context.fillStyle = '#f59e0b';
@@ -1199,49 +1566,41 @@
         context.textAlign = 'center';
         context.fillText('09:33', 45, 76);
 
-        // Station Route Line Strip Above Door
         context.fillStyle = '#ffffff';
         context.font = 'bold 8px monospace';
         context.textAlign = 'left';
         context.fillText('⚪ Bến Thành ➔ Nhà hát TP ➔ Ba Son ... ➔ Ga Thủ Đức', 85, 76);
 
-        // Platform Screen Doors (PSD) Glass Partition Frame
+        // Platform Screen Doors (PSD)
         context.fillStyle = '#64748b';
-        context.fillRect(0, 110, 360, 8); // Top PSD Beam
-        context.fillRect(0, 185, 360, 6); // Bottom PSD Guide
+        context.fillRect(0, 110, 360, 8);
+        context.fillRect(0, 185, 360, 6);
 
-        // Glass Panels & Automatic Sliding Glass Doors
         context.fillStyle = 'rgba(224, 242, 254, 0.55)';
         context.fillRect(20, 118, 120, 67);
         context.fillRect(220, 118, 120, 67);
 
-        // Sliding Glass PSD Doors (Animate open when train arrives)
         const psdSlide = state.psdDoorProgress;
         context.fillStyle = 'rgba(186, 230, 253, 0.75)';
         context.fillRect(140 - psdSlide, 118, 40, 67);
         context.fillRect(180 + psdSlide, 118, 40, 67);
 
-        // Metallic door borders & handles
         context.fillStyle = '#334155';
         context.fillRect(140 - psdSlide, 118, 3, 67);
         context.fillRect(180 - psdSlide - 3, 118, 3, 67);
         context.fillRect(180 + psdSlide, 118, 3, 67);
         context.fillRect(220 + psdSlide - 3, 118, 3, 67);
 
-        // Yellow tactile warning strip on floor
         context.fillStyle = '#fef08a';
         context.fillRect(0, 192, 360, 10);
         context.fillStyle = '#d6d3d1';
         context.fillRect(0, 202, 360, 278);
 
       } else if (stage === 4) {
-        // Stage 4: Onboard Train & 15-Station Route Cutscene
         if (!state.startMapCutscene) {
-          // Phase 1: Train Interior Cutscene with Parallax Container Port & Landmark 81 Windows
           context.fillStyle = '#0f172a';
           context.fillRect(0, 0, 360, 480);
 
-          // Parallax Scrolling Window View Background (y: 45..185)
           const scrollX = (Date.now() * 0.035) % 440;
 
           context.save();
@@ -1249,7 +1608,6 @@
           context.rect(15, 45, 330, 140);
           context.clip();
 
-          // Sky & Sun
           context.fillStyle = '#38bdf8';
           context.fillRect(0, 0, 360, 185);
           context.fillStyle = '#fef08a';
@@ -1257,31 +1615,27 @@
           context.arc(310, 75, 16, 0, Math.PI * 2);
           context.fill();
 
-          // River Water
           context.fillStyle = '#0284c7';
           context.fillRect(0, 145, 360, 40);
 
-          // Landmark 81 Spire Silhouette (Scrolling)
+          // Landmark 81 Silhoutte
           const landmarkX = (520 - scrollX) % 440 - 50;
           context.fillStyle = '#475569';
           context.fillRect(landmarkX, 55, 26, 90);
           context.fillRect(landmarkX + 6, 40, 14, 15);
-          context.fillRect(landmarkX + 11, 20, 4, 20); // Spire top
+          context.fillRect(landmarkX + 11, 20, 4, 20);
           context.fillStyle = '#38bdf8';
           context.fillRect(landmarkX + 4, 60, 18, 80);
 
-          // Container Port Cranes & Stacked Cargo Containers (Scrolling)
+          // Container Port Cranes
           for (let i = 0; i < 3; i++) {
             const portX = (i * 160 + 120 - scrollX % 440 + 440) % 440 - 60;
-            
-            // Port Cranes
             context.fillStyle = '#dc2626';
             context.fillRect(portX, 90, 6, 55);
             context.fillRect(portX + 16, 90, 6, 55);
             context.fillRect(portX - 10, 90, 40, 6);
             context.fillRect(portX + 24, 90, 4, 25);
 
-            // Stacked Containers
             context.fillStyle = '#ef4444';
             context.fillRect(portX - 25, 125, 22, 10);
             context.fillStyle = '#2563eb';
@@ -1294,22 +1648,20 @@
 
           context.restore();
 
-          // Train Interior Window Frames & Metallic Wall
+          // Train Interior Window Frames
           context.fillStyle = '#1e293b';
-          context.fillRect(0, 0, 360, 45); // Roof
-          context.fillRect(0, 185, 360, 20); // Window Sill Wall
-          context.fillRect(0, 45, 15, 140);  // Left Frame
-          context.fillRect(345, 45, 15, 140); // Right Frame
-          context.fillRect(172, 45, 16, 140); // Center Pillar
+          context.fillRect(0, 0, 360, 45);
+          context.fillRect(0, 185, 360, 20);
+          context.fillRect(0, 45, 15, 140);
+          context.fillRect(345, 45, 15, 140);
+          context.fillRect(172, 45, 16, 140);
 
-          // Interior Seats & Handles
           context.fillStyle = '#334155';
           context.fillRect(0, 205, 360, 275);
           context.fillStyle = '#0284c7';
           context.fillRect(15, 225, 145, 80);
           context.fillRect(200, 225, 145, 80);
 
-          // Overhead Handrail Bars
           context.fillStyle = '#94a3b8';
           context.fillRect(20, 25, 320, 5);
           for (let hx = 40; hx <= 320; hx += 40) {
@@ -1321,7 +1673,7 @@
             context.fillStyle = '#94a3b8';
           }
         } else {
-          // Phase 2: Full 15-Station Animated Route Map Cutscene
+          // Phase 2: Full 15-Station Route Map
           if (state.mapAnimProgress < 1) {
             state.mapAnimProgress += 0.004;
           }
@@ -1337,7 +1689,6 @@
           context.font = '9px monospace';
           context.fillText('Depot Long Bình ↔ Bến Thành', 180, 36);
 
-          // Route Path Line
           context.strokeStyle = '#eab308';
           context.lineWidth = 4;
           context.beginPath();
@@ -1359,7 +1710,6 @@
           context.lineTo(52, 426);
           context.stroke();
 
-          // Full Stations List (15 stations / locations)
           const stations = [
             { name: 'Depot Long Bình', x: 310, y: 50, isDepot: true },
             { name: 'Bến xe Miền Đông mới', x: 290, y: 60 },
@@ -1400,11 +1750,9 @@
             context.fillText(st.name, st.x + 7, st.y + 3);
           });
 
-          // Clock Tower Icon at Ben Thanh
           context.fillStyle = '#eab308';
           context.fillRect(30, 416, 14, 14);
 
-          // Moving Mini Train along Route (from Thủ Đức down to Bến Thành)
           const t = state.mapAnimProgress;
           const currX = 218 + (52 - 218) * t;
           const currY = 140 + (426 - 140) * t;
@@ -1424,7 +1772,6 @@
         }
 
       } else if (stage === 5) {
-        // Stage 5: Ga Bến Thành
         context.fillStyle = '#94a3b8';
         context.fillRect(0, 0, 360, 240);
 
@@ -1452,7 +1799,7 @@
       }
     }
 
-    // 360 Virtual Joystick Controller
+    // 360 Virtual Joystick Controller with Touch Tracking
     let joyBase, joyStick;
     let joyActive = false;
     let joyCenterX = 0;
@@ -1474,7 +1821,7 @@
       const dx = touch.clientX - joyCenterX;
       const dy = touch.clientY - joyCenterY;
       const dist = Math.hypot(dx, dy);
-      const maxDist = 32;
+      const maxDist = 36;
 
       const angle = Math.atan2(dy, dx);
       const moveDist = Math.min(dist, maxDist);
@@ -1487,10 +1834,11 @@
       }
 
       const normSpeed = moveDist / maxDist;
-      state.playerVx = Math.cos(angle) * normSpeed * 3.0;
-      state.playerVy = Math.sin(angle) * normSpeed * 3.0;
+      const effectiveSpeed = 3.2 * state.moveSpeedBonus;
+      state.playerVx = Math.cos(angle) * normSpeed * effectiveSpeed;
+      state.playerVy = Math.sin(angle) * normSpeed * effectiveSpeed;
 
-      state.isWalking = moveDist > 4;
+      state.isWalking = moveDist > 5;
       if (Math.abs(state.playerVx) > 0.2) {
         state.facingDir = state.playerVx > 0 ? 'right' : 'left';
       }
@@ -1511,11 +1859,12 @@
 
       let vx = 0;
       let vy = 0;
+      const speed = 3 * state.moveSpeedBonus;
 
-      if (keysPressed['arrowleft'] || keysPressed['a']) vx -= 3;
-      if (keysPressed['arrowright'] || keysPressed['d']) vx += 3;
-      if (keysPressed['arrowup'] || keysPressed['w']) vy -= 3;
-      if (keysPressed['arrowdown'] || keysPressed['s']) vy += 3;
+      if (keysPressed['arrowleft'] || keysPressed['a']) vx -= speed;
+      if (keysPressed['arrowright'] || keysPressed['d']) vx += speed;
+      if (keysPressed['arrowup'] || keysPressed['w']) vy -= speed;
+      if (keysPressed['arrowdown'] || keysPressed['s']) vy += speed;
 
       state.playerVx = vx;
       state.playerVy = vy;
@@ -1610,6 +1959,11 @@
         if (state.currentStage === 0) {
           if (closestNPC.id === 'traffic_npc') {
             updateQuestTracker('Tiến vào Bãi Gửi Xe Ga Thủ Đức bên phải và nói chuyện với Bác Trông Xe');
+          } else if (closestNPC.id === 'banhmi_cart') {
+            state.moveSpeedBonus = 1.35;
+            state.hasSpeedBoost = true;
+            sound.scanSuccessSound();
+            showToast('🥖 Đã nạp Bánh Mì & Cà Phê Sữa Đá Sài Gòn! Tốc độ di chuyển tăng 35%!');
           } else if (closestNPC.id === 'parking_guard') {
             state.motorBikeParked = true;
             updateQuestTracker('Đã gửi xe máy thành công! Đi tiến vào Lối Vào Ga Thủ Đức bên phải.');
@@ -1626,13 +1980,14 @@
             }
           }
         } else if (state.currentStage === 1) {
-          if (closestNPC.id === 'guard') {
+          if (closestNPC.id === 'led_billboard') {
+            openLedVideoModal();
+          } else if (closestNPC.id === 'guard') {
             updateQuestTracker('Hỏi Sinh viên A cách mở App HURC màu đỏ mua vé sinh viên');
           } else if (closestNPC.id === 'student_a') {
             updateQuestTracker('Mở nút 📱 APP HURC màu đỏ ở góc phải để mua vé');
           }
 
-          // Unlock HURC App button ONLY after talking to BOTH Bác Bảo Vệ AND Sinh viên A
           if (state.interactedNPCs['1_guard'] && state.interactedNPCs['1_student_a']) {
             const appBtn = document.getElementById('btn-open-phone');
             if (appBtn && appBtn.classList.contains('hidden')) {
@@ -1732,6 +2087,43 @@
       }
     }
 
+    // Modal Video Quảng Cáo LED (media.mp4)
+    function openLedVideoModal() {
+      const videoModal = document.getElementById('modal-led-video');
+      const videoPlayer = document.getElementById('led-media-player');
+      if (!videoModal || !videoPlayer) return;
+
+      sound.clickSound();
+      videoModal.classList.remove('hidden');
+
+      // Tạm ngắt nhạc nền game để nghe âm thanh video
+      sound.toggleBGM(false);
+
+      // Thử phát video (hỗ trợ mobile touch)
+      try {
+        videoPlayer.currentTime = 0;
+        const playPromise = videoPlayer.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.log('Video auto-play prevented or file not ready yet:', err);
+          });
+        }
+      } catch(e){}
+    }
+
+    function closeLedVideoModal() {
+      const videoModal = document.getElementById('modal-led-video');
+      const videoPlayer = document.getElementById('led-media-player');
+      if (videoPlayer) {
+        videoPlayer.pause();
+      }
+      if (videoModal) {
+        videoModal.classList.add('hidden');
+      }
+      // Bật lại BGM game khi tắt video
+      sound.toggleBGM(true);
+    }
+
     // Main Game Loop
     function gameLoop() {
       if (ctx) {
@@ -1739,7 +2131,6 @@
 
         updateKeyboardControls();
 
-        // Check Idle Inactivity Delay
         const dialogueOpen = !document.getElementById('dialogue-box').classList.contains('hidden');
         const delayTime = dialogueOpen ? 10000 : 5000;
         if (Date.now() - state.lastActivityTime > delayTime) {
@@ -1749,14 +2140,14 @@
         state.playerX += state.playerVx;
         state.playerY += state.playerVy;
 
-        // Stage Boundaries & Roadway / Security Gate Locking
+        // Stage Boundaries
         if (state.currentStage === 0 && state.motorBikeParked) {
           if (state.playerX < 220) {
-            state.playerX = 220; // Block player from walking back onto roadway
+            state.playerX = 220;
             showToast('⛔ Hàng rào an toàn: Không thể quay lại làn xe máy đang chạy!');
           }
         } else if (state.currentStage === 2 && !state.ticketScanned && state.playerY < 250) {
-          state.playerY = 250; // Block entrance to platform if QR ticket not scanned
+          state.playerY = 250;
           showToast('CỔNG AN NINH KHÓA (ĐÈN ĐỎ): Phải mở App HURC quét mã QR để qua cổng!');
         } else if (state.currentStage === 5 && !state.exitScanned && state.playerY < 250) {
           state.playerY = 250;
@@ -1772,7 +2163,6 @@
 
         drawStageBackground(ctx, state.currentStage);
 
-        // Hide Dialogue Box during Stage 4 Map Cutscene
         if (state.currentStage === 4 && state.startMapCutscene) {
           const dBox = document.getElementById('dialogue-box');
           if (dBox && !dBox.classList.contains('hidden')) {
@@ -1780,7 +2170,6 @@
           }
         }
 
-        // Render Stage NPCs
         if (!(state.currentStage === 4 && state.startMapCutscene)) {
           const npcs = stageNPCs[state.currentStage] || [];
           npcs.forEach(npc => {
@@ -1800,7 +2189,6 @@
             }
           });
 
-          // Highlight interact button
           const interactBtn = document.getElementById('btn-interact');
           const nearby = npcs.some(npc => Math.hypot(state.playerX - npc.x, state.playerY - npc.y) < 110);
           if (nearby) interactBtn.classList.add('ring-4', 'ring-amber-300', 'animate-pulse');
@@ -1813,7 +2201,7 @@
           ctx.fillStyle = '#ffffff';
           ctx.font = 'bold 8px monospace';
           ctx.textAlign = 'center';
-          ctx.fillText(state.playerName || 'Anh', state.playerX, state.playerY - 24);
+          ctx.fillText(state.playerName || 'Học sinh', state.playerX, state.playerY - 24);
         }
       }
 
@@ -1830,25 +2218,37 @@
       joyBase = document.getElementById('joystick-base');
       joyStick = document.getElementById('joystick-stick');
 
+      // Touch & Pointer Support for 360 Joystick
       if (joyBase) {
+        joyBase.addEventListener('touchstart', handleJoystickStart, { passive: false });
+        window.addEventListener('touchmove', handleJoystickMove, { passive: false });
+        window.addEventListener('touchend', handleJoystickEnd);
+        window.addEventListener('touchcancel', handleJoystickEnd);
+
         joyBase.addEventListener('pointerdown', handleJoystickStart);
         window.addEventListener('pointermove', handleJoystickMove);
         window.addEventListener('pointerup', handleJoystickEnd);
       }
 
       const nameInput = document.getElementById('input-player-name');
+      const kazumaBtn = document.getElementById('btn-skin-kazuma');
       const maleBtn = document.getElementById('btn-gender-male');
       const femaleBtn = document.getElementById('btn-gender-female');
       const startBtn = document.getElementById('btn-start-game');
 
-      if (nameInput) nameInput.addEventListener('input', checkStartValidity);
+      if (nameInput) {
+        nameInput.value = state.playerName;
+        nameInput.addEventListener('input', checkStartValidity);
+      }
 
       if (maleBtn) {
         maleBtn.addEventListener('click', () => {
           sound.clickSound();
           state.gender = 'male';
-          maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 shadow-md';
-          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer';
+          localStorage.setItem('hurc_player_skin', 'male');
+          maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
+          if (kazumaBtn) kazumaBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
           checkStartValidity();
         });
       }
@@ -1857,8 +2257,22 @@
         femaleBtn.addEventListener('click', () => {
           sound.clickSound();
           state.gender = 'female';
-          femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 shadow-md';
-          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex items-center justify-center gap-1 cursor-pointer';
+          localStorage.setItem('hurc_player_skin', 'female');
+          femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
+          if (kazumaBtn) kazumaBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          checkStartValidity();
+        });
+      }
+
+      if (kazumaBtn) {
+        kazumaBtn.addEventListener('click', () => {
+          sound.clickSound();
+          state.gender = 'kazuma';
+          localStorage.setItem('hurc_player_skin', 'kazuma');
+          kazumaBtn.className = 'bg-teal-600 border-2 border-teal-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
+          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
           checkStartValidity();
         });
       }
@@ -1867,8 +2281,10 @@
         startBtn.addEventListener('click', () => {
           sound.clickSound();
           sound.toggleBGM(true);
+          sound.startBgmLoop();
           const val = nameInput ? nameInput.value.trim() : '';
-          state.playerName = val || 'Sinh viên Metro';
+          state.playerName = val || (state.gender === 'female' ? 'Nữ sinh' : 'Nam sinh');
+          localStorage.setItem('hurc_player_name', state.playerName);
           document.getElementById('hud-player-name').textContent = state.playerName;
           document.getElementById('screen-customize').classList.add('hidden');
           updateQuestTracker('Lái xe máy kẹt xe Xa Lộ Hà Nội & gửi xe tại Bãi Xe Ga Thủ Đức');
@@ -1898,7 +2314,7 @@
       document.getElementById('btn-back-home-4').onclick = () => switchAppTab('tab-home');
       document.getElementById('btn-back-buy-screen').onclick = () => switchAppTab('tab-buy');
 
-      // Verification & Payment
+      // Student Verification & Payment
       document.getElementById('btn-verify-student').onclick = () => {
         resetActivityTimer();
         const val = document.getElementById('input-student-id').value.trim();
@@ -1950,10 +2366,68 @@
 
       document.getElementById('btn-audio-toggle').onclick = () => sound.toggleBGM();
 
-      // Keyboard Controls
+      // Guide Modal Logic & Sound Effects
+      const guideModal = document.getElementById('modal-game-guide');
+      const btnOpenGuide = document.getElementById('btn-guide-toggle');
+      const btnOpenGuideStart = document.getElementById('btn-quick-guide-start');
+      const btnCloseGuide = document.getElementById('btn-close-guide');
+      const btnConfirmGuide = document.getElementById('btn-confirm-guide');
+
+      const openGuideFn = () => {
+        resetActivityTimer();
+        sound.init();
+        sound.guideChimeSound();
+        if ('speechSynthesis' in window) {
+          try {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance("Chào mừng bạn đến với Hướng dẫn chơi HCMC Metro HURC Quest.");
+            utterance.lang = 'vi-VN';
+            utterance.rate = 1.05;
+            window.speechSynthesis.speak(utterance);
+          } catch(e){}
+        }
+        if (guideModal) guideModal.classList.remove('hidden');
+      };
+
+      const closeGuideFn = () => {
+        resetActivityTimer();
+        sound.clickSound();
+        if (guideModal) guideModal.classList.add('hidden');
+      };
+
+      if (btnOpenGuide) btnOpenGuide.onclick = openGuideFn;
+      if (btnOpenGuideStart) btnOpenGuideStart.onclick = openGuideFn;
+      if (btnCloseGuide) btnCloseGuide.onclick = closeGuideFn;
+      if (btnConfirmGuide) btnConfirmGuide.onclick = closeGuideFn;
+
+      // Event listener đóng Popup Video LED
+      const btnCloseLedVideo = document.getElementById('btn-close-led-video');
+      const btnDismissVideo = document.getElementById('btn-dismiss-video');
+      if (btnCloseLedVideo) btnCloseLedVideo.onclick = closeLedVideoModal;
+      if (btnDismissVideo) btnDismissVideo.onclick = closeLedVideoModal;
+
+      // Language Toggle simulation
+      const langBtn = document.getElementById('btn-lang-toggle');
+      if (langBtn) {
+        langBtn.onclick = () => {
+          sound.clickSound();
+          if (langBtn.textContent.includes('VI')) {
+            langBtn.textContent = '🇬🇧 EN';
+            showToast('🌐 Switched language to English (HURC App)');
+          } else {
+            langBtn.textContent = '🇻🇳 VI';
+            showToast('🌐 Đã chuyển ngôn ngữ sang Tiếng Việt');
+          }
+        };
+      }
+
+      // Keyboard Controls (Laptop fallback)
       window.addEventListener('keydown', (e) => {
         resetActivityTimer();
         const k = e.key.toLowerCase();
+        if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) {
+          e.preventDefault();
+        }
         keysPressed[k] = true;
         if (k === 'e' || k === ' ' || k === 'enter') {
           triggerInteraction();
@@ -1963,7 +2437,7 @@
         keysPressed[e.key.toLowerCase()] = false;
       });
 
-      // Canvas Touch/Click
+      // Canvas Touch/Click on NPCs
       if (canvas) {
         canvas.addEventListener('click', (e) => {
           const rect = canvas.getBoundingClientRect();
@@ -2015,7 +2489,6 @@
       requestAnimationFrame(gameLoop);
     }
 
-    // Safe immediate initialization handling for web embeds
     function safeInit() {
       initGameEngine();
     }
@@ -2028,4 +2501,3 @@
   </script>
 </body>
 </html>
-
