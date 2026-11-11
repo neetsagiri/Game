@@ -290,19 +290,15 @@
 
       <!-- Skin & Character Selection Toggle -->
       <div class="space-y-1 text-left">
-        <label class="text-xs text-slate-300 font-bold block">Chọn Nhân Vật / Trang Phục:</label>
-        <div class="grid grid-cols-3 gap-1.5">
-          <button id="btn-gender-male" type="button" class="bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95">
-            <span class="text-lg">👦</span>
-            <span class="text-[10px]">Nam (Đồng phục)</span>
+        <label class="text-xs text-slate-300 font-bold block">Chọn Giới Tính:</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button id="btn-gender-male" type="button" class="bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 shadow-md active:scale-95">
+            <span class="text-xl">👦</span>
+            <span class="text-xs">Nam</span>
           </button>
-          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95">
-            <span class="text-lg">👧</span>
-            <span class="text-[10px]">Nữ (Đồng phục)</span>
-          </button>
-          <button id="btn-skin-kazuma" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95">
-            <span class="text-lg">🗡️</span>
-            <span class="text-[10px]">Kazuma</span>
+          <button id="btn-gender-female" type="button" class="bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+            <span class="text-xl">👧</span>
+            <span class="text-xs">Nữ</span>
           </button>
         </div>
       </div>
@@ -916,7 +912,8 @@
 
     // Core Game State (With LocalStorage Persistence)
     const savedName = localStorage.getItem('hurc_player_name') || '';
-    const savedSkin = localStorage.getItem('hurc_player_skin') || 'male';
+    const rawSkin = localStorage.getItem('hurc_player_skin') || 'male';
+    const savedSkin = rawSkin === 'kazuma' ? 'male' : rawSkin;
 
     const state = {
       playerName: savedName,
@@ -1216,84 +1213,6 @@
         context.fillRect(-9, -21 + breathOffset, 2, 4);
         context.fillRect(7, -21 + breathOffset, 2, 4);
 
-      } else {
-        // === KAZUMA PIXEL ART SPRITE ===
-        // 1. Quần sẫm màu & Chân
-        context.fillStyle = '#0b0f19';
-        context.fillRect(-7, 8 + legOffset, 6, 8);
-        context.fillRect(1, 8 - legOffset, 6, 8);
-        context.fillStyle = '#3f4254';
-        context.fillRect(-6, 9 + legOffset, 4, 6);
-        context.fillRect(2, 9 - legOffset, 4, 6);
-
-        // 2. Thắt lưng da & Khóa nẹp vàng
-        context.fillStyle = '#111827';
-        context.fillRect(-8, 3 + breathOffset, 16, 5);
-        context.fillStyle = '#6b4f3b';
-        context.fillRect(-7, 4 + breathOffset, 14, 3);
-        context.fillStyle = '#d4af37';
-        context.fillRect(-2, 4 + breathOffset, 4, 3);
-
-        // 3. Áo choàng màu xanh mòng két viền vàng
-        const capeWave = isWalking ? Math.sin(walkCycle * 0.35) * 3 : 0;
-        context.fillStyle = '#1f5761';
-        context.fillRect(-13 - capeWave, -5 + breathOffset, 5, 12);
-        context.fillStyle = '#e5b352';
-        context.fillRect(-13 - capeWave, 7 + breathOffset, 5, 2);
-
-        context.fillStyle = '#0f172a';
-        context.fillRect(-11, -8 + breathOffset, 22, 12);
-        context.fillStyle = '#2a6f7b';
-        context.fillRect(-10, -7 + breathOffset, 20, 10);
-        
-        context.fillStyle = '#f3c467';
-        context.fillRect(-10, 1 + breathOffset, 20, 2);
-        context.fillRect(-7, -4 + breathOffset, 3, 7);
-        context.fillRect(4, -4 + breathOffset, 3, 7);
-
-        context.fillStyle = '#ffffff';
-        context.fillRect(-4, -6 + breathOffset, 8, 9);
-        context.fillStyle = '#334155';
-        context.fillRect(-1, -6 + breathOffset, 2, 4);
-
-        context.fillStyle = '#fde2c8';
-        context.fillRect(-11, 4 + legOffset * 0.5 + breathOffset, 3, 4);
-        context.fillRect(8, 4 - legOffset * 0.5 + breathOffset, 3, 4);
-
-        // 4. Khuôn mặt & Cổ
-        context.fillStyle = '#111827';
-        context.fillRect(-10, -22 + breathOffset, 20, 15);
-        context.fillStyle = '#fde2c8';
-        context.fillRect(-9, -21 + breathOffset, 18, 13);
-
-        context.fillStyle = '#0f172a';
-        context.fillRect(-6, -15 + breathOffset, 4, 2);
-        context.fillRect(2, -15 + breathOffset, 4, 2);
-        context.fillStyle = '#44b8a6';
-        context.fillRect(-6, -13 + breathOffset, 4, 3);
-        context.fillRect(2, -13 + breathOffset, 4, 3);
-        context.fillStyle = '#0f766e';
-        context.fillRect(-5, -13 + breathOffset, 2, 2);
-        context.fillRect(3, -13 + breathOffset, 2, 2);
-
-        // 5. Mái tóc nâu nhiều nhánh nhọn
-        context.fillStyle = '#1c150e';
-        context.fillRect(-11, -26 + breathOffset, 22, 10);
-        context.fillRect(-12, -22 + breathOffset, 3, 8);
-        context.fillRect(9, -22 + breathOffset, 3, 8);
-        context.fillRect(1, -29 + breathOffset, 4, 4);
-
-        context.fillStyle = '#875237';
-        context.fillRect(-10, -25 + breathOffset, 20, 8);
-        context.fillRect(2, -28 + breathOffset, 2, 3);
-
-        context.fillStyle = '#a06345';
-        context.fillRect(-9, -21 + breathOffset, 5, 4);
-        context.fillRect(-2, -21 + breathOffset, 4, 5);
-        context.fillRect(5, -21 + breathOffset, 4, 4);
-
-        context.fillStyle = '#5c321b';
-        context.fillRect(-1, -17 + breathOffset, 2, 3);
       }
 
       context.restore();
@@ -2231,7 +2150,6 @@
       }
 
       const nameInput = document.getElementById('input-player-name');
-      const kazumaBtn = document.getElementById('btn-skin-kazuma');
       const maleBtn = document.getElementById('btn-gender-male');
       const femaleBtn = document.getElementById('btn-gender-female');
       const startBtn = document.getElementById('btn-start-game');
@@ -2246,9 +2164,8 @@
           sound.clickSound();
           state.gender = 'male';
           localStorage.setItem('hurc_player_skin', 'male');
-          maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
-          if (kazumaBtn) kazumaBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
-          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          maleBtn.className = 'bg-blue-600 border-2 border-blue-400 text-white rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 shadow-md active:scale-95';
+          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-95';
           checkStartValidity();
         });
       }
@@ -2258,21 +2175,8 @@
           sound.clickSound();
           state.gender = 'female';
           localStorage.setItem('hurc_player_skin', 'female');
-          femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
-          if (kazumaBtn) kazumaBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
-          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
-          checkStartValidity();
-        });
-      }
-
-      if (kazumaBtn) {
-        kazumaBtn.addEventListener('click', () => {
-          sound.clickSound();
-          state.gender = 'kazuma';
-          localStorage.setItem('hurc_player_skin', 'kazuma');
-          kazumaBtn.className = 'bg-teal-600 border-2 border-teal-400 text-white rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 shadow-md active:scale-95';
-          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
-          if (femaleBtn) femaleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2 text-xs font-bold flex flex-col items-center justify-center gap-0.5 cursor-pointer active:scale-95';
+          femaleBtn.className = 'bg-pink-600 border-2 border-pink-400 text-white rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 shadow-md active:scale-95';
+          if (maleBtn) maleBtn.className = 'bg-slate-800 hover:bg-slate-700 border-2 border-slate-700 text-slate-300 rounded-xl p-2.5 text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-95';
           checkStartValidity();
         });
       }
